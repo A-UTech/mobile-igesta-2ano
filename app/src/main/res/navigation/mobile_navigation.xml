@@ -22,4 +22,9 @@
         android:name="com.matheus.igestamobile.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/navigation_perfil"
+        android:name="com.matheus.igestamobile.Perfil"
+        android:label="fragment_perfil"
+        tools:layout="@layout/fragment_perfil" />
 </navigation>
