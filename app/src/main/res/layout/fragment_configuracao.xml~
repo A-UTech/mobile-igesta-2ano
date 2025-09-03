@@ -16,23 +16,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            android:layout_marginTop="60dp"
             android:fontFamily="@font/poppins_semibold"
             android:text="Configurações"
             android:textColor="@color/verde_escuro"
             android:textSize="22sp"
             app:layout_constraintStart_toEndOf="@+id/imageView10"
-            app:layout_constraintTop_toTopOf="parent" />
+            tools:layout_editor_absoluteY="60dp" />
 
         <ImageView
             android:id="@+id/imageView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="65dp"
             android:src="@drawable/ic_seta_verde"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            tools:layout_editor_absoluteY="65dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"

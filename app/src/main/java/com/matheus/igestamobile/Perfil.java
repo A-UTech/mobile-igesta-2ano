@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +61,22 @@ public class Perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+
+        LinearLayout bt_config = view.findViewById(R.id.bt_config);
+
+        bt_config.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuracao configuracao = new Configuracao();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, configuracao)
+                        .commit();
+            }
+        });
+
+        return view;
     }
 }
