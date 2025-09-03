@@ -9,8 +9,8 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
-        android:layout_width="416dp"
-        android:layout_height="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/bottom_nav"
         app:itemHorizontalTranslationEnabled="false"
         app:labelVisibilityMode="unlabeled"
@@ -19,7 +19,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
 
     <fragment
         android:id="@+id/nav_host_fragment_activity_main"

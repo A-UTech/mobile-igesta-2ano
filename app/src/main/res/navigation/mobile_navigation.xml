@@ -27,4 +27,9 @@
         android:name="com.matheus.igestamobile.Perfil"
         android:label="fragment_perfil"
         tools:layout="@layout/fragment_perfil" />
+    <fragment
+        android:id="@+id/navigation_configuracao"
+        android:name="com.matheus.igestamobile.Configuracao"
+        android:label="fragment_configuracao"
+        tools:layout="@layout/fragment_configuracao" />
 </navigation>
