@@ -1,4 +1,4 @@
-package com.matheus.igestamobile;
+package com.example.igestamobile;
 
 import android.os.Bundle;
 
@@ -10,7 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.matheus.igestamobile.databinding.ActivityMainBinding;
+import com.example.igestamobile.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 

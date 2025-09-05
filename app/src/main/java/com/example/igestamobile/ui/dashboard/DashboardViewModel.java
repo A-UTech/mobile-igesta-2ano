@@ -1,4 +1,4 @@
-package com.matheus.igestamobile.ui.dashboard;
+package com.example.igestamobile.ui.dashboard;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
