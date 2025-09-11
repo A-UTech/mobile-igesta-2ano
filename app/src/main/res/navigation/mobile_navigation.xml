@@ -7,29 +7,29 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.matheus.igestamobile.ui.home.HomeFragment"
+        android:name="com.example.igestamobile.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.matheus.igestamobile.ui.dashboard.DashboardFragment"
+        android:name="com.example.igestamobile.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.matheus.igestamobile.ui.notifications.NotificationsFragment"
+        android:name="com.example.igestamobile.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/navigation_perfil"
-        android:name="com.matheus.igestamobile.Perfil"
+        android:name="com.example.igestamobile.Perfil"
         android:label="fragment_perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment
         android:id="@+id/navigation_configuracao"
-        android:name="com.matheus.igestamobile.Configuracao"
+        android:name="com.example.igestamobile.Configuracao"
         android:label="fragment_configuracao"
         tools:layout="@layout/fragment_configuracao" />
 </navigation>

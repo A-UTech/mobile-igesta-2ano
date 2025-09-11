@@ -1,4 +1,4 @@
-package com.matheus.igestamobile.ui.notifications;
+package com.example.igestamobile.ui.notifications;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

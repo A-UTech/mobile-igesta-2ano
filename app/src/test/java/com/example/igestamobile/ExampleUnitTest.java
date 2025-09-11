@@ -1,4 +1,4 @@
-package com.matheus.igestamobile;
+package com.example.igestamobile;
 
 import org.junit.Test;
 

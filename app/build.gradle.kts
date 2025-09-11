@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.matheus.igestamobile"
+    namespace = "com.example.igestamobile"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.matheus.igestamobile"
+        applicationId = "com.example.igestamobile"
         minSdk = 33
         targetSdk = 35
         versionCode = 1
