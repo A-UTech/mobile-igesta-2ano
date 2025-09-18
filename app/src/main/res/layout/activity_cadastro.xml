@@ -47,6 +47,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView12" />
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_email"
+                android:layout_width="279dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="8dp"
+                android:accessibilityHeading="false"
+                android:background="@drawable/borda_edittext"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="E-mail"
+                android:paddingLeft="25dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/cinza_medio"
+                android:textSize="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_nome" />
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_nome"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
@@ -54,7 +72,7 @@
                 android:accessibilityHeading="false"
                 android:background="@drawable/borda_edittext"
                 android:fontFamily="@font/poppins_regular"
-                android:hint="E-mail"
+                android:hint="Nome"
                 android:paddingLeft="25dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
@@ -80,7 +98,7 @@
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_nome" />
+                app:layout_constraintTop_toBottomOf="@+id/input_email" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_cpf"
