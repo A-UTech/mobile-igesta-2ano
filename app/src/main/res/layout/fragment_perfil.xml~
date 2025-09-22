@@ -73,7 +73,7 @@
             android:id="@+id/bt_config"
             android:layout_width="274dp"
             android:layout_height="49dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="50dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
