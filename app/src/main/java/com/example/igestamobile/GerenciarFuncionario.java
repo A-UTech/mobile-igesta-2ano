@@ -1,4 +1,4 @@
-package com.matheus.igestamobile;
+package com.example.igestamobile;
 
 import android.graphics.Color;
 import android.os.Bundle;
