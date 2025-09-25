@@ -23,49 +23,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/cadastro_logo"
-                android:layout_width="111dp"
-                android:layout_height="137dp"
-                android:layout_marginTop="60dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/logo" />
-
             <TextView
-                android:id="@+id/cadastro_criar_conta_txt"
+                android:id="@+id/fazer_cadastro_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="Criar Conta"
-                android:textColor="@color/verde_escuro"
-                android:textSize="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastro_logo" />
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/cadastro_email_input"
-                android:layout_width="279dp"
-                android:layout_height="65dp"
-                android:layout_marginTop="8dp"
-                android:accessibilityHeading="false"
-                android:background="@drawable/borda_edittext"
+                android:layout_marginBottom="54dp"
                 android:fontFamily="@font/poppins_regular"
-                android:hint="E-mail"
-                android:paddingLeft="25dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/cinza_medio"
-                android:textSize="13dp"
+                android:text="Ainda não tem conta? Cadastrar"
+                android:textColor="@color/cinza_escuro"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastro_nome_input" />
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/cadastro_nome_input"
+                android:id="@+id/login_nome_input"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="36dp"
@@ -80,17 +53,17 @@
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastro_criar_conta_txt" />
+                app:layout_constraintTop_toBottomOf="@+id/login_txt" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/cadastro_senha_input"
+                android:id="@+id/login_email_input"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="8dp"
                 android:accessibilityHeading="false"
                 android:background="@drawable/borda_edittext"
                 android:fontFamily="@font/poppins_regular"
-                android:hint="Senha"
+                android:hint="E-mail"
                 android:paddingLeft="25dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
@@ -98,53 +71,44 @@
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastro_email_input" />
+                app:layout_constraintTop_toBottomOf="@+id/login_nome_input" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/cadastro_cpf_input"
-                android:layout_width="279dp"
-                android:layout_height="65dp"
-                android:layout_marginTop="8dp"
-                android:accessibilityHeading="false"
-                android:background="@drawable/borda_edittext"
-                android:fontFamily="@font/poppins_regular"
-                android:hint="CPF"
-                android:paddingLeft="25dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/cinza_medio"
-                android:textSize="13dp"
+            <ImageView
+                android:id="@+id/login_logo"
+                android:layout_width="111dp"
+                android:layout_height="137dp"
+                android:layout_marginTop="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastro_senha_input" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/logo" />
+
+            <TextView
+                android:id="@+id/login_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Login"
+                android:textColor="@color/verde_escuro"
+                android:textSize="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_logo" />
 
             <Button
-                android:id="@+id/cadastrar_bt"
+                android:id="@+id/logar_bt"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/borda_btn"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Cadastrar"
+                android:text="Login"
                 android:textAllCaps="false"
                 android:textSize="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastro_cpf_input" />
-
-            <TextView
-                android:id="@+id/fazer_login_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Já possui conta? Fazer login"
-                android:textColor="@color/cinza_escuro"
-                android:textSize="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastrar_bt" />
-
+                app:layout_constraintTop_toBottomOf="@+id/login_email_input" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

@@ -136,14 +136,14 @@
                 android:id="@+id/fazer_login_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginBottom="54dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Já possui conta? Fazer login"
                 android:textColor="@color/cinza_escuro"
                 android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cadastrar_bt" />
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
