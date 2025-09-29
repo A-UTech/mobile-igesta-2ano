@@ -1,7 +1,8 @@
-package com.example.igestamobile;
+package com.example.igestamobile.ui;
 
 import android.os.Bundle;
 
+import com.example.igestamobile.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
