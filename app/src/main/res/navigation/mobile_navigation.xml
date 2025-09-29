@@ -24,17 +24,17 @@
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/navigation_perfil"
-        android:name="com.example.igestamobile.Perfil"
+        android:name="com.example.igestamobile.ui.Perfil"
         android:label="fragment_perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment
         android:id="@+id/navigation_configuracao"
-        android:name="com.example.igestamobile.Configuracao"
+        android:name="com.example.igestamobile.ui.Configuracao"
         android:label="fragment_configuracao"
         tools:layout="@layout/fragment_configuracao" />
     <fragment
         android:id="@+id/navigation_gerenciarFuncionario"
-        android:name="com.example.igestamobile.GerenciarFuncionario"
+        android:name="com.example.igestamobile.ui.GerenciarFuncionario"
         android:label="fragment_gerenciar_funcionario"
         tools:layout="@layout/fragment_gerenciar_funcionario" />
 </navigation>

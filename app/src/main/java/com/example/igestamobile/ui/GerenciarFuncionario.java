@@ -1,4 +1,4 @@
-package com.example.igestamobile;
+package com.example.igestamobile.ui;
 
 import android.os.Bundle;
 
@@ -7,14 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+
+import com.example.igestamobile.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Perfil#newInstance} factory method to
+ * Use the {@link GerenciarFuncionario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Perfil extends Fragment {
+public class GerenciarFuncionario extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,7 +26,7 @@ public class Perfil extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Perfil() {
+    public GerenciarFuncionario() {
         // Required empty public constructor
     }
 
@@ -35,11 +36,11 @@ public class Perfil extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Perfil.
+     * @return A new instance of fragment GerenciarFuncionario.
      */
     // TODO: Rename and change types and number of parameters
-    public static Perfil newInstance(String param1, String param2) {
-        Perfil fragment = new Perfil();
+    public static GerenciarFuncionario newInstance(String param1, String param2) {
+        GerenciarFuncionario fragment = new GerenciarFuncionario();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,32 +62,7 @@ public class Perfil extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
-
-        LinearLayout bt_config = view.findViewById(R.id.bt_config);
-        LinearLayout bt_gerenciar = view.findViewById(R.id.bt_gerenciar);
-
-        bt_config.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Configuracao configuracao = new Configuracao();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, configuracao)
-                        .commit();
-            }
-        });
-
-        bt_gerenciar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GerenciarFuncionario gerenciar = new GerenciarFuncionario();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, gerenciar)
-                        .commit();
-            }
-        });
+        View view = inflater.inflate(R.layout.fragment_gerenciar_funcionario, container, false);
 
         return view;
     }
