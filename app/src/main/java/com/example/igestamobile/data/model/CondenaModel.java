@@ -1,17 +1,26 @@
 package com.example.igestamobile.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CondenaModel {
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("nome")
     private String nome;
+
+    @SerializedName("tipo")
     private String tipo;
 
-    public CondenaModel(int id, String nome, String tipo) {
-        this.id = id;
-        this.nome = nome;
-        this.tipo = tipo;
+    public int getId() {
+        return id;
     }
 
-    public int getId() { return id; }
-    public String getNome() { return nome; }
-    public String getTipo() { return tipo; }
+    public String getNome() {
+        return nome;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
 }
