@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="98dp"
+        android:padding="10dp"
         tools:layout_editor_absoluteX="2dp"
         tools:layout_editor_absoluteY="-1dp">
 
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:text="Aero Saculite"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"

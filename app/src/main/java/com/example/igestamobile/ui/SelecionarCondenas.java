@@ -1,6 +1,7 @@
 package com.example.igestamobile.ui;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,15 +14,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.igestamobile.R;
 import com.example.igestamobile.adapter.CondenaAdapter;
+import com.example.igestamobile.data.api.CondenaApi;
 import com.example.igestamobile.data.model.CondenaModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelecionarCondenas extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-    RecyclerView recyclerView;
-    CondenaAdapter adapter;
+public class SelecionarCondenas extends AppCompatActivity {
+    private final List<CondenaModel> condenaList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private CondenaAdapter adapter;
+    private CondenaApi condenaApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +39,37 @@ public class SelecionarCondenas extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.condena_recyclerView);
 
-        List<CondenaModel> mockList = new ArrayList<>();
-        mockList.add(new CondenaModel(1, "Condena 1", "Tipo 1"));
-        mockList.add(new CondenaModel(2, "Condena 2", "Tipo 2"));
-        mockList.add(new CondenaModel(3, "Condena 3", "Tipo 3"));
-        mockList.add(new CondenaModel(4, "Condena 4", "Tipo 4"));
-        mockList.add(new CondenaModel(5, "Condena 5", "Tipo 5"));
-        mockList.add(new CondenaModel(6, "Condena 6", "Tipo 6"));
-        mockList.add(new CondenaModel(7, "Condena 7", "Tipo 7"));
-        mockList.add(new CondenaModel(8, "Condena 8", "Tipo 8"));
-        mockList.add(new CondenaModel(9, "Condena 9", "Tipo 9"));
-        mockList.add(new CondenaModel(10, "Condena 10", "Tipo 10"));
-        mockList.add(new CondenaModel(11, "Condena 11", "Tipo 11"));
-        mockList.add(new CondenaModel(12, "Condena 12", "Tipo 12"));
+        setupRetrofit();
 
-        adapter = new CondenaAdapter(mockList);
-
+        adapter = new CondenaAdapter(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(adapter);
+
+        fetchCondenas();
     }
+
+    private void setupRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api-sql-igesta-2ano.onrender.com/igesta/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        condenaApi = retrofit.create(CondenaApi.class);
+    }
+
+    private void fetchCondenas() {
+        condenaApi.selecionarCondenas().enqueue(new Callback<List<CondenaModel>>() {
+            @Override
+            public void onResponse(Call<List<CondenaModel>> call, Response<List<CondenaModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    adapter.setCondenas(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CondenaModel>> call, Throwable t) {
+                Toast.makeText(SelecionarCondenas.this, "Não foi possível carregar as condenas", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
