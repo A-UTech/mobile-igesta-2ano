@@ -26,7 +26,7 @@ public class Cadastro extends AppCompatActivity {
         });
         Button btn_cadastrar = findViewById(R.id.cadastrar_bt);
         btn_cadastrar.setOnClickListener(v -> {
-            Intent rota = new Intent(this, MainActivity.class);
+            Intent rota = new Intent(this, Login.class);
             startActivity(rota);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();
