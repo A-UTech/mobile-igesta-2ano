@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.igestamobile">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,13 +16,16 @@
         android:theme="@style/Theme.IgestaMobile"
         tools:targetApi="31">
         <activity
-            android:name=".Login"
+            android:name=".ui.SelecionarCondenas"
             android:exported="false" />
         <activity
-            android:name=".Cadastro"
+            android:name=".ui.Login"
             android:exported="false" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".ui.Cadastro"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name" />
     </application>

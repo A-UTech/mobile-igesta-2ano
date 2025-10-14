@@ -1,6 +1,5 @@
-package com.matheus.igestamobile;
+package com.example.igestamobile.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,16 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SearchView;
+
+import com.example.igestamobile.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link GerenciarFuncionario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GerenciarFuncionario extends Fragment {
+public class    GerenciarFuncionario extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,21 +63,6 @@ public class GerenciarFuncionario extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_gerenciar_funcionario, container, false);
-
-        SearchView searchView = view.findViewById(R.id.search_view);
-        int id = searchView.getContext()
-                .getResources()
-                .getIdentifier("android:id/search_src_text", null, null);
-
-        EditText searchEditText = searchView.findViewById(id);
-        searchEditText.setBackground(null);
-        searchEditText.setHintTextColor(Color.rgb(A1,A1,A1));
-        searchEditText.setTextColor(Color.BLACK);
-
-        int magId = searchView.getContext().getResources()
-                .getIdentifier("android:id/search_mag_icon", null, null);
-        ImageView magImage = searchView.findViewById(magId);
-        magImage.setColorFilter(Color.GRAY);  // mesma cor do placeholder, por exemplo
 
         return view;
     }

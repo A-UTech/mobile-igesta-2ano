@@ -1,4 +1,4 @@
-package com.example.igestamobile;
+package com.example.igestamobile.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.igestamobile.R;
 
 public class Cadastro extends AppCompatActivity {
 
@@ -24,7 +26,7 @@ public class Cadastro extends AppCompatActivity {
         });
         Button btn_cadastrar = findViewById(R.id.cadastrar_bt);
         btn_cadastrar.setOnClickListener(v -> {
-            Intent rota = new Intent(this, MainActivity.class);
+            Intent rota = new Intent(this, Login.class);
             startActivity(rota);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();

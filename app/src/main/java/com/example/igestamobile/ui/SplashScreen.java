@@ -1,4 +1,4 @@
-package com.example.igestamobile;
+package com.example.igestamobile.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.igestamobile.R;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -33,6 +34,6 @@ public class SplashScreen extends AppCompatActivity {
         Intent rota = new Intent(this, Cadastro.class);
         startActivity(rota);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        finish();
+        finish();   
     }
 }

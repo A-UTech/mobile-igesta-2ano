@@ -6,7 +6,7 @@
     android:background="@color/preto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Cadastro">
+    tools:context=".ui.Cadastro">
 
     <FrameLayout
         android:id="@+id/view"
