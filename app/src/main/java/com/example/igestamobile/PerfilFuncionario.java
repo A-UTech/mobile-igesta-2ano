@@ -2,11 +2,15 @@ package com.example.igestamobile;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,5 +64,29 @@ public class PerfilFuncionario extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_perfil_funcionario, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        String[] funcoes = requireContext().getResources().getStringArray(R.array.cargos_opcoes);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                funcoes
+        );
+
+        AutoCompleteTextView dropdownCargos = view.findViewById(R.id.bt_cargos);
+
+        dropdownCargos.setAdapter(adapter);
+
+        //Para definir qual é a função "padrão"
+        dropdownCargos.setText(funcoes[0], false);
+
+        dropdownCargos.setOnItemClickListener((parent, v, position, id) -> {
+            String itemSelecionado = (String) parent.getItemAtPosition(position);
+        });
     }
 }

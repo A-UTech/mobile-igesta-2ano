@@ -68,7 +68,7 @@
             app:layout_constraintTop_toBottomOf="@+id/shapeableImageView" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditText"
+            android:id="@+id/mensagem_input"
             android:layout_width="match_parent"
             android:layout_height="51dp"
             android:layout_marginLeft="30dp"
@@ -95,7 +95,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputEditText"
+            app:layout_constraintTop_toBottomOf="@+id/mensagem_input"
             tools:listitem="@layout/funcionario">
 
         </androidx.recyclerview.widget.RecyclerView>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/preto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Cadastro">
@@ -124,6 +125,7 @@
                 android:layout_height="65dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/borda_btn"
+                app:backgroundTint="@null"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Cadastrar"
                 android:textAllCaps="false"

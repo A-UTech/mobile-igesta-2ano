@@ -80,7 +80,7 @@ public class Perfil extends Fragment {
         bt_gerenciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GerenciarFuncionario gerenciar = new GerenciarFuncionario();
+                PerfilFuncionario gerenciar = new PerfilFuncionario();
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.container, gerenciar)
