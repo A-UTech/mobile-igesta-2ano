@@ -7,7 +7,7 @@
         android:title="Cadastrar Condenas" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_chatbot"
         android:icon="@drawable/nav_chatbot_selector"
         android:title="Chatbot" />
 

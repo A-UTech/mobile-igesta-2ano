@@ -1,22 +1,23 @@
-package com.example.igestamobile.ui;
+package com.example.igestamobile;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
-import com.example.igestamobile.R;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Perfil#newInstance} factory method to
+ * Use the {@link PerfilFuncionario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Perfil extends Fragment {
+public class PerfilFuncionario extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +28,7 @@ public class Perfil extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Perfil() {
+    public PerfilFuncionario() {
         // Required empty public constructor
     }
 
@@ -37,11 +38,11 @@ public class Perfil extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Perfil.
+     * @return A new instance of fragment PerfilFuncionario.
      */
     // TODO: Rename and change types and number of parameters
-    public static Perfil newInstance(String param1, String param2) {
-        Perfil fragment = new Perfil();
+    public static PerfilFuncionario newInstance(String param1, String param2) {
+        PerfilFuncionario fragment = new PerfilFuncionario();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,34 +63,30 @@ public class Perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_perfil_funcionario, container, false);
+    }
 
-        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        LinearLayout bt_config = view.findViewById(R.id.bt_config);
-        LinearLayout bt_gerenciar = view.findViewById(R.id.bt_gerenciar);
+        String[] funcoes = requireContext().getResources().getStringArray(R.array.cargos_opcoes);
 
-        bt_config.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Configuracao configuracao = new Configuracao();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, configuracao)
-                        .commit();
-            }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                funcoes
+        );
+
+        AutoCompleteTextView dropdownCargos = view.findViewById(R.id.bt_cargos);
+
+        dropdownCargos.setAdapter(adapter);
+
+        //Para definir qual é a função "padrão"
+        dropdownCargos.setText(funcoes[0], false);
+
+        dropdownCargos.setOnItemClickListener((parent, v, position, id) -> {
+            String itemSelecionado = (String) parent.getItemAtPosition(position);
         });
-
-        bt_gerenciar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PerfilFuncionario gerenciar = new PerfilFuncionario();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, gerenciar)
-                        .commit();
-            }
-        });
-
-        return view;
     }
 }

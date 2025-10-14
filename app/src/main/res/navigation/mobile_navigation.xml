@@ -37,4 +37,10 @@
         android:name="com.example.igestamobile.ui.GerenciarFuncionario"
         android:label="fragment_gerenciar_funcionario"
         tools:layout="@layout/fragment_gerenciar_funcionario" />
+    <fragment
+        android:id="@+id/navigation_chatbot"
+        android:name="com.example.igestamobile.Chatbot"
+        android:label="fragment_chatbot"
+        tools:layout="@layout/fragment_chatbot" />
+
 </navigation>
