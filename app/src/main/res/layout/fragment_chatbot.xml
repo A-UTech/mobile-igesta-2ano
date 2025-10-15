@@ -88,33 +88,13 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="26dp"
+            android:paddingHorizontal="40dp"
             app:layout_constraintBottom_toTopOf="@+id/mensagem_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView37"
-
-        <LinearLayout
-            android:id="@+id/chat_esquerda"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/mensagem_bot"
-            android:paddingHorizontal="25dp"
-            android:paddingVertical="20dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="209dp">
-
-            <TextView
-                android:id="@+id/chat_esquerda_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
-                android:text="Como posso te ajudar hoje?"
-                android:textColor="@color/preto"
-                android:textSize="13sp"></TextView>
-        </LinearLayout>
-        />
+            app:layout_constraintTop_toBottomOf="@+id/textView37" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

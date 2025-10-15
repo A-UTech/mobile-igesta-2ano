@@ -2,11 +2,11 @@
     <!-- Base application theme. -->
     <style name="Theme.IgestaMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/preto</item>
+        <item name="colorPrimary">@color/verde_escuro</item>
         <item name="colorOnPrimary">@color/branco</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/verde_claro</item>
-        <item name="colorOnSecondary">@color/verde_escuro</item>
+        <item name="colorOnSecondary">@color/preto</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

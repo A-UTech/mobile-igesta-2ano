@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/igestinha_img"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="9dp"
+            android:layout_weight="0"
+            android:src="@mipmap/igestinha" />
+
+        <LinearLayout
+            android:id="@+id/chat_esquerda"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/igestinha_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Igestinha"
+                android:textColor="@color/verde_escuro"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/chat_esquerda_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/mensagem_bot"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingHorizontal="25dp"
+                android:paddingVertical="20dp"
+                android:text="Como posso te ajudar hoje?"
+                android:textColor="@color/preto"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/chat_direita"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nome_usuario_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="end"
+                android:text="Cleiton Barros"
+                android:textColor="@color/verde_escuro"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/chat_direita_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borda_btn"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingHorizontal="25dp"
+                android:paddingVertical="20dp"
+                android:text="Quero saber quantas condenas...?"
+                android:textColor="@color/branco"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="9dp"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+            app:srcCompat="@mipmap/fotoperfil" />
+
+    </LinearLayout>
+</RelativeLayout>
