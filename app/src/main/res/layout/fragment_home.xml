@@ -76,7 +76,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageView14"
             app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"
             android:layout_width="100dp"
             android:layout_height="40dp"

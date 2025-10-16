@@ -119,17 +119,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cadastro_senha_input" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cadastrar_bt"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/borda_btn"
-                app:backgroundTint="@null"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Cadastrar"
                 android:textAllCaps="false"
+                android:textColor="@color/branco"
                 android:textSize="15dp"
+                app:backgroundTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cadastro_cpf_input" />
