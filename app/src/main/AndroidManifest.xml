@@ -16,6 +16,9 @@
         android:theme="@style/Theme.IgestaMobile"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ContarCondenas"
+            android:exported="false" />
+        <activity
             android:name=".ui.SelecionarCondenas"
             android:exported="false" />
         <activity
