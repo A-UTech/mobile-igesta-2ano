@@ -8,7 +8,7 @@
         <item name="colorSecondary">@color/verde_claro</item>
         <item name="colorOnSecondary">@color/verde_escuro</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">?attr/colorOnSecondary</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

@@ -39,7 +39,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_nome_input"
+                android:id="@+id/nome_input"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="36dp"
@@ -72,7 +72,7 @@
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_nome_input" />
+                app:layout_constraintTop_toBottomOf="@+id/nome_input" />
 
             <ImageView
                 android:id="@+id/login_logo"

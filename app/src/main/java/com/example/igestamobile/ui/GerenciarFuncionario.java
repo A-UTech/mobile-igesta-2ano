@@ -3,6 +3,7 @@ package com.example.igestamobile.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import com.example.igestamobile.R;
  * Use the {@link GerenciarFuncionario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class    GerenciarFuncionario extends Fragment {
+public class GerenciarFuncionario extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,8 +62,29 @@ public class    GerenciarFuncionario extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_gerenciar_funcionario, container, false);
+
+        View adicionarFuncionario = view.findViewById(R.id.bt_adicionar_funcionario);
+        View btVoltar = view.findViewById(R.id.bt_voltar_gf);
+
+        if (btVoltar != null) {
+            btVoltar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v).popBackStack();
+                }
+            });
+        }
+
+        //Adicionando clique temporário na RecyclerView apenas para visualizar a tela de perfil do funcionário
+        if (adicionarFuncionario != null) {
+            adicionarFuncionario.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v).navigate(R.id.action_navigation_gerenciarFuncionario_to_navigation_perfilFuncionario);
+                }
+            });
+        }
 
         return view;
     }
