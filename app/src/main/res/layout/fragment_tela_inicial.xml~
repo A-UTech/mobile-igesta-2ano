@@ -1,6 +1,10 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TelaInicial">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -72,12 +76,12 @@
             android:text="O Igestinha está aqui para te ajudar!"
             android:textColor="@color/preto"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/bt_chatbot"
             app:layout_constraintStart_toEndOf="@+id/imageView14"
             app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button"
+            android:id="@+id/bt_chatbot"
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_marginTop="17dp"
@@ -100,7 +104,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button">
+            app:layout_constraintTop_toBottomOf="@+id/bt_chatbot">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,9 +120,11 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView2"
-                        android:layout_width="156dp"
-                        android:layout_height="167dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="11dp"
+                        android:minWidth="156dp"
+                        android:minHeight="167dp"
                         app:cardBackgroundColor="@color/verde_escuro"
                         app:cardCornerRadius="20.5dp"
                         app:cardElevation="0dp">
@@ -168,8 +174,10 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView"
-                        android:layout_width="156dp"
-                        android:layout_height="168dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minWidth="156dp"
+                        android:minHeight="167dp"
                         app:cardBackgroundColor="@color/verde_claro"
                         app:cardCornerRadius="20.5dp"
                         app:cardElevation="0dp">
@@ -220,10 +228,11 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="217dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="44dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="44dp"
+                    android:minHeight="217dp"
                     app:cardBackgroundColor="@color/verde_escuro"
                     app:cardCornerRadius="20.5dp"
                     app:cardElevation="0dp">
@@ -258,13 +267,15 @@
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="156dp"
-                        android:layout_height="131dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
+                        android:minWidth="156dp"
+                        android:minHeight="131dp"
                         app:cardBackgroundColor="@color/verde_claro"
                         app:cardCornerRadius="20.5dp"
-                        app:cardElevation="0dp" >
+                        app:cardElevation="0dp">
 
                         <TextView
                             android:id="@+id/textView29"
@@ -355,68 +366,69 @@
                     app:cardCornerRadius="20.5dp"
                     app:cardElevation="0dp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="0%"
+                        android:textColor="#4E8530"
+                        android:textSize="36sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginRight="20dp"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="0%"
-                            android:textColor="#4E8530"
-                            android:textSize="36sp" />
-
-                        <TextView
-                            android:layout_width="200dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:lineHeight="18dp"
-                            android:text="Condenas em relação a semana passada."
-                            android:textColor="@color/preto" />
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:lineHeight="18dp"
+                        android:text="Condenas em relação a semana passada."
+                        android:textColor="@color/preto" />
+                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="217dp"
-                        android:layout_marginLeft="44dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="44dp"
-                        android:layout_marginBottom="50dp"
-                        app:cardBackgroundColor="@color/verde_escuro"
-                        app:cardCornerRadius="20.5dp"
-                        app:cardElevation="0dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="44dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="44dp"
+                    android:layout_marginBottom="50dp"
+                    android:minHeight="217dp"
+                    app:cardBackgroundColor="@color/verde_escuro"
+                    app:cardCornerRadius="20.5dp"
+                    app:cardElevation="0dp">
 
-                        <TextView
-                            android:id="@+id/textView50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="23dp"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Picos"
-                            android:textColor="@color/branco"
-                            android:textSize="21dp" />
+                    <TextView
+                        android:id="@+id/textView50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="23dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Picos"
+                        android:textColor="@color/branco"
+                        android:textSize="21dp" />
 
-                        <TextView
-                            android:id="@+id/textView51"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="49dp"
-                            android:fontFamily="@font/poppins_medium"
-                            android:text="condenações parciais"
-                            android:textColor="@color/branco"
-                            android:textSize="12sp" />
-                    </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/textView51"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="49dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="condenações parciais"
+                        android:textColor="@color/branco"
+                        android:textSize="12sp" />
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</layout>
+</FrameLayout>

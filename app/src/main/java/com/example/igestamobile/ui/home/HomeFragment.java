@@ -9,7 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import com.example.igestamobile.R;
 import com.example.igestamobile.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
