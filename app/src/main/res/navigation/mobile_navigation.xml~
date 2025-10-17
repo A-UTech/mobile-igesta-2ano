@@ -25,7 +25,7 @@
 
     <navigation
         android:id="@+id/navigation_perfil"
-        app:startDestination="@id/fragment_perfil_base" >
+        app:startDestination="@id/navigation_perfil_base" >
 
         <fragment
             android:id="@+id/fragment_perfil_base"
@@ -45,7 +45,11 @@
             android:id="@+id/navigation_configuracao"
             android:name="com.example.igestamobile.ui.Configuracao"
             android:label="fragment_configuracao"
-            tools:layout="@layout/fragment_configuracao" />
+            tools:layout="@layout/fragment_configuracao" >
+            <action
+                android:id="@+id/action_navigation_perfil_to_navigation_configuracao"
+                app:destination="@id/navigation_configuracao" />
+        </fragment>
 
         <fragment
             android:id="@+id/navigation_gerenciarFuncionario"
@@ -55,13 +59,10 @@
             <action
                 android:id="@+id/action_navigation_gerenciarFuncionario_to_navigation_perfilFuncionario"
                 app:destination="@id/navigation_perfilFuncionario" />
+            <action
+                android:id="@+id/action_navigation_perfil_to_navigation_gerenciarFuncionario"
+                app:destination="@id/navigation_gerenciarFuncionario" />
         </fragment>
-
-        <fragment
-            android:id="@+id/navigation_perfilFuncionario"
-            android:name="com.example.igestamobile.PerfilFuncionario"
-            android:label="fragment_perfil_funcionario"
-            tools:layout="@layout/fragment_perfil_funcionario" />
     </navigation>
 
     <fragment
@@ -69,5 +70,9 @@
         android:name="com.example.igestamobile.Chatbot"
         android:label="fragment_chatbot"
         tools:layout="@layout/fragment_chatbot" />
-
+    <fragment
+        android:id="@+id/navigation_perfilFuncionario"
+        android:name="com.example.igestamobile.PerfilFuncionario"
+        android:label="fragment_perfil_funcionario"
+        tools:layout="@layout/fragment_perfil_funcionario" />
 </navigation>

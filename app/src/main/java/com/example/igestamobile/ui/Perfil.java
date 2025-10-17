@@ -3,6 +3,7 @@ package com.example.igestamobile.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,22 +73,14 @@ public class Perfil extends Fragment {
         bt_config.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Configuracao configuracao = new Configuracao();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, configuracao)
-                        .commit();
+                Navigation.findNavController(v).navigate(R.id.action_perfil_to_configuracao);
             }
         });
 
         bt_gerenciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PerfilFuncionario gerenciar = new PerfilFuncionario();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, gerenciar)
-                        .commit();
+                Navigation.findNavController(v).navigate(R.id.action_perfil_to_gerenciarFuncionario);
             }
         });
 

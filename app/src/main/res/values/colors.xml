@@ -9,6 +9,7 @@
     <color name="cinza_claro">#E7E7E7</color>
     <color name="vermelho">#EA2323</color>
     <color name="amarelo">#FFC916</color>
+    <color name="transparente">#00000000</color>
 
     <color name="purple_200">#BB86FC</color>
     <color name="purple_500">#6200EE</color>

@@ -12,14 +12,14 @@
         android:background="@color/branco">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/bt_adicionar_funcionario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="103dp"
             android:clickable="true"
+            android:contentDescription="Adicionar funcionário"
             android:src="@drawable/ic_adicionar"
             app:fabCustomSize="78dp"
-            android:contentDescription="Adicionar funcionário"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.909"
@@ -56,6 +56,7 @@
             android:id="@+id/textView16"
             android:layout_width="185dp"
             android:layout_height="62dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="40dp"
             android:fontFamily="@font/poppins_semibold"
             android:lineHeight="28dp"
@@ -63,8 +64,8 @@
             android:textColor="@color/verde_escuro"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.19"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/bt_voltar_gf"
             app:layout_constraintTop_toBottomOf="@+id/shapeableImageView" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -89,9 +90,11 @@
             app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="420dp"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="26dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +102,16 @@
             tools:listitem="@layout/funcionario">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <ImageView
+            android:id="@+id/bt_voltar_gf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="58dp"
+            android:src="@drawable/ic_seta_verde"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shapeableImageView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
