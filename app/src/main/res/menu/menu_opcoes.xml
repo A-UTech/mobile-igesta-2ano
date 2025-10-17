@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/editar_condenas"
+        android:icon="@drawable/ic_edit"
+        android:title="Editar condenas" />
+    <item
+        android:id="@+id/limpar_condenas"
+        android:title="Limpar contagens"
+        android:titleTextColor="@color/design_default_color_error"
+        android:icon="@drawable/ic_delete" />
+</menu>

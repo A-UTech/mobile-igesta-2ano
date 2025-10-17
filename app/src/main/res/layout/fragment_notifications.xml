@@ -69,7 +69,7 @@
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
         app:srcCompat="@mipmap/fotoperfil" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_total"
         android:layout_width="104dp"
         android:layout_height="41dp"
@@ -82,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_parcial"
         android:layout_width="104dp"
         android:layout_height="41dp"
@@ -95,7 +95,7 @@
         app:layout_constraintStart_toEndOf="@+id/btn_total"
         app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_option"
         android:layout_width="41dp"
         android:layout_height="41dp"
