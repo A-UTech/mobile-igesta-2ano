@@ -39,28 +39,10 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nome_input"
-                android:layout_width="279dp"
-                android:layout_height="65dp"
-                android:layout_marginTop="36dp"
-                android:accessibilityHeading="false"
-                android:background="@drawable/borda_edittext"
-                android:fontFamily="@font/poppins_regular"
-                android:hint="Nome"
-                android:paddingLeft="25dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/cinza_medio"
-                android:textSize="13dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_txt" />
-
-            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_email_input"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="36dp"
                 android:accessibilityHeading="false"
                 android:background="@drawable/borda_edittext"
                 android:fontFamily="@font/poppins_regular"
@@ -72,7 +54,25 @@
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nome_input" />
+                app:layout_constraintTop_toBottomOf="@+id/login_txt" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_senha_input"
+                android:layout_width="279dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="8dp"
+                android:accessibilityHeading="false"
+                android:background="@drawable/borda_edittext"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Senha"
+                android:paddingLeft="25dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/cinza_medio"
+                android:textSize="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_email_input" />
 
             <ImageView
                 android:id="@+id/login_logo"
@@ -113,7 +113,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/fazer_cadastro_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_email_input"
+                app:layout_constraintTop_toBottomOf="@+id/login_senha_input"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
