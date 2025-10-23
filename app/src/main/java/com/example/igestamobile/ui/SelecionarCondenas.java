@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.igestamobile.R;
 import com.example.igestamobile.adapter.CondenaAdapter;
 import com.example.igestamobile.data.api.CondenaApi;
+import com.example.igestamobile.data.api.RetrofitClient;
 import com.example.igestamobile.data.model.CondenaModel;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class SelecionarCondenas extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.condena_recyclerView);
 
-        setupRetrofit();
+        condenaApi = RetrofitClient.getClient().create(CondenaApi.class);
 
         adapter = new CondenaAdapter(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -58,14 +59,6 @@ public class SelecionarCondenas extends AppCompatActivity {
 
             List<CondenaModel> condenasSelecionadas = adapter.getCondenasSelecionadas();
         });
-    }
-
-    private void setupRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api-sql-igesta-2ano.onrender.com/igesta/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        condenaApi = retrofit.create(CondenaApi.class);
     }
 
     private void fetchCondenas() {

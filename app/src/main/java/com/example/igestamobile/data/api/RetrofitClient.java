@@ -5,14 +5,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoginApiClient {
+public class RetrofitClient {
     private static final String BASE_URL = "https://api-sql-igesta-2ano.onrender.com/";
-
-    private static LoginApi service = null;
-
-    public static LoginApi getService() {
-        if (service == null) {
-
+    private static Retrofit retrofit = null;
+    public static Retrofit getClient() {
+        if (retrofit == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -20,14 +17,12 @@ public class LoginApiClient {
                     .addInterceptor(logging)
                     .build();
 
-            Retrofit retrofit = new Retrofit.Builder()
+            retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-
-            service = retrofit.create(LoginApi.class);
         }
-        return service;
+        return retrofit;
     }
 }

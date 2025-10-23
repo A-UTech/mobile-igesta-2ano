@@ -1,0 +1,13 @@
+package com.example.igestamobile.data.api;
+
+import com.example.igestamobile.data.model.GestorModel;
+import com.example.igestamobile.data.model.LiderModel;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+
+public interface GestorApi {
+    @GET("igesta/gestores/selecionarPorId/{id}")
+    Call<GestorModel> selecionarGestores(@Path("id") Integer id);
+}
