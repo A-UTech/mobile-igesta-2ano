@@ -20,6 +20,7 @@ import com.example.igestamobile.data.model.GestorModel;
 import com.example.igestamobile.data.model.LiderModel;
 import com.example.igestamobile.data.model.LoginModelRequest;
 import com.example.igestamobile.data.model.LoginModelResponse;
+import com.example.igestamobile.utils.MaskUtil;
 
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class Login extends AppCompatActivity {
         etSenha = findViewById(R.id.login_senha_input);
         btnLogin = findViewById(R.id.logar_bt);
         cadastro = findViewById(R.id.fazer_cadastro_txt);
+
+        MaskUtil.aplicarMascara(etEmailCnpj);
 
         btnLogin.setOnClickListener(view -> {
             String emailCnpj = etEmailCnpj.getText().toString().trim();
@@ -79,7 +82,6 @@ public class Login extends AppCompatActivity {
                             switch (user.getTipoUsuario()) {
                                 case "unidade":
                                     handleLoginUnidade(user);
-                                    Toast.makeText(Login.this, "Tipo unidade", Toast.LENGTH_SHORT).show();
                                     break;
 
                                 case "lider":
