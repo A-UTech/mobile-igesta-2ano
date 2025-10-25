@@ -18,7 +18,7 @@
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="10dp"
         android:fontFamily="@font/poppins_regular"
-        android:hint="Pesquisar funcionários"
+        android:hint="Pesquisar condenas"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:textColor="@color/preto"
