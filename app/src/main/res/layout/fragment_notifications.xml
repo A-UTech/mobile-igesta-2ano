@@ -18,7 +18,7 @@
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="10dp"
         android:fontFamily="@font/poppins_regular"
-        android:hint="Pesquisar funcionários"
+        android:hint="Pesquisar condenas"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:textColor="@color/preto"
@@ -69,31 +69,35 @@
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
         app:srcCompat="@mipmap/fotoperfil" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_total"
         android:layout_width="104dp"
-        android:layout_height="41dp"
+        android:layout_height="50dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="26dp"
-        android:background="@drawable/borda_btn"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins_medium"
         android:gravity="center"
         android:text="Totais"
         android:textAllCaps="false"
+        android:textColor="@color/branco"
+        app:backgroundTint="@color/verde_escuro"
+        app:cornerRadius="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_parcial"
         android:layout_width="104dp"
-        android:layout_height="41dp"
+        android:layout_height="50dp"
         android:layout_marginStart="11dp"
-        android:layout_marginTop="26dp"
-        android:background="@drawable/borda_btn"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins_medium"
         android:gravity="center"
         android:text="Parciais"
         android:textAllCaps="false"
+        android:textColor="@color/branco"
+        app:backgroundTint="@color/verde_escuro"
+        app:cornerRadius="20.5dp"
         app:layout_constraintStart_toEndOf="@+id/btn_total"
         app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
 
@@ -113,7 +117,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="30dp"
+        android:paddingBottom="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,11 +127,11 @@
         tools:listitem="@layout/item_contagem_condenas" />
 
     <TextView
-        android:id="@+id/floatingActionButton2"
+        android:id="@+id/bt_enviar_contagens"
         android:layout_width="99dp"
         android:layout_height="70dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="103dp"
         android:background="@drawable/borda_btn"
         android:drawableTop="@drawable/enviar_contagem"
         android:drawablePadding="5dp"

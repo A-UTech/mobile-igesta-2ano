@@ -91,7 +91,6 @@ public class NotificationsFragment extends Fragment {
         });
 
         bt_enviar_contagens_dialog.setOnClickListener(v -> {
-           dialog_enviar_contagens.dismiss();
            dialog_enviar_condenas.show();
         });
 

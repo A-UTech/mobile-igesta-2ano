@@ -1,5 +1,7 @@
 package com.example.igestamobile.ui;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,9 +10,9 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.example.igestamobile.PerfilFuncionario;
 import com.example.igestamobile.R;
 
 /**
@@ -28,6 +30,8 @@ public class Perfil extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button bt_n_logout, bt_logout_dialog;
+    private Dialog dialog_logout;
 
     public Perfil() {
         // Required empty public constructor
@@ -69,6 +73,31 @@ public class Perfil extends Fragment {
 
         LinearLayout bt_config = view.findViewById(R.id.bt_config);
         LinearLayout bt_gerenciar = view.findViewById(R.id.bt_gerenciar);
+        LinearLayout bt_logout = view.findViewById(R.id.bt_logout);
+
+        dialog_logout = new Dialog(requireContext());
+        dialog_logout.setContentView(R.layout.dialog_logout);
+        dialog_logout.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog_logout.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        bt_n_logout = dialog_logout.findViewById(R.id.bt_n_remover);
+        bt_logout_dialog = dialog_logout.findViewById(R.id.bt_cadastrar_func_dialog);
+
+        bt_logout.setOnClickListener(v -> {
+            dialog_logout.show();
+        });
+
+        bt_n_logout.setOnClickListener(v -> {
+            dialog_logout.dismiss();
+        });
+
+        bt_logout_dialog.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), Login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            startActivity(intent);
+            dialog_logout.dismiss();
+        });
 
         bt_config.setOnClickListener(new View.OnClickListener() {
             @Override
