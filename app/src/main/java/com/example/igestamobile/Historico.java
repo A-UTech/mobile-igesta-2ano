@@ -1,24 +1,21 @@
-package com.example.igestamobile.ui;
+package com.example.igestamobile;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.example.igestamobile.PerfilFuncionario;
-import com.example.igestamobile.R;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Perfil#newInstance} factory method to
+ * Use the {@link Historico#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Perfil extends Fragment {
+public class Historico extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +26,7 @@ public class Perfil extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Perfil() {
+    public Historico() {
         // Required empty public constructor
     }
 
@@ -39,11 +36,11 @@ public class Perfil extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Perfil.
+     * @return A new instance of fragment Historico.
      */
     // TODO: Rename and change types and number of parameters
-    public static Perfil newInstance(String param1, String param2) {
-        Perfil fragment = new Perfil();
+    public static Historico newInstance(String param1, String param2) {
+        Historico fragment = new Historico();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,32 +62,7 @@ public class Perfil extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
-
-        LinearLayout bt_config = view.findViewById(R.id.bt_config);
-        LinearLayout bt_gerenciar = view.findViewById(R.id.bt_gerenciar);
-        LinearLayout bt_historico = view.findViewById(R.id.bt_historico);
-
-        bt_config.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_perfil_to_configuracao);
-            }
-        });
-
-        bt_gerenciar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_perfil_to_gerenciarFuncionario);
-            }
-        });
-
-        bt_historico.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_navigation_perfil_to_navigation_historico);
-            }
-        });
+        View view = inflater.inflate(R.layout.fragment_historico, container, false);
 
         return view;
     }
