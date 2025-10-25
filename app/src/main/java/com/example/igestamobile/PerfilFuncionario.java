@@ -1,5 +1,6 @@
 package com.example.igestamobile;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +31,7 @@ public class PerfilFuncionario extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Dialog dialog_remover;
 
     public PerfilFuncionario() {
         // Required empty public constructor
@@ -66,6 +70,28 @@ public class PerfilFuncionario extends Fragment {
         View view = inflater.inflate(R.layout.fragment_perfil_funcionario, container, false);
 
         View btVoltar = view.findViewById(R.id.bt_voltar_pf);
+
+        LinearLayout bt_remover = view.findViewById(R.id.bt_remover_funcionario);
+
+        dialog_remover = new Dialog(requireContext());
+        dialog_remover.setContentView(R.layout.dialog_remover);
+        dialog_remover.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog_remover.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        Button bt_n_remover = dialog_remover.findViewById(R.id.bt_n_remover);
+        Button bt_remover_dialog = dialog_remover.findViewById(R.id.bt_cadastrar_func_dialog);
+
+        bt_remover.setOnClickListener(v -> {
+            dialog_remover.show();
+        });
+
+        bt_n_remover.setOnClickListener(v -> {
+            dialog_remover.dismiss();
+        });
+
+        bt_remover_dialog.setOnClickListener(v -> {
+            //Lógica para remover o funcionário do banco
+        });
 
         if (btVoltar != null) {
             btVoltar.setOnClickListener(new View.OnClickListener() {

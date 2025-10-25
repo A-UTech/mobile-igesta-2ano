@@ -1,5 +1,6 @@
 package com.example.igestamobile.ui;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.igestamobile.R;
 
@@ -26,6 +28,7 @@ public class GerenciarFuncionario extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Dialog dialog_cadastrar_func;
 
     public GerenciarFuncionario() {
         // Required empty public constructor
@@ -67,21 +70,26 @@ public class GerenciarFuncionario extends Fragment {
         View adicionarFuncionario = view.findViewById(R.id.bt_adicionar_funcionario);
         View btVoltar = view.findViewById(R.id.bt_voltar_gf);
 
+        dialog_cadastrar_func = new Dialog(requireContext());
+        dialog_cadastrar_func.setContentView(R.layout.dialog_cadastrar_func);
+        dialog_cadastrar_func.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog_cadastrar_func.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        Button bt_cadastrar_func = dialog_cadastrar_func.findViewById(R.id.bt_cadastrar_func_dialog);
+
+        adicionarFuncionario.setOnClickListener(v -> {
+            dialog_cadastrar_func.show();
+        });
+
+        bt_cadastrar_func.setOnClickListener(v -> {
+            //Lógica para cadastrar o funcionário no banco
+        });
+
         if (btVoltar != null) {
             btVoltar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Navigation.findNavController(v).popBackStack();
-                }
-            });
-        }
-
-        //Adicionando clique temporário na RecyclerView apenas para visualizar a tela de perfil do funcionário
-        if (adicionarFuncionario != null) {
-            adicionarFuncionario.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(v).navigate(R.id.action_navigation_gerenciarFuncionario_to_navigation_perfilFuncionario);
                 }
             });
         }
