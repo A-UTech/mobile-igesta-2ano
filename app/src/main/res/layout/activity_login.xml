@@ -43,36 +43,53 @@
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="36dp"
-                android:accessibilityHeading="false"
                 android:background="@drawable/borda_edittext"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="E-mail ou CNPJ"
+                android:inputType="textEmailAddress"
                 android:paddingLeft="25dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/cinza_medio"
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_txt" />
+                app:layout_constraintTop_toBottomOf="@+id/login_txt"
+                android:textCursorDrawable="@drawable/custom_cursor"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_senha_input"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="8dp"
-                android:accessibilityHeading="false"
                 android:background="@drawable/borda_edittext"
-                android:fontFamily="@font/poppins_regular"
-                android:hint="Senha"
-                android:paddingLeft="25dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/cinza_medio"
-                android:textSize="13dp"
+                app:boxBackgroundMode="none"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/cinza_escuro"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_email_input" />
+                app:layout_constraintTop_toBottomOf="@+id/login_email_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/login_senha_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="50dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="Senha"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/cinza_medio"
+                    android:textSize="13sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/login_logo"
@@ -102,6 +119,7 @@
                 android:layout_width="279dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="143dp"
                 android:background="@drawable/borda_btn"
                 android:backgroundTint="@color/verde_escuro"
                 android:backgroundTintMode="@null"
@@ -113,8 +131,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/fazer_cadastro_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_senha_input"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

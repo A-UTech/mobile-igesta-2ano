@@ -3,12 +3,16 @@ package com.example.igestamobile.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
+
 import com.example.igestamobile.R;
 import com.example.igestamobile.data.api.CondenaUnidadeApi;
 import com.example.igestamobile.data.api.GestorApi;
@@ -22,6 +26,7 @@ import com.example.igestamobile.data.model.LoginModelRequest;
 import com.example.igestamobile.data.model.LoginModelResponse;
 import com.example.igestamobile.utils.MaskUtil;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import retrofit2.Call;
@@ -97,7 +102,10 @@ public class Login extends AppCompatActivity {
                                     break;
                             }
                         } else if (response.code() == 401) {
-                            Toast.makeText(Login.this, "Credenciais inválidas. Tente novamente.", Toast.LENGTH_LONG).show();
+                            etEmailCnpj.setError("E-mail ou CNPJ inválido.");
+                            etSenha.setError("Senha inválida.");
+                            etEmailCnpj.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
+                            etSenha.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
                         } else {
                             Toast.makeText(Login.this, "Erro no servidor: Código " + response.code(), Toast.LENGTH_LONG).show();
                         }
