@@ -61,7 +61,7 @@
                         android:textColor="@color/vermelho" />
 
                     <TextView
-                        android:id="@+id/textView34"
+                        android:id="@+id/input_quantidade"
                         android:layout_width="234dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"

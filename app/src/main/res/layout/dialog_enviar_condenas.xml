@@ -75,7 +75,7 @@
             android:textSize="13dp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_cadastrar_func_dialog"
+            android:id="@+id/bt_enviar_condenas_dialog"
             android:layout_width="279dp"
             android:layout_height="75dp"
             android:layout_marginHorizontal="30dp"
