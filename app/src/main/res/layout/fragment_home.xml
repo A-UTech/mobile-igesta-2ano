@@ -94,7 +94,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
         <ScrollView
-            android:layout_width="412dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -105,8 +105,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="90dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="90dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -362,30 +362,30 @@
                     app:cardCornerRadius="20.5dp"
                     app:cardElevation="0dp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="0%"
+                        android:textColor="#4E8530"
+                        android:textSize="36sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginRight="20dp"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="0%"
-                            android:textColor="#4E8530"
-                            android:textSize="36sp" />
-
-                        <TextView
-                            android:layout_width="200dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:lineHeight="18dp"
-                            android:text="Condenas em relação a semana passada."
-                            android:textColor="@color/preto" />
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:lineHeight="18dp"
+                        android:text="Condenas em relação a semana passada."
+                        android:textColor="@color/preto" />
+                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"

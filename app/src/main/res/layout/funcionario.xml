@@ -39,7 +39,7 @@
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Líder"
+                android:text="Cargo"
                 android:textColor="@color/branco"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/imageView11"
