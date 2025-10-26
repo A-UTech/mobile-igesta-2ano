@@ -48,6 +48,7 @@ public class NotificationsFragment extends Fragment {
     private FragmentNotificationsBinding binding;
     private CondenaUnidadeAdapter adapter;
     private Dialog dialog_enviar_contagens, dialog_enviar_condenas;
+
     private Integer getClienteIdSalvo() {
         Integer clienteId = -1;
 
@@ -70,7 +71,6 @@ public class NotificationsFragment extends Fragment {
         condenaUnidadeApi = RetrofitClient.getClient().create(CondenaUnidadeApi.class);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
         adapter = new CondenaUnidadeAdapter(new ArrayList<>(), requireContext(), condenaApi);
         binding.recyclerView.setAdapter(adapter);
 
@@ -102,18 +102,18 @@ public class NotificationsFragment extends Fragment {
         });
 
         bt_enviar_contagens_dialog.setOnClickListener(v -> {
-           dialog_enviar_contagens.dismiss();
-           dialog_enviar_condenas.show();
+            dialog_enviar_contagens.dismiss();
+            dialog_enviar_condenas.show();
         });
 
         bt_enviar_condenas_dialog.setOnClickListener(v -> {
             dialog_enviar_condenas.dismiss();
 
+            List<CondenaUnidadeResponse> contagensFinais = adapter.getContagensFinais();
+
             List<Condena> listaParaPlanilha = new ArrayList<>();
-            for (CondenaUnidadeResponse item : adapter.getCondenasUnidades()) {
-                if (item.getQuantidade() > 0) {
-                    listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade()));
-                }
+            for (CondenaUnidadeResponse item : contagensFinais) {
+                listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade(), item.getTipo()));
             }
 
             gerarPlanilha(listaParaPlanilha);
@@ -121,7 +121,6 @@ public class NotificationsFragment extends Fragment {
 
         return root;
     }
-
     private void carregarCondenasDeUnidade(Integer unidadeId) {
         condenaUnidadeApi.selecionarCondenasUnidade(unidadeId).enqueue(new Callback<List<CondenaUnidadeResponse>>() {
             @Override
@@ -146,16 +145,19 @@ public class NotificationsFragment extends Fragment {
         binding = null;
     }
 
+    
     private void gerarPlanilha(List<Condena> condenas) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Condenas");
 
+        
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("Condena");
-        header.createCell(1).setCellValue("Tipo");
+        header.createCell(1).setCellValue("Tipo"); 
         header.createCell(2).setCellValue("Quantidade");
         header.createCell(3).setCellValue("Porcentagem");
 
+        
         int total = 0;
         for (Condena c : condenas) total += c.getQuantidade();
 
@@ -163,8 +165,10 @@ public class NotificationsFragment extends Fragment {
         for (Condena c : condenas) {
             Row row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue(c.getNome());
-            row.createCell(1).setCellValue("Total");
+            row.createCell(1).setCellValue(c.getTipo()); 
             row.createCell(2).setCellValue(c.getQuantidade());
+
+            
             double porcentagem = (total > 0) ? ((double) c.getQuantidade() / total) * 100 : 0;
             row.createCell(3).setCellValue(String.format("%.2f%%", porcentagem));
         }
@@ -196,13 +200,16 @@ public class NotificationsFragment extends Fragment {
     public static class Condena {
         private String nome;
         private int quantidade;
+        private String tipo;
 
-        public Condena(String nome, int quantidade) {
+        public Condena(String nome, int quantidade, String tipo) {
             this.nome = nome;
             this.quantidade = quantidade;
+            this.tipo = tipo;
         }
 
         public String getNome() { return nome; }
         public int getQuantidade() { return quantidade; }
+        public String getTipo() { return tipo; }
     }
 }
