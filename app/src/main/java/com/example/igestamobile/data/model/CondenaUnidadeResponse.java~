@@ -3,7 +3,6 @@ package com.example.igestamobile.data.model;
 public class CondenaUnidadeResponse {
     private Long idCondena;
     private int quantidade;
-    private String nome;
 
     public CondenaUnidadeResponse(Long idCondena) {
         this.idCondena = idCondena;
@@ -24,8 +23,5 @@ public class CondenaUnidadeResponse {
     public int getQuantidade() {
         return quantidade;
     }
-
-    public void setNome(String nome) { this.nome = nome; } // NOVO
-    public String getNome() { return nome; }
 
 }

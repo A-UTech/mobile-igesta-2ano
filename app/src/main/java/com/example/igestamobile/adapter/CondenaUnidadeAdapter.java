@@ -1,9 +1,12 @@
 package com.example.igestamobile.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +17,7 @@ import com.example.igestamobile.R;
 import com.example.igestamobile.data.api.CondenaApi;
 import com.example.igestamobile.data.model.CondenaModel;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -38,11 +42,16 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
 
         CondenaUnidadeResponse condenaUnidade = condenasUnidades.get(position);
 
+        if (holder.quantidadeEditText.getTag() instanceof TextWatcher) {
+            holder.quantidadeEditText.removeTextChangedListener((TextWatcher) holder.quantidadeEditText.getTag());
+        }
+
         condenaApi.selecionarCondenaPorId(condenaUnidade.getIdCondena()).enqueue(new Callback<CondenaModel>() {
             @Override
             public void onResponse(Call<CondenaModel> call, Response<CondenaModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     holder.nome_condena.setText(response.body().getNome());
+                    condenaUnidade.setNome(response.body().getNome());
                 } else {
                     holder.nome_condena.setText("Erro");
                 }
@@ -54,6 +63,57 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
                 Toast.makeText(context, "Não foi possível carregar as condenas", Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.btn_mais.setOnClickListener(v -> {
+            int quantidadeAtual = condenaUnidade.getQuantidade();
+            int novaQuantidade = quantidadeAtual + 1;
+
+            condenaUnidade.setQuantidade(novaQuantidade);
+            holder.quantidadeEditText.setText(String.valueOf(novaQuantidade));
+
+        });
+
+        holder.btn_menos.setOnClickListener(v -> {
+            int quantidadeAtual = condenaUnidade.getQuantidade();
+            int novaQuantidade = quantidadeAtual - 1;
+
+            if (novaQuantidade < 0) {
+                novaQuantidade = 0;
+            }
+
+            condenaUnidade.setQuantidade(novaQuantidade);
+            holder.quantidadeEditText.setText(String.valueOf(novaQuantidade));
+        });
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String texto = s.toString();
+                int novaQuantidade = 0;
+
+                if (!texto.isEmpty()) {
+                    try {
+                        novaQuantidade = Integer.parseInt(texto);
+
+                        if (novaQuantidade < 0) {
+                            novaQuantidade = 0;
+                        }
+                    } catch (NumberFormatException e) {
+
+                    }
+                }
+                condenaUnidade.setQuantidade(novaQuantidade);
+            }
+        };
+
+        holder.quantidadeEditText.addTextChangedListener(textWatcher);
+        holder.quantidadeEditText.setTag(textWatcher);
     }
     @NonNull
     @Override
@@ -69,10 +129,16 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nome_condena;
+        public Button btn_menos;
+        public Button btn_mais;
+        public TextInputEditText quantidadeEditText;
 
         public ViewHolder(View view) {
             super(view);
             nome_condena = view.findViewById(R.id.nome_condena);
+            btn_menos = view.findViewById(R.id.btn_menos);
+            btn_mais = view.findViewById(R.id.btn_mais);
+            quantidadeEditText = view.findViewById(R.id.input_quantidade);
         }
     }
 
@@ -80,4 +146,9 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
         this.condenasUnidades = novaLista;
         notifyDataSetChanged();
     }
+
+    public List<CondenaUnidadeResponse> getCondenasUnidades() {
+        return condenasUnidades;
+    }
+
 }

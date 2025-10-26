@@ -20,9 +20,18 @@ import com.example.igestamobile.adapter.CondenaUnidadeAdapter;
 import com.example.igestamobile.data.api.CondenaApi;
 import com.example.igestamobile.data.api.CondenaUnidadeApi;
 import com.example.igestamobile.data.api.RetrofitClient;
+import com.example.igestamobile.data.model.CondenaModel;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
 import com.example.igestamobile.databinding.FragmentNotificationsBinding;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +90,7 @@ public class NotificationsFragment extends Fragment {
 
         Button bt_n_enviar_contagens = dialog_enviar_contagens.findViewById(R.id.bt_n_remover);
         Button bt_enviar_contagens_dialog = dialog_enviar_contagens.findViewById(R.id.bt_cadastrar_func_dialog);
+        Button bt_enviar_condenas_dialog = dialog_enviar_condenas.findViewById(R.id.bt_enviar_condenas_dialog);
 
         bt_enviar_contagens.setOnClickListener(v -> {
             dialog_enviar_contagens.show();
@@ -91,7 +101,21 @@ public class NotificationsFragment extends Fragment {
         });
 
         bt_enviar_contagens_dialog.setOnClickListener(v -> {
+           dialog_enviar_contagens.dismiss();
            dialog_enviar_condenas.show();
+        });
+
+        bt_enviar_condenas_dialog.setOnClickListener(v -> {
+            dialog_enviar_condenas.dismiss();
+
+            List<Condena> listaParaPlanilha = new ArrayList<>();
+            for (CondenaUnidadeResponse item : adapter.getCondenasUnidades()) {
+                if (item.getQuantidade() > 0) {
+                    listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade()));
+                }
+            }
+
+            gerarPlanilha(listaParaPlanilha);
         });
 
         return root;
@@ -119,5 +143,60 @@ public class NotificationsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void gerarPlanilha(List<Condena> condenas) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Condenas");
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Condena");
+        header.createCell(1).setCellValue("Tipo");
+        header.createCell(2).setCellValue("Quantidade");
+        header.createCell(3).setCellValue("Porcentagem");
+
+        int total = 0;
+        for (Condena c : condenas) total += c.getQuantidade();
+
+        int rowIndex = 1;
+        for (Condena c : condenas) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(c.getNome());
+            row.createCell(1).setCellValue("Total");
+            row.createCell(2).setCellValue(c.getQuantidade());
+            double porcentagem = (total > 0) ? ((double) c.getQuantidade() / total) * 100 : 0;
+            row.createCell(3).setCellValue(String.format("%.2f%%", porcentagem));
+        }
+
+        try {
+            File root = requireContext().getExternalFilesDir(null).getParentFile().getParentFile().getParentFile();
+            File downloadsDir = new File(root, "Download");
+            if (!downloadsDir.exists()) {
+                downloadsDir.mkdirs();
+            }
+            File file = new File(downloadsDir, "condenas.xlsx");
+            FileOutputStream fos = new FileOutputStream(file);
+            workbook.write(fos);
+            fos.close();
+            workbook.close();
+
+            Toast.makeText(requireContext(), "Planilha salva em: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Erro ao salvar planilha: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static class Condena {
+        private String nome;
+        private int quantidade;
+
+        public Condena(String nome, int quantidade) {
+            this.nome = nome;
+            this.quantidade = quantidade;
+        }
+
+        public String getNome() { return nome; }
+        public int getQuantidade() { return quantidade; }
     }
 }
