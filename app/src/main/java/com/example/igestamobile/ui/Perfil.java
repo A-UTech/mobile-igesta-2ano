@@ -73,6 +73,7 @@ public class Perfil extends Fragment {
 
         LinearLayout bt_config = view.findViewById(R.id.bt_config);
         LinearLayout bt_gerenciar = view.findViewById(R.id.bt_gerenciar);
+        LinearLayout bt_historico = view.findViewById(R.id.bt_historico);
         LinearLayout bt_logout = view.findViewById(R.id.bt_logout);
 
         dialog_logout = new Dialog(requireContext());
@@ -110,6 +111,13 @@ public class Perfil extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_perfil_to_gerenciarFuncionario);
+            }
+        });
+
+        bt_historico.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_navigation_perfil_to_navigation_historico);
             }
         });
 

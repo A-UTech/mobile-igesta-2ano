@@ -45,7 +45,7 @@
                 app:destination="@id/navigation_gerenciarFuncionario" />
             <action
                 android:id="@+id/action_navigation_perfil_to_navigation_historico"
-                app:destination="@id/navigation_historico" />
+                app:destination="@id/navigation_perfilFuncionario" />
         </fragment>
 
         <fragment
