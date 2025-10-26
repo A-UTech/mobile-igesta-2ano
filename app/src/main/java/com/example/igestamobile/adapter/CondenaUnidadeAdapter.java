@@ -19,6 +19,7 @@ import com.example.igestamobile.data.model.CondenaModel;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,16 +43,24 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
 
         CondenaUnidadeResponse condenaUnidade = condenasUnidades.get(position);
 
+        
+        holder.quantidadeEditText.setText(String.valueOf(condenaUnidade.getQuantidade()));
+
         if (holder.quantidadeEditText.getTag() instanceof TextWatcher) {
             holder.quantidadeEditText.removeTextChangedListener((TextWatcher) holder.quantidadeEditText.getTag());
         }
 
+        
         condenaApi.selecionarCondenaPorId(condenaUnidade.getIdCondena()).enqueue(new Callback<CondenaModel>() {
             @Override
             public void onResponse(Call<CondenaModel> call, Response<CondenaModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    holder.nome_condena.setText(response.body().getNome());
-                    condenaUnidade.setNome(response.body().getNome());
+                    CondenaModel model = response.body();
+                    holder.nome_condena.setText(model.getNome());
+
+                    
+                    condenaUnidade.setNome(model.getNome());
+                    condenaUnidade.setTipo(model.getTipo());
                 } else {
                     holder.nome_condena.setText("Erro");
                 }
@@ -64,13 +73,11 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
             }
         });
 
+        
         holder.btn_mais.setOnClickListener(v -> {
-            int quantidadeAtual = condenaUnidade.getQuantidade();
-            int novaQuantidade = quantidadeAtual + 1;
-
+            int novaQuantidade = condenaUnidade.getQuantidade() + 1;
             condenaUnidade.setQuantidade(novaQuantidade);
             holder.quantidadeEditText.setText(String.valueOf(novaQuantidade));
-
         });
 
         holder.btn_menos.setOnClickListener(v -> {
@@ -85,6 +92,7 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
             holder.quantidadeEditText.setText(String.valueOf(novaQuantidade));
         });
 
+        
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -105,7 +113,7 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
                             novaQuantidade = 0;
                         }
                     } catch (NumberFormatException e) {
-
+                        
                     }
                 }
                 condenaUnidade.setQuantidade(novaQuantidade);
@@ -114,7 +122,9 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
 
         holder.quantidadeEditText.addTextChangedListener(textWatcher);
         holder.quantidadeEditText.setTag(textWatcher);
+        holder.quantidadeEditText.setText(String.valueOf(condenaUnidade.getQuantidade()));
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -150,5 +160,14 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
     public List<CondenaUnidadeResponse> getCondenasUnidades() {
         return condenasUnidades;
     }
-
+    
+    public List<CondenaUnidadeResponse> getContagensFinais() {
+        List<CondenaUnidadeResponse> contagensFinais = new ArrayList<>();
+        for (CondenaUnidadeResponse item : condenasUnidades) {
+            if (item.getQuantidade() > 0) {
+                contagensFinais.add(item);
+            }
+        }
+        return contagensFinais;
+    }
 }
