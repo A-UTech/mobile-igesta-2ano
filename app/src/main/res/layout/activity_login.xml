@@ -52,13 +52,14 @@
                 android:paddingRight="10dp"
                 android:paddingBottom="10dp"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/preto"
                 android:textColorHint="@color/cinza_medio"
+                android:textColorLink="@color/preto"
+                android:textCursorDrawable="@drawable/custom_cursor"
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_txt"
-                android:textCursorDrawable="@drawable/custom_cursor"/>
+                app:layout_constraintTop_toBottomOf="@+id/login_txt" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout2"
@@ -78,17 +79,18 @@
                     android:id="@+id/login_senha_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingStart="25dp"
-                    android:paddingEnd="50dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="Senha"
                     android:inputType="textPassword"
+                    android:paddingStart="25dp"
+                    android:paddingTop="14dp"
+                    android:paddingEnd="50dp"
+                    android:paddingBottom="14dp"
                     android:singleLine="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/preto"
                     android:textColorHint="@color/cinza_medio"
-                    android:textSize="13sp"/>
+                    android:textColorLink="@color/preto"
+                    android:textSize="13sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView

@@ -135,8 +135,9 @@ public class NotificationsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<CondenaUnidadeResponse>> call, Throwable t) {
-                Toast.makeText(requireContext(), "Erro de rede: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
+                if (isAdded() && getActivity() != null) {
+                    Toast.makeText(requireContext(), "Erro de rede!", Toast.LENGTH_SHORT).show();
+                }            }
         });
     }
 

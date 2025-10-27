@@ -84,6 +84,7 @@
             android:paddingRight="12dp"
             android:textColor="@color/preto"
             android:textColorHint="@color/cinza_escuro"
+            android:textColorLink="@color/preto"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

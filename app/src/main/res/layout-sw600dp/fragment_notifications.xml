@@ -31,8 +31,9 @@
 
     <TextView
         android:id="@+id/textView32"
-        android:layout_width="179dp"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins_semibold"
         android:lineHeight="30dp"
@@ -40,7 +41,7 @@
         android:textColor="@color/verde_escuro"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintHorizontal_bias="0.038"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/foto_perfil_condenas" />
 
