@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -16,79 +17,106 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5">
 
-        <TextView
-            android:id="@+id/textView33"
-            android:layout_width="194dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="74dp"
-            android:layout_marginTop="47dp"
-            android:fontFamily="@font/poppins_medium"
-            android:lineHeight="35dp"
-            android:text="Enviar condenas"
-            android:textAlignment="center"
-            android:textColor="@color/preto"
-            android:textSize="30sp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="40dp">
 
-        <TextView
-            android:id="@+id/textView38"
-            android:layout_width="238dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="52dp"
-            android:layout_marginTop="136dp"
-            android:fontFamily="@font/poppins_regular"
-            android:lineHeight="20dp"
-            android:text="Para continuar, cadastre o horário do turno."
-            android:textAlignment="center"
-            android:textColor="@color/preto"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/textView33"
+                android:layout_width="194dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="74dp"
+                android:layout_marginTop="47dp"
+                android:fontFamily="@font/poppins_medium"
+                android:lineHeight="35dp"
+                android:text="Enviar condenas"
+                android:textAlignment="center"
+                android:textColor="@color/preto"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_horario_inicio"
-            android:layout_width="279dp"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="201dp"
-            android:accessibilityHeading="false"
-            android:background="@drawable/borda_edittext"
-            android:fontFamily="@font/poppins_regular"
-            android:hint="Horário de início"
-            android:paddingLeft="25dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/cinza_medio"
-            android:textSize="13dp" />
+            <TextView
+                android:id="@+id/textView38"
+                android:layout_width="238dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="52dp"
+                android:layout_marginTop="7dp"
+                android:fontFamily="@font/poppins_regular"
+                android:lineHeight="20dp"
+                android:text="Para continuar, cadastre o horário do turno."
+                android:textAlignment="center"
+                android:textColor="@color/preto"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView33" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_horario_termino"
-            android:layout_width="279dp"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="273dp"
-            android:accessibilityHeading="false"
-            android:background="@drawable/borda_edittext"
-            android:fontFamily="@font/poppins_regular"
-            android:hint="Horário de término"
-            android:paddingLeft="25dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/cinza_medio"
-            android:textSize="13dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_horario_inicio"
+                android:layout_width="279dp"
+                android:layout_height="65dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="20dp"
+                android:accessibilityHeading="false"
+                android:background="@drawable/borda_edittext"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Horário de início"
+                android:paddingLeft="25dp"
+                android:singleLine="true"
+                android:textColor="@color/preto"
+                android:textColorHint="@color/cinza_medio"
+                android:textColorLink="@color/preto"
+                android:textSize="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView38" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_enviar_condenas_dialog"
-            android:layout_width="279dp"
-            android:layout_height="75dp"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="340dp"
-            android:layout_marginBottom="73dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/verde_escuro"
-            android:fontFamily="@font/poppins_medium"
-            android:paddingVertical="10dp"
-            android:text="Enviar"
-            android:textAllCaps="false"
-            android:textColor="@color/branco"
-            app:cornerRadius="14dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_horario_termino"
+                android:layout_width="279dp"
+                android:layout_height="65dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="7dp"
+                android:accessibilityHeading="false"
+                android:background="@drawable/borda_edittext"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Horário de término"
+                android:paddingLeft="25dp"
+                android:singleLine="true"
+                android:textColor="@color/preto"
+                android:textColorHint="@color/cinza_medio"
+                android:textColorLink="@color/preto"
+                android:textSize="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_horario_inicio" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_enviar_condenas_dialog"
+                android:layout_width="279dp"
+                android:layout_height="75dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/verde_escuro"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingVertical="10dp"
+                android:text="Enviar"
+                android:textAllCaps="false"
+                android:textColor="@color/branco"
+                app:cornerRadius="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_horario_termino" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
