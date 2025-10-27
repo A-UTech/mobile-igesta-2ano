@@ -228,7 +228,8 @@ public class NotificationsFragment extends Fragment {
             public void onFailure(Call<List<CondenaUnidadeResponse>> call, Throwable t) {
                 if (isAdded() && getActivity() != null) {
                     Toast.makeText(requireContext(), "Erro de rede!", Toast.LENGTH_SHORT).show();
-                }            }
+                }
+            }
         });
     }
 
