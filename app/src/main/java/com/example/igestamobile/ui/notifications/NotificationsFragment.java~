@@ -48,6 +48,12 @@ public class NotificationsFragment extends Fragment {
     private FragmentNotificationsBinding binding;
     private CondenaUnidadeAdapter adapter;
     private Dialog dialog_enviar_contagens, dialog_enviar_condenas;
+
+    
+    private Button bt_filtrar_total;
+    private Button bt_filtrar_parcial;
+    private String currentFilterType = null; 
+
     private Integer getClienteIdSalvo() {
         Integer clienteId = -1;
 
@@ -70,13 +76,18 @@ public class NotificationsFragment extends Fragment {
         condenaUnidadeApi = RetrofitClient.getClient().create(CondenaUnidadeApi.class);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
+        
         adapter = new CondenaUnidadeAdapter(new ArrayList<>(), requireContext(), condenaApi);
         binding.recyclerView.setAdapter(adapter);
 
         carregarCondenasDeUnidade(getClienteIdSalvo());
 
         TextView bt_enviar_contagens = root.findViewById(R.id.bt_enviar_contagens);
+
+        
+        bt_filtrar_total = root.findViewById(R.id.btn_total);
+        bt_filtrar_parcial = root.findViewById(R.id.btn_parcial);
+
 
         dialog_enviar_contagens = new Dialog(requireContext());
         dialog_enviar_condenas = new Dialog(requireContext());
@@ -102,31 +113,111 @@ public class NotificationsFragment extends Fragment {
         });
 
         bt_enviar_contagens_dialog.setOnClickListener(v -> {
-           dialog_enviar_contagens.dismiss();
-           dialog_enviar_condenas.show();
+            dialog_enviar_contagens.dismiss();
+            dialog_enviar_condenas.show();
         });
 
+        
         bt_enviar_condenas_dialog.setOnClickListener(v -> {
             dialog_enviar_condenas.dismiss();
 
+            List<CondenaUnidadeResponse> contagensFinais = adapter.getContagensFinais();
+
             List<Condena> listaParaPlanilha = new ArrayList<>();
-            for (CondenaUnidadeResponse item : adapter.getCondenasUnidades()) {
-                if (item.getQuantidade() > 0) {
-                    listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade()));
-                }
+            for (CondenaUnidadeResponse item : contagensFinais) {
+                
+                listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade(), item.getTipo()));
             }
 
             gerarPlanilha(listaParaPlanilha);
         });
 
+        
+
+        
+        View.OnClickListener filtroClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newFilterType = null;
+
+                
+                if (v.getId() == R.id.btn_total) {
+                    newFilterType = "Total";
+                } else if (v.getId() == R.id.btn_parcial) {
+                    newFilterType = "Parcial";
+                }
+
+                
+                if (newFilterType != null && newFilterType.equals(currentFilterType)) {
+                    currentFilterType = null; 
+                } else {
+                    currentFilterType = newFilterType; 
+                }
+
+                
+                adapter.aplicarFiltroVisual(currentFilterType);
+
+                
+                updateFiltroButtons(currentFilterType);
+            }
+        };
+
+        if (bt_filtrar_total != null) {
+            bt_filtrar_total.setOnClickListener(filtroClickListener);
+        }
+
+        if (bt_filtrar_parcial != null) {
+            bt_filtrar_parcial.setOnClickListener(filtroClickListener);
+        }
+
+        
+        updateFiltroButtons(currentFilterType);
+
+        
+
         return root;
     }
+
+    private void updateFiltroButtons(String activeType) {
+        if (getContext() == null) return;
+        try {
+            int activeColor = requireContext().getResources().getColor(R.color.cinza_claro, null);
+            int inactiveColor = requireContext().getResources().getColor(R.color.verde_escuro, null);
+            int textColorActive = requireContext().getResources().getColor(R.color.branco, null);
+            int textColorInactive = requireContext().getResources().getColor(R.color.branco, null);
+
+            if (bt_filtrar_total != null) {
+                if ("Total".equals(activeType)) {
+                    bt_filtrar_total.setBackgroundColor(activeColor);
+                    bt_filtrar_total.setTextColor(textColorActive);
+                } else {
+                    bt_filtrar_total.setBackgroundColor(inactiveColor);
+                    bt_filtrar_total.setTextColor(textColorInactive);
+                }
+            }
+
+            if (bt_filtrar_parcial != null) {
+                if ("Parcial".equals(activeType)) {
+                    bt_filtrar_parcial.setBackgroundColor(activeColor);
+                    bt_filtrar_parcial.setTextColor(textColorActive);
+                } else {
+                    bt_filtrar_parcial.setBackgroundColor(inactiveColor);
+                    bt_filtrar_parcial.setTextColor(textColorInactive);
+                }
+            }
+        } catch (Exception e) {
+            
+            
+        }
+    }
+
 
     private void carregarCondenasDeUnidade(Integer unidadeId) {
         condenaUnidadeApi.selecionarCondenasUnidade(unidadeId).enqueue(new Callback<List<CondenaUnidadeResponse>>() {
             @Override
             public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    
                     adapter.setLista(response.body());
                 } else {
                     Toast.makeText(requireContext(), "Falha ao carregar IDs de associação.", Toast.LENGTH_LONG).show();
@@ -147,15 +238,18 @@ public class NotificationsFragment extends Fragment {
         binding = null;
     }
 
+
     private void gerarPlanilha(List<Condena> condenas) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Condenas");
+
 
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("Condena");
         header.createCell(1).setCellValue("Tipo");
         header.createCell(2).setCellValue("Quantidade");
         header.createCell(3).setCellValue("Porcentagem");
+
 
         int total = 0;
         for (Condena c : condenas) total += c.getQuantidade();
@@ -164,8 +258,10 @@ public class NotificationsFragment extends Fragment {
         for (Condena c : condenas) {
             Row row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue(c.getNome());
-            row.createCell(1).setCellValue("Total");
+            row.createCell(1).setCellValue(c.getTipo());
             row.createCell(2).setCellValue(c.getQuantidade());
+
+
             double porcentagem = (total > 0) ? ((double) c.getQuantidade() / total) * 100 : 0;
             row.createCell(3).setCellValue(String.format("%.2f%%", porcentagem));
         }
@@ -197,13 +293,16 @@ public class NotificationsFragment extends Fragment {
     public static class Condena {
         private String nome;
         private int quantidade;
+        private String tipo;
 
-        public Condena(String nome, int quantidade) {
+        public Condena(String nome, int quantidade, String tipo) {
             this.nome = nome;
             this.quantidade = quantidade;
+            this.tipo = tipo;
         }
 
         public String getNome() { return nome; }
         public int getQuantidade() { return quantidade; }
+        public String getTipo() { return tipo; }
     }
 }
