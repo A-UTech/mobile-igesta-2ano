@@ -31,9 +31,9 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(this::abrirTela, 7500);
     }
     private void abrirTela(){
-        Intent rota = new Intent(this, MainActivity.class);
+        Intent rota = new Intent(this, Login.class);
         startActivity(rota);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        finish();   
+        finish();
     }
 }
