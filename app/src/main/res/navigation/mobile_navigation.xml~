@@ -45,7 +45,7 @@
                 app:destination="@id/navigation_gerenciarFuncionario" />
             <action
                 android:id="@+id/action_navigation_perfil_to_navigation_historico"
-                app:destination="@id/navigation_perfilFuncionario" />
+                app:destination="@id/navigation_historico" />
         </fragment>
 
         <fragment
@@ -75,6 +75,11 @@
             android:name="com.example.igestamobile.Historico"
             android:label="fragment_historico"
             tools:layout="@layout/fragment_historico" />
+        <fragment
+            android:id="@+id/turnos"
+            android:name="com.example.igestamobile.Turnos"
+            android:label="fragment_turnos"
+            tools:layout="@layout/fragment_turnos" />
 
     </navigation>
 

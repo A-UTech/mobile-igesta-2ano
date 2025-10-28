@@ -75,6 +75,11 @@
             android:name="com.example.igestamobile.Historico"
             android:label="fragment_historico"
             tools:layout="@layout/fragment_historico" />
+        <fragment
+            android:id="@+id/navigation_turnos"
+            android:name="com.example.igestamobile.Turnos"
+            android:label="fragment_turnos"
+            tools:layout="@layout/fragment_turnos" />
 
     </navigation>
 

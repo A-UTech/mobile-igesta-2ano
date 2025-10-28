@@ -13,7 +13,7 @@
         android:background="@color/preto">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout2"
+            android:id="@+id/bt_alterar_imagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
@@ -64,7 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/bt_alterar_imagem" />
 
         <TextView
             android:id="@+id/textView2"
@@ -149,7 +149,7 @@
                 android:id="@+id/bt_gerenciar"
                 android:layout_width="420dp"
                 android:layout_height="49dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -186,7 +186,7 @@
                 android:id="@+id/bt_historico"
                 android:layout_width="420dp"
                 android:layout_height="49dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -223,7 +223,7 @@
                 android:id="@+id/bt_logout"
                 android:layout_width="420dp"
                 android:layout_height="49dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
