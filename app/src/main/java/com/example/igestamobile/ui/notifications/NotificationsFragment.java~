@@ -51,12 +51,14 @@ public class NotificationsFragment extends Fragment {
     private CondenaUnidadeAdapter adapter;
     private Dialog dialog_enviar_contagens, dialog_enviar_condenas;
 
+    // Campo para guardar os dados enquanto o usuário escolhe o local para salvar
     private List<Condena> pendingCondenasList = null;
 
     private Button bt_filtrar_total;
     private Button bt_filtrar_parcial;
     private String currentFilterType = null;
 
+    // Launcher para o Storage Access Framework (SAF)
     private ActivityResultLauncher<String> createDocumentLauncher;
 
     private Integer getClienteIdSalvo() {
@@ -109,17 +111,22 @@ public class NotificationsFragment extends Fragment {
         Button bt_enviar_contagens_dialog = dialog_enviar_contagens.findViewById(R.id.bt_cadastrar_func_dialog);
         Button bt_enviar_condenas_dialog = dialog_enviar_condenas.findViewById(R.id.bt_enviar_condenas_dialog);
 
+        // --- Configuração do SAF Launcher ---
+        // Este launcher será chamado quando for a hora de salvar o arquivo.
         createDocumentLauncher = registerForActivityResult(
                 new ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
                 uri -> {
                     if (uri != null && pendingCondenasList != null) {
+                        // URI recebida, agora podemos gerar o arquivo
                         gerarPlanilha(pendingCondenasList, uri);
-                        pendingCondenasList = null;
+                        pendingCondenasList = null; // Limpa a lista temporária
                     } else if (uri == null) {
                         Toast.makeText(requireContext(), "Criação de arquivo cancelada pelo usuário.", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
+        // ------------------------------------
+
 
         bt_enviar_contagens.setOnClickListener(v -> {
             dialog_enviar_contagens.show();
@@ -146,8 +153,10 @@ public class NotificationsFragment extends Fragment {
                 listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade(), item.getTipo()));
             }
 
+            // Armazena a lista e inicia o SAF (abre a janela para o usuário escolher o local)
             this.pendingCondenasList = listaParaPlanilha;
 
+            // O nome sugerido para o arquivo
             createDocumentLauncher.launch("condenas.xlsx");
         });
 
@@ -196,6 +205,8 @@ public class NotificationsFragment extends Fragment {
 
         return root;
     }
+
+    // REMOVIDOS: checkPermissionAndGenerate e onRequestPermissionsResult, pois não são mais necessários.
 
     private void updateFiltroButtons(String activeType) {
         if (getContext() == null) return;
@@ -257,6 +268,9 @@ public class NotificationsFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
+    // MÉTODO ATUALIZADO: Agora recebe a Uri e usa OutputStream
     private void gerarPlanilha(List<Condena> condenas, Uri uri) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Condenas");
@@ -284,6 +298,7 @@ public class NotificationsFragment extends Fragment {
             row.createCell(3).setCellValue(String.format("%.2f%%", porcentagem));
         }
 
+        // --- Lógica de salvamento com SAF ---
         try (OutputStream os = requireContext().getContentResolver().openOutputStream(uri)) {
             if (os != null) {
                 workbook.write(os);
@@ -296,6 +311,7 @@ public class NotificationsFragment extends Fragment {
             e.printStackTrace();
             Toast.makeText(requireContext(), "Erro ao salvar planilha: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+        // --- Fim da lógica de salvamento com SAF ---
     }
 
     public static class Condena {
