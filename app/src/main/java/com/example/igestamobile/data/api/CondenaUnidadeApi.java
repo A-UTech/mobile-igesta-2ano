@@ -13,12 +13,12 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface CondenaUnidadeApi {
-    @GET("igesta/condena-unidade/unidade/{id}")
+    @GET("igesta/user/condena-unidade/unidade/{id}")
     Call<List<CondenaUnidadeResponse>> selecionarCondenasUnidade(@Path("id") Integer id);
 
-    @POST("igesta/condena-unidade/associar")
+    @POST("igesta/user/condena-unidade/associar")
     Call<CondenaUnidadeResponse> associarCondenaUnidade(@Body CondenaUnidadeRequest request);
 
-    @DELETE("igesta/condena-unidade/desassociar")
+    @DELETE("igesta/user/condena-unidade/desassociar")
     Call<Void> desassociarCondenaUnidade(@Body CondenaUnidadeRequest request);
 }

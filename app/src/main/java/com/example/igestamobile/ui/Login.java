@@ -3,8 +3,6 @@ package com.example.igestamobile.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,11 +12,15 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
 import com.example.igestamobile.R;
+import com.example.igestamobile.data.api.AuthApi;
 import com.example.igestamobile.data.api.CondenaUnidadeApi;
 import com.example.igestamobile.data.api.GestorApi;
 import com.example.igestamobile.data.api.LiderApi;
 import com.example.igestamobile.data.api.LoginApi;
-import com.example.igestamobile.data.api.RetrofitClient;
+import com.example.igestamobile.data.api.SqlRetrofitClient;
+import com.example.igestamobile.data.api.TokenManager;
+import com.example.igestamobile.data.model.AuthRequest;
+import com.example.igestamobile.data.model.AuthResponse;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
 import com.example.igestamobile.data.model.GestorModel;
 import com.example.igestamobile.data.model.LiderModel;
@@ -26,7 +28,6 @@ import com.example.igestamobile.data.model.LoginModelRequest;
 import com.example.igestamobile.data.model.LoginModelResponse;
 import com.example.igestamobile.utils.MaskUtil;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,6 +59,7 @@ public class Login extends AppCompatActivity {
             String senha = etSenha.getText().toString().trim();
 
             if (!emailCnpj.isEmpty() && !senha.isEmpty()) {
+                pegarToken(emailCnpj, senha);
                 performLogin(emailCnpj, senha);
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
@@ -71,11 +73,34 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void pegarToken(String emailCnpj, String senha) {
+        AuthRequest authRequest = new AuthRequest(emailCnpj, senha);
+        SqlRetrofitClient.getClient(this).create(AuthApi.class).login(authRequest)
+                .enqueue(new Callback<AuthResponse>() {
+                    @Override
+                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                        btnLogin.setEnabled(true);
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            AuthResponse authResponse = response.body();
+                            TokenManager tokenManager = new TokenManager(Login.this);
+                            tokenManager.saveToken(authResponse.getToken());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AuthResponse> call, Throwable t) {
+                        btnLogin.setEnabled(true);
+                        Toast.makeText(Login.this, "Falha na conexão de rede ao buscar token.", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
     private void performLogin(String emailCnpj, String senha) {
         LoginModelRequest request = new LoginModelRequest(emailCnpj, senha);
         btnLogin.setEnabled(false);
 
-        RetrofitClient.getClient().create(LoginApi.class).login(request)
+        SqlRetrofitClient.getClient(this).create(LoginApi.class).login(request)
                 .enqueue(new Callback<LoginModelResponse>() {
                     @Override
                     public void onResponse(Call<LoginModelResponse> call, Response<LoginModelResponse> response) {
@@ -123,7 +148,7 @@ public class Login extends AppCompatActivity {
         SharedPreferences sharedPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().putInt(KEY_CLIENTE_ID, user.getId()).apply();
 
-        CondenaUnidadeApi condenaUnidadeApi = RetrofitClient.getClient().create(CondenaUnidadeApi.class);
+        CondenaUnidadeApi condenaUnidadeApi = SqlRetrofitClient.getClient(this).create(CondenaUnidadeApi.class);
         condenaUnidadeApi.selecionarCondenasUnidade(user.getId()).enqueue(new Callback<List<CondenaUnidadeResponse>>() {
             @Override
             public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> response) {
@@ -141,7 +166,7 @@ public class Login extends AppCompatActivity {
         });
     }
     private void handleLoginLider(LoginModelResponse user) {
-        LiderApi liderApi = RetrofitClient.getClient().create(LiderApi.class);
+        LiderApi liderApi = SqlRetrofitClient.getClient(this).create(LiderApi.class);
         liderApi.selecionarLideres(user.getId()).enqueue(new Callback<LiderModel>() {
             @Override
             public void onResponse(Call<LiderModel> call, Response<LiderModel> response) {
@@ -164,7 +189,7 @@ public class Login extends AppCompatActivity {
         });
     }
     private void handleLoginGestor(LoginModelResponse user) {
-        GestorApi gestorApi = RetrofitClient.getClient().create(GestorApi.class);
+        GestorApi gestorApi = SqlRetrofitClient.getClient(this).create(GestorApi.class);
         gestorApi.selecionarGestores(user.getId()).enqueue(new Callback<GestorModel>() {
             @Override
             public void onResponse(Call<GestorModel> call, Response<GestorModel> response) {

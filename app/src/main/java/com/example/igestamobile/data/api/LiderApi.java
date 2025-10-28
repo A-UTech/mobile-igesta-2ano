@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface LiderApi {
-    @GET("igesta/lideres/selecionarPorId/{id}")
+    @GET("igesta/user/lideres/selecionarPorId/{id}")
     Call<LiderModel> selecionarLideres(@Path("id") Integer id);
 }
