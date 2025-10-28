@@ -2,9 +2,10 @@ package com.example.igestamobile.ui.notifications;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,8 +23,7 @@ import com.example.igestamobile.R;
 import com.example.igestamobile.adapter.CondenaUnidadeAdapter;
 import com.example.igestamobile.data.api.CondenaApi;
 import com.example.igestamobile.data.api.CondenaUnidadeApi;
-import com.example.igestamobile.data.api.RetrofitClient;
-import com.example.igestamobile.data.model.CondenaModel;
+import com.example.igestamobile.data.api.SqlRetrofitClient;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
 import com.example.igestamobile.databinding.FragmentNotificationsBinding;
 
@@ -30,9 +32,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,16 +44,22 @@ import retrofit2.Response;
 public class NotificationsFragment extends Fragment {
     private static final String PREFS_NAME = "LoginPrefs";
     private static final String KEY_CLIENTE_ID = "CLIENTE_ID";
+
     private CondenaApi condenaApi;
     private CondenaUnidadeApi condenaUnidadeApi;
     private FragmentNotificationsBinding binding;
     private CondenaUnidadeAdapter adapter;
     private Dialog dialog_enviar_contagens, dialog_enviar_condenas;
 
-    
+    // Campo para guardar os dados enquanto o usuário escolhe o local para salvar
+    private List<Condena> pendingCondenasList = null;
+
     private Button bt_filtrar_total;
     private Button bt_filtrar_parcial;
-    private String currentFilterType = null; 
+    private String currentFilterType = null;
+
+    // Launcher para o Storage Access Framework (SAF)
+    private ActivityResultLauncher<String> createDocumentLauncher;
 
     private Integer getClienteIdSalvo() {
         Integer clienteId = -1;
@@ -72,11 +79,11 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        condenaApi = RetrofitClient.getClient().create(CondenaApi.class);
-        condenaUnidadeApi = RetrofitClient.getClient().create(CondenaUnidadeApi.class);
+        condenaApi = SqlRetrofitClient.getClient(requireContext()).create(CondenaApi.class);
+        condenaUnidadeApi = SqlRetrofitClient.getClient(requireContext()).create(CondenaUnidadeApi.class);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        
+
         adapter = new CondenaUnidadeAdapter(new ArrayList<>(), requireContext(), condenaApi);
         binding.recyclerView.setAdapter(adapter);
 
@@ -84,7 +91,7 @@ public class NotificationsFragment extends Fragment {
 
         TextView bt_enviar_contagens = root.findViewById(R.id.bt_enviar_contagens);
 
-        
+
         bt_filtrar_total = root.findViewById(R.id.btn_total);
         bt_filtrar_parcial = root.findViewById(R.id.btn_parcial);
 
@@ -104,6 +111,23 @@ public class NotificationsFragment extends Fragment {
         Button bt_enviar_contagens_dialog = dialog_enviar_contagens.findViewById(R.id.bt_cadastrar_func_dialog);
         Button bt_enviar_condenas_dialog = dialog_enviar_condenas.findViewById(R.id.bt_enviar_condenas_dialog);
 
+        // --- Configuração do SAF Launcher ---
+        // Este launcher será chamado quando for a hora de salvar o arquivo.
+        createDocumentLauncher = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+                uri -> {
+                    if (uri != null && pendingCondenasList != null) {
+                        // URI recebida, agora podemos gerar o arquivo
+                        gerarPlanilha(pendingCondenasList, uri);
+                        pendingCondenasList = null; // Limpa a lista temporária
+                    } else if (uri == null) {
+                        Toast.makeText(requireContext(), "Criação de arquivo cancelada pelo usuário.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        // ------------------------------------
+
+
         bt_enviar_contagens.setOnClickListener(v -> {
             dialog_enviar_contagens.show();
         });
@@ -117,7 +141,7 @@ public class NotificationsFragment extends Fragment {
             dialog_enviar_condenas.show();
         });
 
-        
+
         bt_enviar_condenas_dialog.setOnClickListener(v -> {
             dialog_enviar_condenas.dismiss();
 
@@ -125,39 +149,43 @@ public class NotificationsFragment extends Fragment {
 
             List<Condena> listaParaPlanilha = new ArrayList<>();
             for (CondenaUnidadeResponse item : contagensFinais) {
-                
+
                 listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade(), item.getTipo()));
             }
 
-            gerarPlanilha(listaParaPlanilha);
+            // Armazena a lista e inicia o SAF (abre a janela para o usuário escolher o local)
+            this.pendingCondenasList = listaParaPlanilha;
+
+            // O nome sugerido para o arquivo
+            createDocumentLauncher.launch("condenas.xlsx");
         });
 
-        
 
-        
+
+
         View.OnClickListener filtroClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newFilterType = null;
 
-                
+
                 if (v.getId() == R.id.btn_total) {
                     newFilterType = "Total";
                 } else if (v.getId() == R.id.btn_parcial) {
                     newFilterType = "Parcial";
                 }
 
-                
+
                 if (newFilterType != null && newFilterType.equals(currentFilterType)) {
-                    currentFilterType = null; 
+                    currentFilterType = null;
                 } else {
-                    currentFilterType = newFilterType; 
+                    currentFilterType = newFilterType;
                 }
 
-                
+
                 adapter.aplicarFiltroVisual(currentFilterType);
 
-                
+
                 updateFiltroButtons(currentFilterType);
             }
         };
@@ -170,13 +198,15 @@ public class NotificationsFragment extends Fragment {
             bt_filtrar_parcial.setOnClickListener(filtroClickListener);
         }
 
-        
+
         updateFiltroButtons(currentFilterType);
 
-        
+
 
         return root;
     }
+
+    // REMOVIDOS: checkPermissionAndGenerate e onRequestPermissionsResult, pois não são mais necessários.
 
     private void updateFiltroButtons(String activeType) {
         if (getContext() == null) return;
@@ -206,8 +236,8 @@ public class NotificationsFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
-            
-            
+
+
         }
     }
 
@@ -217,7 +247,7 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    
+
                     adapter.setLista(response.body());
                 } else {
                     Toast.makeText(requireContext(), "Falha ao carregar IDs de associação.", Toast.LENGTH_LONG).show();
@@ -240,7 +270,8 @@ public class NotificationsFragment extends Fragment {
     }
 
 
-    private void gerarPlanilha(List<Condena> condenas) {
+    // MÉTODO ATUALIZADO: Agora recebe a Uri e usa OutputStream
+    private void gerarPlanilha(List<Condena> condenas, Uri uri) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Condenas");
 
@@ -267,28 +298,20 @@ public class NotificationsFragment extends Fragment {
             row.createCell(3).setCellValue(String.format("%.2f%%", porcentagem));
         }
 
-        try {
-            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-            if (!downloadsDir.exists()) {
-                downloadsDir.mkdirs();
+        // --- Lógica de salvamento com SAF ---
+        try (OutputStream os = requireContext().getContentResolver().openOutputStream(uri)) {
+            if (os != null) {
+                workbook.write(os);
+                workbook.close();
+                Toast.makeText(requireContext(), "Planilha salva com sucesso!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(requireContext(), "Não foi possível abrir o fluxo de saída.", Toast.LENGTH_LONG).show();
             }
-
-            File file = new File(downloadsDir, "condenas.xlsx");
-
-            FileOutputStream fos = new FileOutputStream(file);
-            workbook.write(fos);
-            fos.close();
-            workbook.close();
-
-            Toast.makeText(requireContext(), "Planilha salva em: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(requireContext(), "Erro ao salvar planilha: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            Toast.makeText(requireContext(), "Permissão de Armazenamento não concedida. Por favor, conceda a permissão.", Toast.LENGTH_LONG).show();
         }
+        // --- Fim da lógica de salvamento com SAF ---
     }
 
     public static class Condena {

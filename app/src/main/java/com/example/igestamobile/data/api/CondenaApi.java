@@ -9,9 +9,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface CondenaApi {
-    @GET("igesta/condenas/selecionar")
+    @GET("igesta/user/condenas/selecionar")
     Call<List<CondenaModel>> selecionarCondenas();
 
-    @GET("igesta/condenas/selecionarPorId/{id}")
+    @GET("igesta/user/condenas/selecionarPorId/{id}")
     Call<CondenaModel> selecionarCondenaPorId(@Path("id") Long id);
 }
