@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Historico#newInstance} factory method to

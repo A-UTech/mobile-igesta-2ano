@@ -60,6 +60,7 @@ public class Login extends AppCompatActivity {
 
             if (!emailCnpj.isEmpty() && !senha.isEmpty()) {
                 pegarToken(emailCnpj, senha);
+                performLogin(emailCnpj, senha);
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
             }
