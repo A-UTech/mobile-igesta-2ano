@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.igestamobile.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -118,12 +117,7 @@ public class Perfil extends Fragment {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri imagemUri = result.getData().getData();
-
-                        Glide.with(this)
-                                .load(imagemUri)
-                                .override(175, 175)
-                                .centerCrop()
-                                .into(img_foto_perfil);
+                        img_foto_perfil.setImageURI(imagemUri);
                     } else {
                         Toast.makeText(requireContext(), "Nenhuma imagem selecionada", Toast.LENGTH_SHORT).show();
                     }
