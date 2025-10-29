@@ -1,11 +1,11 @@
 package com.example.igestamobile.data.model;
 
 public class AuthRequest {
-    private String credencial;
-    private String password;
+    private String emailCnpj;
+    private String senha;
 
-    public AuthRequest(String credencial, String password) {
-        this.credencial = credencial;
-        this.password = password;
+    public AuthRequest(String emailCnpj, String senha) {
+        this.emailCnpj = emailCnpj;
+        this.senha = senha;
     }
 }

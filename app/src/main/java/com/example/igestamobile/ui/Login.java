@@ -60,6 +60,7 @@ public class Login extends AppCompatActivity {
 
             if (!emailCnpj.isEmpty() && !senha.isEmpty()) {
                 pegarToken(emailCnpj, senha);
+                performLogin(emailCnpj, senha);
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();
             }
@@ -84,9 +85,8 @@ public class Login extends AppCompatActivity {
                             AuthResponse authResponse = response.body();
                             TokenManager tokenManager = new TokenManager(Login.this);
                             tokenManager.saveToken(authResponse.getToken());
-                            Toast.makeText(Login.this, authResponse.getToken(), Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(Login.this, "Erro no servidor: Código " + response.code(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Token - Erro no servidor: Código " + response.code(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
