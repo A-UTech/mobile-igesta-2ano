@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -34,8 +33,6 @@ public class Chatbot extends Fragment {
 
     private static final String BASE_URL = "https://chatbot-mobile-igesta.vercel.app/";
     private static final String UNIDADE = "Panatem Osasco";
-    private static final String GESTOR = "Daniel Freitas";
-
     private RecyclerView recyclerView;
     private TextInputEditText mensagem_funcionario;
     private ImageButton btnEnviar;
@@ -86,7 +83,7 @@ public class Chatbot extends Fragment {
         recyclerView.smoothScrollToPosition(mensagens.size() - 1);
         mensagem_funcionario.setText("");
 
-        ChatRequest chatRequest = new ChatRequest(mensagem, UNIDADE, GESTOR);
+        ChatRequest chatRequest = new ChatRequest(mensagem, UNIDADE);
 
         chatApi.enviarMensagem(chatRequest).enqueue(new Callback<ChatResponse>() {
             @Override

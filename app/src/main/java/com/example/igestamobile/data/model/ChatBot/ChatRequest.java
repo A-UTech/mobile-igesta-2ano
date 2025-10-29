@@ -4,7 +4,7 @@ public class ChatRequest {
     private String usuario;
     private String unidade;
 
-    public ChatRequest(String usuario, String unidade, String gestor) {
+    public ChatRequest(String usuario, String unidade) {
         this.usuario = usuario;
         this.unidade = unidade;
     }
