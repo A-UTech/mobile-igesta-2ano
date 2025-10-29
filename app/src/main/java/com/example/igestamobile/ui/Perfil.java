@@ -1,19 +1,43 @@
 package com.example.igestamobile.ui;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.Manifest;
 
+import com.bumptech.glide.Glide;
 import com.example.igestamobile.R;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +56,10 @@ public class Perfil extends Fragment {
     private String mParam2;
     private Button bt_n_logout, bt_logout_dialog;
     private Dialog dialog_logout;
+    private TextView bt_alterar_foto_perfil, bt_selecionar_galeria, bt_tirar_foto;
+    private ImageView img_foto_perfil;
+
+    ActivityResultLauncher<Intent> galeriaLauncher, cameraLauncher;
 
     public Perfil() {
         // Required empty public constructor
@@ -75,6 +103,13 @@ public class Perfil extends Fragment {
         LinearLayout bt_gerenciar = view.findViewById(R.id.bt_gerenciar);
         LinearLayout bt_historico = view.findViewById(R.id.bt_historico);
         LinearLayout bt_logout = view.findViewById(R.id.bt_logout);
+        ConstraintLayout bt_alterar_imagem = view.findViewById(R.id.bt_alterar_imagem);
+
+        BottomSheetDialog dialog_opcoes_imagem = new BottomSheetDialog(requireContext());
+        dialog_opcoes_imagem.setContentView(R.layout.dialog_foto);
+
+        BottomSheetDialog dialog_foto_opcoes = new BottomSheetDialog(requireContext());
+        dialog_foto_opcoes.setContentView(R.layout.dialog_foto_opcoes);
 
         dialog_logout = new Dialog(requireContext());
         dialog_logout.setContentView(R.layout.dialog_logout);
@@ -83,6 +118,45 @@ public class Perfil extends Fragment {
 
         bt_n_logout = dialog_logout.findViewById(R.id.bt_n_remover);
         bt_logout_dialog = dialog_logout.findViewById(R.id.bt_cadastrar_func_dialog);
+        bt_alterar_foto_perfil = dialog_opcoes_imagem.findViewById(R.id.bt_alterar_foto_perfil);
+        bt_selecionar_galeria = dialog_foto_opcoes.findViewById(R.id.bt_selecionar_galeria);
+        img_foto_perfil = view.findViewById(R.id.img_foto_perfil);
+        bt_tirar_foto = dialog_foto_opcoes.findViewById(R.id.bt_tirar_foto);
+
+
+        galeriaLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri imagemUri = result.getData().getData();
+                        Glide.with(this)
+                                .load(imagemUri)
+                                .override(175, 175)
+                                .centerCrop()
+                                .into(img_foto_perfil);
+                    } else {
+                        Toast.makeText(requireContext(), "Nenhuma imagem selecionada", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Bundle extras = result.getData().getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                        Uri tempUri = getImageUri(requireContext(), imageBitmap);
+
+                        Glide.with(this)
+                                .load(tempUri)
+                                .override(175, 175)
+                                .centerCrop()
+                                .into(img_foto_perfil);
+                    } else {
+                        Toast.makeText(requireContext(), "Falha ao tirar foto", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         bt_logout.setOnClickListener(v -> {
             dialog_logout.show();
@@ -121,6 +195,55 @@ public class Perfil extends Fragment {
             }
         });
 
+        bt_alterar_imagem.setOnClickListener(v -> {
+            dialog_opcoes_imagem.show();
+        });
+
+        bt_alterar_foto_perfil.setOnClickListener(v -> {
+            dialog_opcoes_imagem.dismiss();
+            dialog_foto_opcoes.show();
+        });
+
+        bt_selecionar_galeria.setOnClickListener(v -> escolherImagem());
+        bt_tirar_foto.setOnClickListener(v -> tirarFoto());
+
         return view;
+    }
+
+    private void escolherImagem() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        galeriaLauncher.launch(intent);
+    }
+
+    private void tirarFoto() {
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.CAMERA}, 101);
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraLauncher.launch(intent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 101) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                tirarFoto();
+            } else {
+                Toast.makeText(requireContext(), "Permissão da câmera negada", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private Uri getImageUri(Context context, Bitmap bitmap) {
+        String path = MediaStore.Images.Media.insertImage(
+                context.getContentResolver(),
+                bitmap,
+                "FotoPerfil",
+                null
+        );
+        return Uri.parse(path);
     }
 }

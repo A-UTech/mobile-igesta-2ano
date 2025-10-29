@@ -21,6 +21,8 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,11 +30,16 @@ import retrofit2.Response;
 
 public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAdapter.ViewHolder> {
     private CondenaApi condenaApi;
-    private List<CondenaUnidadeResponse> condenasUnidades;
+    
+    private List<CondenaUnidadeResponse> condenasUnidadesOriginal;
+    
+    private List<CondenaUnidadeResponse> condenasUnidadesExibida;
     private Context context;
 
     public CondenaUnidadeAdapter(List<CondenaUnidadeResponse> condenasUnidades, Context context, CondenaApi condenaApi) {
-        this.condenasUnidades = condenasUnidades;
+        this.condenasUnidadesOriginal = condenasUnidades;
+        
+        this.condenasUnidadesExibida = new ArrayList<>(condenasUnidades);
         this.context = context;
         this.condenaApi = condenaApi;
     }
@@ -41,16 +48,17 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.nome_condena.setText("Carregando...");
 
-        CondenaUnidadeResponse condenaUnidade = condenasUnidades.get(position);
-
         
+        CondenaUnidadeResponse condenaUnidade = condenasUnidadesExibida.get(position);
+
+
         holder.quantidadeEditText.setText(String.valueOf(condenaUnidade.getQuantidade()));
 
         if (holder.quantidadeEditText.getTag() instanceof TextWatcher) {
             holder.quantidadeEditText.removeTextChangedListener((TextWatcher) holder.quantidadeEditText.getTag());
         }
 
-        
+
         condenaApi.selecionarCondenaPorId(condenaUnidade.getIdCondena()).enqueue(new Callback<CondenaModel>() {
             @Override
             public void onResponse(Call<CondenaModel> call, Response<CondenaModel> response) {
@@ -58,7 +66,7 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
                     CondenaModel model = response.body();
                     holder.nome_condena.setText(model.getNome());
 
-                    
+
                     condenaUnidade.setNome(model.getNome());
                     condenaUnidade.setTipo(model.getTipo());
                 } else {
@@ -73,7 +81,7 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
             }
         });
 
-        
+
         holder.btn_mais.setOnClickListener(v -> {
             int novaQuantidade = condenaUnidade.getQuantidade() + 1;
             condenaUnidade.setQuantidade(novaQuantidade);
@@ -92,7 +100,7 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
             holder.quantidadeEditText.setText(String.valueOf(novaQuantidade));
         });
 
-        
+
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -113,9 +121,10 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
                             novaQuantidade = 0;
                         }
                     } catch (NumberFormatException e) {
-                        
+
                     }
                 }
+                
                 condenaUnidade.setQuantidade(novaQuantidade);
             }
         };
@@ -134,7 +143,8 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
 
     @Override
     public int getItemCount() {
-        return condenasUnidades.size();
+        
+        return condenasUnidadesExibida.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -153,21 +163,47 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
     }
 
     public void setLista(List<CondenaUnidadeResponse> novaLista) {
-        this.condenasUnidades = novaLista;
+        this.condenasUnidadesOriginal = novaLista;
+        
+        this.condenasUnidadesExibida = new ArrayList<>(novaLista);
         notifyDataSetChanged();
     }
 
-    public List<CondenaUnidadeResponse> getCondenasUnidades() {
-        return condenasUnidades;
+    public void aplicarFiltroVisual(String tipoFiltro) {
+        if (tipoFiltro == null) {
+            
+            condenasUnidadesExibida = new ArrayList<>(condenasUnidadesOriginal);
+        } else {
+            
+            
+            String filtroLowerCase = tipoFiltro.toLowerCase(Locale.ROOT);
+
+            
+            List<CondenaUnidadeResponse> listaFiltrada = condenasUnidadesOriginal.stream()
+                    .filter(item ->
+                            item.getTipo() != null && item.getTipo().toLowerCase(Locale.ROOT).equals(filtroLowerCase)
+                    )
+                    .collect(Collectors.toList());
+
+            condenasUnidadesExibida = listaFiltrada;
+        }
+
+        notifyDataSetChanged();
     }
-    
+
     public List<CondenaUnidadeResponse> getContagensFinais() {
         List<CondenaUnidadeResponse> contagensFinais = new ArrayList<>();
-        for (CondenaUnidadeResponse item : condenasUnidades) {
+        
+        for (CondenaUnidadeResponse item : condenasUnidadesOriginal) {
             if (item.getQuantidade() > 0) {
                 contagensFinais.add(item);
             }
         }
         return contagensFinais;
+    }
+
+    
+    public List<CondenaUnidadeResponse> getCondenasUnidades() {
+        return condenasUnidadesOriginal;
     }
 }

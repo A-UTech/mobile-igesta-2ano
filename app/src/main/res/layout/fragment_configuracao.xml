@@ -46,8 +46,9 @@
             android:hint="Nome"
             android:paddingLeft="25dp"
             android:singleLine="true"
-            android:textColor="@color/black"
+            android:textColor="@color/preto"
             android:textColorHint="@color/cinza_medio"
+            android:textColorLink="@color/preto"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -65,32 +66,14 @@
             android:hint="E-mail"
             android:paddingLeft="25dp"
             android:singleLine="true"
-            android:textColor="@color/black"
+            android:textColor="@color/preto"
             android:textColorHint="@color/cinza_medio"
+            android:textColorLink="@color/preto"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cpf_input"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="55dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/input_border"
-            android:fontFamily="@font/poppins_regular"
-            android:hint="CPF"
-            android:paddingLeft="25dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/cinza_medio"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/senha_input"
@@ -103,8 +86,9 @@
             android:hint="Senha"
             android:paddingLeft="25dp"
             android:singleLine="true"
-            android:textColor="@color/black"
+            android:textColor="@color/preto"
             android:textColorHint="@color/cinza_medio"
+            android:textColorLink="@color/preto"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -138,19 +122,6 @@
             app:layout_constraintTop_toBottomOf="@+id/login_email_input" />
 
         <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="CPF*"
-            android:textColor="@color/preto"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.18"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_input" />
-
-        <TextView
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -161,7 +132,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.189"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cpf_input" />
+            app:layout_constraintTop_toBottomOf="@+id/email_input" />
 
         <Switch
             android:id="@+id/modo_escuro_switch"

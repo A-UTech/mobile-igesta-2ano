@@ -5,8 +5,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
-    private static final String BASE_URL = "https://api-sql-igesta-2ano.onrender.com/";
+public class MongoRetrofitClient {
+    private static final String BASE_URL = "https://api-mongodb-igesta-2ano.onrender.com/";
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {
         if (retrofit == null) {

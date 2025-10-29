@@ -54,10 +54,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+            app:layout_constraintTop_toBottomOf="@+id/bt_voltar_historico" />
 
         <ImageView
-            android:id="@+id/imageView10"
+            android:id="@+id/bt_voltar_historico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="33dp"
@@ -76,7 +76,7 @@
             android:text="Histórico"
             android:textColor="@color/verde_claro"
             android:textSize="24sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView10"
+            app:layout_constraintStart_toEndOf="@+id/bt_voltar_historico"
             app:layout_constraintTop_toTopOf="parent" />
 
 

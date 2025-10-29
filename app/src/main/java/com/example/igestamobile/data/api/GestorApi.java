@@ -8,6 +8,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface GestorApi {
-    @GET("igesta/gestores/selecionarPorId/{id}")
+    @GET("igesta/user/gestores/selecionarPorId/{id}")
     Call<GestorModel> selecionarGestores(@Path("id") Integer id);
 }

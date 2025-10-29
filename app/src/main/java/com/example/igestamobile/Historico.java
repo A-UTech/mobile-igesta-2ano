@@ -3,12 +3,11 @@ package com.example.igestamobile;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.material.datepicker.MaterialDatePicker;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +63,15 @@ public class Historico extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_historico, container, false);
 
+        View btVoltar = view.findViewById(R.id.bt_voltar_historico);
+        if (btVoltar != null) {
+            btVoltar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v).popBackStack();
+                }
+            });
+        }
         return view;
     }
 }

@@ -12,24 +12,46 @@
         android:layout_height="match_parent"
         android:background="@color/preto">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bt_alterar_imagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:layout_marginBottom="4dp"
-            android:minWidth="174dp"
-            android:minHeight="174dp"
-            android:padding="10dp"
-            android:src="@mipmap/fotoperfil"
+            android:layout_marginTop="50dp"
             app:layout_constraintBottom_toTopOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.51"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-            app:strokeColor="@color/verde_claro"
-            app:strokeWidth="10dp" />
+            app:layout_constraintVertical_bias="0.5">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_foto_perfil"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:minWidth="174dp"
+                android:minHeight="174dp"
+                android:padding="10dp"
+                android:src="@mipmap/fotoperfil"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                app:strokeColor="@color/verde_claro"
+                app:strokeWidth="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/textView"
@@ -43,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/bt_alterar_imagem" />
 
         <TextView
             android:id="@+id/textView2"
