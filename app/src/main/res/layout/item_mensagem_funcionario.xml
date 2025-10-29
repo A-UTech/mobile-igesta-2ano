@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="end"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tvNomeUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Cleiton Barros"
+        android:textColor="@color/verde_escuro"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvMensagemFuncionario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_msg_funcionario"
+            android:fontFamily="@font/poppins_medium"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:maxWidth="250dp"
+            android:ellipsize="none"
+            android:scrollHorizontally="false" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="6dp"
+            android:contentDescription="Usuário"
+            android:src="@mipmap/fotoperfil"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
+    </LinearLayout>
+</LinearLayout>

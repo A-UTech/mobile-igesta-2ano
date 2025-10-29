@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -16,7 +17,6 @@
         android:background="@drawable/arredondar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_igesta_title">
 
@@ -28,15 +28,15 @@
                 android:id="@+id/fazer_cadastro_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="54dp"
+                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Ainda não tem conta? Cadastrar"
                 android:textColor="@color/cinza_escuro"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.497" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_email_input"
@@ -54,7 +54,7 @@
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/cinza_medio"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_txt"
@@ -109,29 +109,29 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:text="Login"
                 android:textColor="@color/verde_escuro"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_logo" />
 
+            <!-- Botão de login corrigido -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/logar_bt"
                 android:layout_width="279dp"
                 android:layout_height="65dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="143dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/borda_btn"
                 android:backgroundTint="@color/verde_escuro"
-                android:backgroundTintMode="@null"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Login"
                 android:textAllCaps="false"
                 android:textColor="@color/branco"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@+id/fazer_cadastro_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+                app:layout_constraintVertical_bias="0.08" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
@@ -143,7 +143,7 @@
         android:fontFamily="@font/poppins_light"
         android:text="IGesta"
         android:textColor="@color/branco"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

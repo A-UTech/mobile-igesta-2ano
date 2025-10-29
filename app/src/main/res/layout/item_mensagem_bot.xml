@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Nome -->
+    <TextView
+        android:id="@+id/tvNomeBot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Igestinha"
+        android:textColor="@color/verde_escuro"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <!-- Mensagem + ícone -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="Bot"
+            android:src="@mipmap/igestinha" />
+
+        <TextView
+            android:id="@+id/tvMensagemBot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_msg_bot"
+            android:fontFamily="@font/poppins_medium"
+            android:padding="10dp"
+            android:textColor="#2F3034"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>
