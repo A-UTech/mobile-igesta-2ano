@@ -9,17 +9,18 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven { url 'https://jitpack.io' } // 👈 pode ficar aqui também
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
+        maven { url 'https://jitpack.io' } // 👈 repositório adicionado corretamente
     }
 }
 
 rootProject.name = "IgestaMobile"
 include(":app")
- 
