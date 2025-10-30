@@ -56,11 +56,13 @@ public class Chatbot extends Fragment {
         mensagem_funcionario = view.findViewById(R.id.mensagem_funcionario);
         btnEnviar = view.findViewById(R.id.btnEnviar);
 
-        adapter = new MensagemAdapter(mensagens);
+        adapter = new MensagemAdapter(mensagens, requireContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
         chatApi = ApiClient.getClient(BASE_URL).create(ChatApi.class);
+
+        addMensagemBot("Olá, sou o Igestinha. Como posso ajudar você hoje?");
 
         btnEnviar.setOnClickListener(v -> {
             String mensagem = mensagem_funcionario.getText().toString().trim();
@@ -83,11 +85,18 @@ public class Chatbot extends Fragment {
         recyclerView.smoothScrollToPosition(mensagens.size() - 1);
         mensagem_funcionario.setText("");
 
+        MensagemModel loadingMsg = new MensagemModel("...", false);
+        loadingMsg.setLoading(true);
+        mensagens.add(loadingMsg);
+        adapter.notifyItemInserted(mensagens.size() - 1);
+        recyclerView.smoothScrollToPosition(mensagens.size() - 1);
+
         ChatRequest chatRequest = new ChatRequest(mensagem, UNIDADE);
 
         chatApi.enviarMensagem(chatRequest).enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
+                removerMensagemLoading();
                 if(response.isSuccessful() && response.body() != null){
                     String respostaBot = response.body().getResposta();
                     if (respostaBot == null || respostaBot.isEmpty()){
@@ -101,11 +110,22 @@ public class Chatbot extends Fragment {
 
             @Override
             public void onFailure(Call<ChatResponse> call, Throwable t) {
+                removerMensagemLoading();
                 addMensagemBot("⚠️ Falha na conexão: " + t.getMessage());
             }
         });
     }
 
+    private void removerMensagemLoading() {
+        if (!mensagens.isEmpty()) {
+            int lastIndex = mensagens.size() - 1;
+            MensagemModel ultima = mensagens.get(lastIndex);
+            if (ultima.isLoading()) {
+                mensagens.remove(lastIndex);
+                adapter.notifyItemRemoved(lastIndex);
+            }
+        }
+    }
     private void addMensagemBot(String text) {
         mensagens.add(new MensagemModel(text, false));
         adapter.notifyItemInserted(mensagens.size() - 1);
