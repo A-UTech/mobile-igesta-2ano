@@ -3,6 +3,7 @@ package com.example.igestamobile.data.model.ChatBot;
 public class MensagemModel {
     private String mensagem;
     private boolean isFuncionario;
+    private boolean isLoading = false;
 
     public MensagemModel(String mensagem, boolean isFuncionario) {
         this.mensagem = mensagem;
@@ -23,5 +24,13 @@ public class MensagemModel {
 
     public void setFuncionario(boolean funcionario) {
         isFuncionario = funcionario;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
     }
 }
