@@ -17,6 +17,7 @@ import com.example.igestamobile.R;
 import com.example.igestamobile.data.api.CondenaApi;
 import com.example.igestamobile.data.model.CondenaModel;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
+import com.example.igestamobile.data.model.RegistroCondenaModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -32,8 +33,9 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
     private CondenaApi condenaApi;
     
     private List<CondenaUnidadeResponse> condenasUnidadesOriginal;
-    
+
     private List<CondenaUnidadeResponse> condenasUnidadesExibida;
+
     private Context context;
 
     public CondenaUnidadeAdapter(List<CondenaUnidadeResponse> condenasUnidades, Context context, CondenaApi condenaApi) {
@@ -202,6 +204,23 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
         return contagensFinais;
     }
 
+    public List<RegistroCondenaModel> getContagensFinaisMongo() {
+        List<RegistroCondenaModel> contagensFinais = new ArrayList<>();
+
+        for (CondenaUnidadeResponse item : condenasUnidadesOriginal) {
+            if (item.getQuantidade() > 0) {
+
+                RegistroCondenaModel registro = new RegistroCondenaModel(
+                        item.getIdCondena(),
+                        item.getQuantidade(),
+                        item.getTipo(),
+                        item.getNome()
+                );
+                contagensFinais.add(registro);
+            }
+        }
+        return contagensFinais;
+    }
     
     public List<CondenaUnidadeResponse> getCondenasUnidades() {
         return condenasUnidadesOriginal;
