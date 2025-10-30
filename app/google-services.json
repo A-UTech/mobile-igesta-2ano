@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "111082297956",
+    "project_id": "igesta",
+    "storage_bucket": "igesta.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111082297956:android:113e1d661fa134011b1d71",
+        "android_client_info": {
+          "package_name": "com.example.igestamobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeLRdZA8Xpap-S6U5nlVh27TpGNcEcgjI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
