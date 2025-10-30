@@ -26,17 +26,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:useCompatPadding="false" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/shapeableImageView"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="43dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-            app:srcCompat="@mipmap/fotoperfil" />
-
         <TextView
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
@@ -49,7 +38,7 @@
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
+            app:layout_constraintStart_toEndOf="@+id/imageFuncionarioGerenciar"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -57,7 +46,7 @@
             android:layout_width="185dp"
             android:layout_height="62dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="41dp"
             android:fontFamily="@font/poppins_semibold"
             android:lineHeight="28dp"
             android:text="Gerenciar Funcionários"
@@ -66,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/bt_voltar_gf"
-            app:layout_constraintTop_toBottomOf="@+id/shapeableImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_funcionarios"
@@ -112,7 +101,18 @@
             android:layout_marginTop="58dp"
             android:src="@drawable/ic_seta_verde"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shapeableImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/imageFuncionarioGerenciar" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageFuncionarioGerenciar"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="43dp"
+            android:src="@mipmap/fotoperfil"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

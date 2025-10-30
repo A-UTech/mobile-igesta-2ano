@@ -38,6 +38,7 @@
             android:scrollHorizontally="false" />
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageFuncionario"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="6dp"

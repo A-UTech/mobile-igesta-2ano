@@ -308,7 +308,7 @@ public class Perfil extends Fragment {
 
     private void preUpload(Uri imageUri) {
         MediaManager.get().upload(imageUri)
-                .option("folder", "fotos_F")
+                .option("folder", "fotos_IGesta")
                 .unsigned(uploadProjeto)
                 .preprocess(new ImagePreprocessChain()
                         .loadWith(new BitmapDecoder(1000, 1000))
@@ -364,15 +364,7 @@ public class Perfil extends Fragment {
         updates.put("email/cnpj", documentId);
 
         db.collection("usuarios").document(documentId)
-                .set(updates, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(requireContext(), "Link da foto salvo no Firebase (ID: " + documentId + ")!", Toast.LENGTH_SHORT).show();
-                    Log.d("Firebase", "URL salva com sucesso (Criado/Atualizado). ID: " + documentId);
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), "Falha ao salvar link no Firebase.", Toast.LENGTH_SHORT).show();
-                    Log.e("Firebase", "Erro ao salvar URL: " + e.getMessage());
-                });
+                .set(updates, SetOptions.merge());
     }
 
     private void loadProfileImage() {

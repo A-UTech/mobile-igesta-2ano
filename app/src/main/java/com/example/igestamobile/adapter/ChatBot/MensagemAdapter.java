@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.igestamobile.R;
 import com.example.igestamobile.data.model.ChatBot.MensagemModel;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
 
@@ -25,11 +26,13 @@ public class MensagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private List<MensagemModel> mensagens;
     private Context context;
+    String funcionarioImageUrl;
 
 
-    public MensagemAdapter(List<MensagemModel> mensagens,Context context) {
+    public MensagemAdapter(List<MensagemModel> mensagens,Context context, String funcionarioImageUrl) {
         this.mensagens = mensagens;
         this.context = context;
+        this.funcionarioImageUrl = funcionarioImageUrl;
     }
 
     @Override
@@ -65,6 +68,17 @@ public class MensagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         MensagemModel msg = mensagens.get(position);
         if (holder instanceof UserViewHolder) {
             ((UserViewHolder) holder).textMessage.setText(msg.getMensagem());
+            if (funcionarioImageUrl != null && !funcionarioImageUrl.isEmpty()) {
+                Glide.with(context)
+                        .load(funcionarioImageUrl)
+                        .override(32, 32)
+                        .centerCrop()
+                        .placeholder(R.mipmap.fotoperfil)
+                        .error(R.mipmap.fotoperfil)
+                        .into(((UserViewHolder) holder).imageFuncionario);
+            } else {
+                ((UserViewHolder) holder).imageFuncionario.setImageResource(R.mipmap.fotoperfil);
+            }
         } else if (holder instanceof BotViewHolder) {
             ((BotViewHolder) holder).textMessage.setText(msg.getMensagem());
         }else if (holder instanceof LoadingViewHolder){
@@ -80,9 +94,11 @@ public class MensagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView textMessage;
+        ShapeableImageView imageFuncionario;
         UserViewHolder(View itemView) {
             super(itemView);
             textMessage = itemView.findViewById(R.id.tvMensagemFuncionario);
+            imageFuncionario = itemView.findViewById(R.id.imageFuncionario);
         }
     }
 
