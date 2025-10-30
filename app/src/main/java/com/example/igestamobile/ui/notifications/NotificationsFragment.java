@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,21 @@ import com.example.igestamobile.R;
 import com.example.igestamobile.adapter.CondenaUnidadeAdapter;
 import com.example.igestamobile.data.api.CondenaApi;
 import com.example.igestamobile.data.api.CondenaUnidadeApi;
+import com.example.igestamobile.data.api.EmpresaApi;
+import com.example.igestamobile.data.api.MongoRetrofitClient;
+import com.example.igestamobile.data.api.RegistroApi;
 import com.example.igestamobile.data.api.SqlRetrofitClient;
+import com.example.igestamobile.data.api.TurnoApi;
+import com.example.igestamobile.data.api.UnidadeApi;
+import com.example.igestamobile.data.model.CondenaModel;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
+import com.example.igestamobile.data.model.EmpresaModel;
+import com.example.igestamobile.data.model.RegistroCondenaModel;
+import com.example.igestamobile.data.model.RegistroModel;
+import com.example.igestamobile.data.model.TurnoResponse;
+import com.example.igestamobile.data.model.UnidadeModel;
 import com.example.igestamobile.databinding.FragmentNotificationsBinding;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -35,7 +48,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,16 +58,23 @@ import retrofit2.Response;
 
 public class NotificationsFragment extends Fragment {
     private static final String PREFS_NAME = "LoginPrefs";
-    private static final String KEY_CLIENTE_ID = "CLIENTE_ID";
+    private static final String KEY_USUARIO_ID = "USUARIO_ID";
+    private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
+    private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
+    private static final String KEY_UNIDADE_NOME = "UNIDADE_NOME";
+    private static final String KEY_EMPRESA_ID = "EMPRESA_ID";
+    private static final String KEY_EMPRESA_NOME = "EMPRESA_NOME";
+    private static final String KEY_TURNO_ID = "TURNO_ID";
 
     private CondenaApi condenaApi;
     private CondenaUnidadeApi condenaUnidadeApi;
+    private UnidadeApi unidadeApi;
+    private EmpresaApi empresaApi;
+    private TurnoApi turnoApi;
     private FragmentNotificationsBinding binding;
     private CondenaUnidadeAdapter adapter;
     private Dialog dialog_enviar_contagens, dialog_enviar_condenas;
-
     private List<Condena> pendingCondenasList = null;
-
     private Button bt_filtrar_total;
     private Button bt_filtrar_parcial;
     private String currentFilterType = null;
@@ -65,7 +87,7 @@ public class NotificationsFragment extends Fragment {
         if (getContext() != null) {
             SharedPreferences sharedPrefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
-            clienteId = sharedPrefs.getInt(KEY_CLIENTE_ID, -1);
+            clienteId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
         }
         return clienteId;
     }
@@ -79,6 +101,9 @@ public class NotificationsFragment extends Fragment {
 
         condenaApi = SqlRetrofitClient.getClient(requireContext()).create(CondenaApi.class);
         condenaUnidadeApi = SqlRetrofitClient.getClient(requireContext()).create(CondenaUnidadeApi.class);
+        unidadeApi = SqlRetrofitClient.getClient(requireContext()).create(UnidadeApi.class);
+        empresaApi = SqlRetrofitClient.getClient(requireContext()).create(EmpresaApi.class);
+        turnoApi = SqlRetrofitClient.getClient(requireContext()).create(TurnoApi.class);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -92,7 +117,6 @@ public class NotificationsFragment extends Fragment {
 
         bt_filtrar_total = root.findViewById(R.id.btn_total);
         bt_filtrar_parcial = root.findViewById(R.id.btn_parcial);
-
 
         dialog_enviar_contagens = new Dialog(requireContext());
         dialog_enviar_condenas = new Dialog(requireContext());
@@ -108,6 +132,8 @@ public class NotificationsFragment extends Fragment {
         Button bt_n_enviar_contagens = dialog_enviar_contagens.findViewById(R.id.bt_n_remover);
         Button bt_enviar_contagens_dialog = dialog_enviar_contagens.findViewById(R.id.bt_cadastrar_func_dialog);
         Button bt_enviar_condenas_dialog = dialog_enviar_condenas.findViewById(R.id.bt_enviar_condenas_dialog);
+        TextInputEditText dialogInputInicio = dialog_enviar_condenas.findViewById(R.id.input_horario_inicio);
+        TextInputEditText dialogInputTermino = dialog_enviar_condenas.findViewById(R.id.input_horario_termino);
 
         createDocumentLauncher = registerForActivityResult(
                 new ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
@@ -142,13 +168,121 @@ public class NotificationsFragment extends Fragment {
 
             List<Condena> listaParaPlanilha = new ArrayList<>();
             for (CondenaUnidadeResponse item : contagensFinais) {
-
                 listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade(), item.getTipo()));
             }
 
-            this.pendingCondenasList = listaParaPlanilha;
+            List<RegistroCondenaModel> condenasParaRegistro = adapter.getContagensFinaisMongo();
+            SharedPreferences sharedPrefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            String gestor = sharedPrefs.getString(KEY_USUARIO_NOME, "");
+            Integer unidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
 
-            createDocumentLauncher.launch("condenas.xlsx");
+            unidadeApi.selecionarUnidadePorId(unidadeId).enqueue(new Callback<UnidadeModel>() {
+                @Override
+                public void onResponse(Call<UnidadeModel> call, Response<UnidadeModel> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        SharedPreferences.Editor editor = sharedPrefs.edit();
+                        editor.putString(KEY_UNIDADE_NOME, response.body().getNome());
+                        Integer empresaId = response.body().getIdEmpresa();
+                        editor.putInt(KEY_EMPRESA_ID, empresaId);
+                        editor.apply();
+
+                        empresaApi.selecionarEmpresaPorId(empresaId).enqueue(new Callback<EmpresaModel>() {
+                            @Override
+                            public void onResponse(Call<EmpresaModel> call, Response<EmpresaModel> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    sharedPrefs.edit().putString(KEY_EMPRESA_NOME, response.body().getNome()).apply();
+
+                                    Integer finalUnidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
+                                    String inicio = dialogInputInicio.getText().toString();
+                                    String termino = dialogInputTermino.getText().toString();
+
+                                    turnoApi.selecionarPorUnidadeEPeriodo(finalUnidadeId, inicio, termino).enqueue(new Callback<TurnoResponse>() {
+                                        @Override
+                                        public void onResponse(Call<TurnoResponse> call, Response<TurnoResponse> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                sharedPrefs.edit().putInt(KEY_TURNO_ID, response.body().getId()).apply();
+
+                                                String gestorFinal = sharedPrefs.getString(KEY_USUARIO_NOME, "Daniel Freitas");
+                                                String unidadeFinal = sharedPrefs.getString(KEY_UNIDADE_NOME, "");
+                                                String empresaFinal = sharedPrefs.getString(KEY_EMPRESA_NOME, "");
+                                                Integer idTurnoFinal = sharedPrefs.getInt(KEY_TURNO_ID, -1);
+
+                                                String lote = "L1234";
+                                                Date dataAtual = new Date();
+
+                                                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", java.util.Locale.US);
+
+                                                sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+
+                                                String dataFormatada = sdf.format(dataAtual);
+
+                                                RegistroModel request = new RegistroModel(
+                                                        gestorFinal,
+                                                        empresaFinal,
+                                                        idTurnoFinal,
+                                                        dataFormatada,
+                                                        lote,
+                                                        unidadeFinal,
+                                                        condenasParaRegistro
+                                                );
+
+                                                MongoRetrofitClient.getClient().create(RegistroApi.class).inserirRegistro(request).enqueue(new Callback<RegistroModel>() {
+                                                    @Override
+                                                    public void onResponse(Call<RegistroModel> call, Response<RegistroModel> response) {
+                                                        if (response.isSuccessful()) {
+                                                            Toast.makeText(requireContext(), "Condenas enviadas com sucesso.", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(requireContext(), "Erro ao enviar condenas.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<RegistroModel> call, Throwable t) {
+                                                        Toast.makeText(requireContext(), "Falha ao enviar condenas.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                                NotificationsFragment.this.pendingCondenasList = listaParaPlanilha;
+                                                createDocumentLauncher.launch("condenas.xlsx");
+
+                                            } else {
+                                                Toast.makeText(requireContext(), "Falha ao carregar turno.", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<TurnoResponse> call, Throwable t) {
+                                            if (isAdded() && getActivity() != null) {
+                                                Toast.makeText(requireContext(), "Erro de rede ao buscar turno!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+                                } else {
+                                    Toast.makeText(requireContext(), "Falha ao carregar empresa.", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<EmpresaModel> call, Throwable t) {
+                                if (isAdded() && getActivity() != null) {
+                                    Toast.makeText(requireContext(), "Erro de rede ao buscar empresa!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    } else {
+                        Toast.makeText(requireContext(), "Falha ao carregar unidade.", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UnidadeModel> call, Throwable t) {
+                    if (isAdded() && getActivity() != null) {
+                        Toast.makeText(requireContext(), "Erro de rede ao buscar unidade!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         });
 
 
@@ -230,13 +364,11 @@ public class NotificationsFragment extends Fragment {
         }
     }
 
-
     private void carregarCondenasDeUnidade(Integer unidadeId) {
         condenaUnidadeApi.selecionarCondenasUnidade(unidadeId).enqueue(new Callback<List<CondenaUnidadeResponse>>() {
             @Override
             public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-
                     adapter.setLista(response.body());
                 } else {
                     Toast.makeText(requireContext(), "Falha ao carregar IDs de associação.", Toast.LENGTH_LONG).show();
