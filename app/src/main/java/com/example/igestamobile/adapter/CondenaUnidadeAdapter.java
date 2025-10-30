@@ -213,8 +213,8 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
                 RegistroCondenaModel registro = new RegistroCondenaModel(
                         item.getIdCondena(),
                         item.getQuantidade(),
-                        item.getTipo(),
-                        item.getNome()
+                        item.getNome(),
+                        item.getTipo()
                 );
                 contagensFinais.add(registro);
             }
