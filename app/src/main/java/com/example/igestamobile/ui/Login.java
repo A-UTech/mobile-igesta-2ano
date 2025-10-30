@@ -39,6 +39,7 @@ public class Login extends AppCompatActivity {
     private static final String KEY_USUARIO_ID = "USUARIO_ID";
     private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
     private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
+    private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
     private EditText etEmailCnpj;
     private EditText etSenha;
     private AppCompatButton btnLogin;
@@ -61,6 +62,10 @@ public class Login extends AppCompatActivity {
             String senha = etSenha.getText().toString().trim();
 
             if (!emailCnpj.isEmpty() && !senha.isEmpty()) {
+                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(KEY_USUARIO_CREDENCIAL, emailCnpj);
+                editor.apply();
                 performLogin(emailCnpj, senha);
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show();

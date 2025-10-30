@@ -2,27 +2,39 @@ package com.example.igestamobile.ui;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
+import com.bumptech.glide.Glide;
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
+import com.cloudinary.android.preprocess.BitmapDecoder;
+import com.cloudinary.android.preprocess.BitmapEncoder;
+import com.cloudinary.android.preprocess.DimensionsValidator;
+import com.cloudinary.android.preprocess.ImagePreprocessChain;
+import com.cloudinary.android.preprocess.Limit;
+import com.cloudinary.android.preprocess.Rotate;
+import com.example.igestamobile.R;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,25 +45,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 
-import com.bumptech.glide.Glide;
-import com.example.igestamobile.R;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.Objects;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Perfil#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.igestamobile.utils.MaskUtil;
+
 public class Perfil extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+    private static final String PREFS_NAME = "LoginPrefs";
+    private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
+    private String cloudname = "dpbzx88eu";
+    private String uploadProjeto = "IGesta";
+    private Uri photoUri;
+
     private String mParam1;
     private String mParam2;
     private Button bt_n_logout, bt_logout_dialog;
@@ -59,45 +75,25 @@ public class Perfil extends Fragment {
     private TextView bt_alterar_foto_perfil, bt_selecionar_galeria, bt_tirar_foto;
     private ImageView img_foto_perfil;
 
-    ActivityResultLauncher<Intent> galeriaLauncher, cameraLauncher;
+    private FirebaseFirestore db;
+
+    ActivityResultLauncher<Intent> galeriaLauncher;
+    ActivityResultLauncher<Uri> cameraLauncher;
 
     public Perfil() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Perfil.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Perfil newInstance(String param1, String param2) {
-        Perfil fragment = new Perfil();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        db = FirebaseFirestore.getInstance();
+
+        initCloudinary();
 
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+
 
         LinearLayout bt_config = view.findViewById(R.id.bt_config);
         LinearLayout bt_gerenciar = view.findViewById(R.id.bt_gerenciar);
@@ -123,40 +119,11 @@ public class Perfil extends Fragment {
         img_foto_perfil = view.findViewById(R.id.img_foto_perfil);
         bt_tirar_foto = dialog_foto_opcoes.findViewById(R.id.bt_tirar_foto);
 
+        setGallery();
+        setCamera();
 
-        galeriaLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        Uri imagemUri = result.getData().getData();
-                        Glide.with(this)
-                                .load(imagemUri)
-                                .override(175, 175)
-                                .centerCrop()
-                                .into(img_foto_perfil);
-                    } else {
-                        Toast.makeText(requireContext(), "Nenhuma imagem selecionada", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        cameraLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        Bundle extras = result.getData().getExtras();
-                        Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-                        Uri tempUri = getImageUri(requireContext(), imageBitmap);
-
-                        Glide.with(this)
-                                .load(tempUri)
-                                .override(175, 175)
-                                .centerCrop()
-                                .into(img_foto_perfil);
-                    } else {
-                        Toast.makeText(requireContext(), "Falha ao tirar foto", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        checkUserDocumentExistence();
+        loadProfileImage();
 
         bt_logout.setOnClickListener(v -> {
             dialog_logout.show();
@@ -167,6 +134,8 @@ public class Perfil extends Fragment {
         });
 
         bt_logout_dialog.setOnClickListener(v -> {
+            clearUsuarioCredencial();
+
             Intent intent = new Intent(requireActivity(), Login.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -204,25 +173,264 @@ public class Perfil extends Fragment {
             dialog_foto_opcoes.show();
         });
 
-        bt_selecionar_galeria.setOnClickListener(v -> escolherImagem());
-        bt_tirar_foto.setOnClickListener(v -> tirarFoto());
+        bt_selecionar_galeria.setOnClickListener(v -> openGallery());
+        bt_tirar_foto.setOnClickListener(v -> captureImage());
 
         return view;
     }
 
-    private void escolherImagem() {
+    private String getUsuarioCredencial() {
+        if (getActivity() == null) return null;
+
+        String rawCredencial = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_CREDENCIAL, null);
+
+        if (rawCredencial != null) {
+            return MaskUtil.unmask(rawCredencial);
+        }
+        return null;
+    }
+
+    private void clearUsuarioCredencial() {
+        if (getActivity() == null) return;
+        getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .edit()
+                .remove(KEY_USUARIO_CREDENCIAL)
+                .apply();
+    }
+
+    private void setCamera() {
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.TakePicture(),
+                o -> {
+                    if (o) {
+                        preUpload(photoUri);
+                    } else {
+                        Toast.makeText(requireContext(), "Foto não foi tirada", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    private void setGallery() {
+        galeriaLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                o -> {
+                    if (o.getResultCode() == RESULT_OK && o.getData() != null) {
+                        Uri imageUri = o.getData().getData();
+
+                        Glide.with(this).load(imageUri).override(175, 175).centerCrop().into(img_foto_perfil);
+
+                        uploadImagem(imageUri);
+                    }
+                }
+        );
+    }
+
+    private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galeriaLauncher.launch(intent);
     }
 
-    private void tirarFoto() {
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
+    private void captureImage() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.CAMERA}, 101);
-        } else {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            cameraLauncher.launch(intent);
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 101);
+            return;
         }
+
+        try {
+            String tempo = new SimpleDateFormat("yyMMdd_HHmmss").format(new Date());
+            String arquivo = "F_" + tempo;
+            File pasta = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+            File photo = File.createTempFile(arquivo, ".jpg", pasta);
+
+            photoUri = FileProvider.getUriForFile(requireContext(), requireContext().getApplicationContext().getPackageName() + ".provider", photo);
+
+            cameraLauncher.launch(photoUri);
+
+        } catch (IOException e) {
+            Log.e("Camera", "Erro ao criar arquivo de imagem: " + e.getMessage());
+            Toast.makeText(requireContext(), "Erro ao preparar a câmera.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void initCloudinary() {
+        try {
+            MediaManager.get();
+        } catch (IllegalStateException e) {
+            Map config = new HashMap<>();
+            config.put("cloud_name", cloudname);
+            MediaManager.init(requireContext().getApplicationContext(), config);
+            Log.i("Cloudinary", "Cloudinary inicializado com sucesso.");
+        } catch (Exception e) {
+            Log.e("Cloudinary", "Erro inesperado ao inicializar Cloudinary: " + e.getMessage());
+        }
+    }
+
+    private void uploadImagem(Uri imageUri) {
+        MediaManager.get().upload(imageUri)
+                .option("folder", "fotos_IGesta")
+                .unsigned(uploadProjeto)
+                .callback(new UploadCallback() {
+                    @Override
+                    public void onStart(String requestId) {
+                        Toast.makeText(requireContext(), "Upload (Galeria) iniciado...", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                    }
+
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        String url = (String) resultData.get("secure_url");
+
+                        Toast.makeText(requireContext(), "Galeria - Upload Sucesso! URL: " + url, Toast.LENGTH_LONG).show();
+
+                        Glide.with(Perfil.this).load(url).override(175, 175).centerCrop().into(img_foto_perfil);
+
+                        saveProfileImageUrl(url);
+                    }
+
+                    @Override
+                    public void onError(String requestId, ErrorInfo error) {
+                        Toast.makeText(requireContext(), "Erro no Upload (Galeria): " + error.getDescription(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onReschedule(String requestId, ErrorInfo error) {
+                    }
+                })
+                .dispatch(requireContext());
+    }
+
+    private void preUpload(Uri imageUri) {
+        MediaManager.get().upload(imageUri)
+                .option("folder", "fotos_F")
+                .unsigned(uploadProjeto)
+                .preprocess(new ImagePreprocessChain()
+                        .loadWith(new BitmapDecoder(1000, 1000))
+                        .addStep(new Limit(1000, 1000))
+                        .addStep(new DimensionsValidator(10, 10, 1000, 1000))
+                        .addStep(new Rotate(90))
+                        .saveWith(new BitmapEncoder(BitmapEncoder.Format.JPEG, 60))
+                )
+                .callback(new UploadCallback() {
+                    @Override
+                    public void onStart(String requestId) {
+                        Toast.makeText(requireContext(), "Pré-Upload (Câmera) iniciado...", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                    }
+
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        String url = (String) resultData.get("secure_url");
+
+                        Toast.makeText(requireContext(), "Câmera - Upload Sucesso! URL: " + url, Toast.LENGTH_LONG).show();
+
+                        Glide.with(Perfil.this).load(url).override(175, 175).centerCrop().into(img_foto_perfil);
+
+                        saveProfileImageUrl(url);
+                    }
+
+                    @Override
+                    public void onError(String requestId, ErrorInfo error) {
+                        Toast.makeText(requireContext(), "Erro no Pré-Upload (Câmera): " + error.getDescription(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onReschedule(String requestId, ErrorInfo error) {
+                    }
+                })
+                .dispatch(requireContext());
+    }
+
+    private void saveProfileImageUrl(String imageUrl) {
+        String documentId = getUsuarioCredencial();
+
+        if (documentId == null) {
+            Toast.makeText(requireContext(), "Erro: Credencial não encontrada. Não é possível salvar a foto.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("imagem", imageUrl);
+
+        updates.put("email/cnpj", documentId);
+
+        db.collection("usuarios").document(documentId)
+                .set(updates, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(requireContext(), "Link da foto salvo no Firebase (ID: " + documentId + ")!", Toast.LENGTH_SHORT).show();
+                    Log.d("Firebase", "URL salva com sucesso (Criado/Atualizado). ID: " + documentId);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Falha ao salvar link no Firebase.", Toast.LENGTH_SHORT).show();
+                    Log.e("Firebase", "Erro ao salvar URL: " + e.getMessage());
+                });
+    }
+
+    private void loadProfileImage() {
+        String documentId = getUsuarioCredencial();
+
+        if (documentId == null) {
+            Log.e("Firebase", "Credencial não encontrada. Imagem não pode ser carregada.");
+            return;
+        }
+
+        db.collection("usuarios").document(documentId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String profileImageUrl = documentSnapshot.getString("imagem");
+
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(this)
+                                    .load(profileImageUrl)
+                                    .override(175, 175)
+                                    .centerCrop()
+                                    .placeholder(R.mipmap.fotoperfil)
+                                    .error(R.mipmap.fotoperfil)
+                                    .into(img_foto_perfil);
+
+                            Log.i("Firebase", "Foto de perfil carregada do Firebase.");
+                        } else {
+                            Log.d("Firebase", "URL da foto de perfil (campo 'imagem') não encontrada no Firestore.");
+                        }
+                    } else {
+                        Log.d("Firebase", "Documento do usuário não encontrado no Firestore (ID: " + documentId + ").");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firebase", "Erro ao buscar documento do usuário: " + e.getMessage());
+                });
+    }
+
+    private void checkUserDocumentExistence() {
+        String documentId = getUsuarioCredencial();
+
+        if (documentId == null) {
+            Log.w("Firebase", "Credencial não encontrada. Não é possível verificar a credencial.");
+            return;
+        }
+
+        db.collection("usuarios").document(documentId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Log.i("Credencial", "Credencial (email/cnpj) ENCONTRADA no Firestore para o ID: " + documentId);
+                    } else {
+                        Log.w("Credencial", "Credencial (email/cnpj) NÃO ENCONTRADA no Firestore para o ID: " + documentId);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Credencial", "Erro ao verificar credencial no Firestore: " + e.getMessage());
+                });
     }
 
     @Override
@@ -230,20 +438,10 @@ public class Perfil extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 101) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                tirarFoto();
+                captureImage();
             } else {
                 Toast.makeText(requireContext(), "Permissão da câmera negada", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private Uri getImageUri(Context context, Bitmap bitmap) {
-        String path = MediaStore.Images.Media.insertImage(
-                context.getContentResolver(),
-                bitmap,
-                "FotoPerfil",
-                null
-        );
-        return Uri.parse(path);
     }
 }
