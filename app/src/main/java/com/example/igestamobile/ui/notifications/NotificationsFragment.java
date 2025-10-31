@@ -502,7 +502,7 @@ public class NotificationsFragment extends Fragment {
                 .getString(KEY_USUARIO_CREDENCIAL, null);
 
         if (rawCredencial != null) {
-            return MaskUtil.unmask(rawCredencial);
+            return MaskUtil.unmaskCnpj(rawCredencial);
         }
         return null;
     }
