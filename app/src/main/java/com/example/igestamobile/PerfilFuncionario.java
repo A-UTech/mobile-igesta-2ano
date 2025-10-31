@@ -16,15 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import com.bumptech.glide.Glide; // Importação adicionada
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.images.ImageManager;
-import com.google.android.material.imageview.ShapeableImageView; // Importação adicionada
+import com.google.android.material.imageview.ShapeableImageView;
 
-import com.example.igestamobile.R; // Garanta que o seu pacote seja o correto
+import com.example.igestamobile.R;
 
 public class PerfilFuncionario extends Fragment {
 
-    // Constantes de Chave de Argumentos (DEVEM ser as mesmas usadas no GerenciarFuncionario!)
     private static final String ARG_NOME = "nome";
     private static final String ARG_EMAIL = "email";
     private static final String ARG_CARGO = "cargo";
@@ -33,14 +32,12 @@ public class PerfilFuncionario extends Fragment {
 
     private Dialog dialog_remover;
 
-    // Elementos de UI
     private ShapeableImageView imagePerfilFuncionario;
     private TextView textNomeFuncionario;
     private TextView textEmailFuncionario;
     private TextView textCargoFuncionario;
 
 
-    // Variáveis para armazenar os dados do funcionário
     private String nomeFuncionario;
     private String emailFuncionario;
     private String cargoFuncionario;
@@ -48,7 +45,6 @@ public class PerfilFuncionario extends Fragment {
 
 
     public PerfilFuncionario() {
-        // Required empty public constructor
     }
 
     public static PerfilFuncionario newInstance(String nome, String email, String cargo, String urlImagem) {
@@ -66,7 +62,6 @@ public class PerfilFuncionario extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Resgatar os dados do funcionário do Bundle
         if (getArguments() != null) {
             nomeFuncionario = getArguments().getString(ARG_NOME);
             emailFuncionario = getArguments().getString(ARG_EMAIL);
@@ -108,7 +103,7 @@ public class PerfilFuncionario extends Fragment {
         });
 
         bt_remover_dialog.setOnClickListener(v -> {
-            // Lógica para remover o funcionário do banco
+            // Lógica para remover o funcionário do banco (lembrar de fazer)
         });
 
         if (btVoltar != null) {
@@ -122,7 +117,6 @@ public class PerfilFuncionario extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 2. Popular os elementos de UI
         if (nomeFuncionario != null) {
             textNomeFuncionario.setText(nomeFuncionario);
         }
@@ -139,12 +133,10 @@ public class PerfilFuncionario extends Fragment {
                     .error(R.mipmap.fotoperfil)
                     .into(imagePerfilFuncionario);
         } else {
-            // Se a URL estiver vazia, use a imagem padrão
             imagePerfilFuncionario.setImageResource(R.mipmap.fotoperfil);
         }
 
 
-        // Lógica do Dropdown (Função/Cargo)
         String[] funcoes = requireContext().getResources().getStringArray(R.array.cargos_opcoes);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -157,17 +149,14 @@ public class PerfilFuncionario extends Fragment {
 
         dropdownCargos.setAdapter(adapter);
 
-        // Para definir a função "padrão" usando o cargo recebido
         if (cargoFuncionario != null && !cargoFuncionario.isEmpty()) {
             dropdownCargos.setText(cargoFuncionario, false);
         } else {
-            // Se não houver cargo, define o primeiro da lista
             dropdownCargos.setText(funcoes[0], false);
         }
 
         dropdownCargos.setOnItemClickListener((parent, v, position, id) -> {
             String itemSelecionado = (String) parent.getItemAtPosition(position);
-            // Aqui você pode adicionar lógica para salvar a mudança de cargo, se necessário.
             Log.d("PerfilFuncionario", "Novo cargo selecionado: " + itemSelecionado);
         });
     }
