@@ -19,17 +19,27 @@ public class MaskUtil {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (isUpdating) return;
 
-                String str = unmask(s.toString());
+                String currentText = s.toString();
+
+                String unmaskedCnpj = unmaskCnpj(currentText);
+
+                boolean isLikelyCnpj = currentText.matches("[\\d.-/]*") || unmaskedCnpj.length() > 0;
+
+                if (currentText.contains("@") || (isLikelyCnpj && unmaskedCnpj.length() > CNPJ_LENGTH)) {
+                    return;
+                }
 
                 isUpdating = true;
-                if (str.length() == CNPJ_LENGTH) {
-                    String formatado = formatarCnpj(str);
-                    editText.setText(formatado);
-                    editText.setSelection(formatado.length());
-                }
-                else if (str.length() < CNPJ_LENGTH && s.toString().contains(".")) {
-                    editText.setText(str);
-                    editText.setSelection(str.length());
+
+                if (isLikelyCnpj) {
+                    if (unmaskedCnpj.length() == CNPJ_LENGTH) {
+                        String formatado = formatarCnpj(unmaskedCnpj);
+                        if (!currentText.equals(formatado)) {
+                            editText.setText(formatado);
+                            editText.setSelection(formatado.length());
+                        }
+                    } else if (currentText.length() > 0 && unmaskedCnpj.length() < CNPJ_LENGTH) {
+                    }
                 }
 
                 isUpdating = false;
@@ -39,7 +49,8 @@ public class MaskUtil {
             public void afterTextChanged(Editable s) {}
         });
     }
-    public static String unmask(String s) {
+
+    public static String unmaskCnpj(String s) {
         return s.replaceAll("[^\\d]", "");
     }
 
