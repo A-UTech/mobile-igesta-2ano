@@ -39,6 +39,7 @@ import com.example.igestamobile.data.model.RegistroModel;
 import com.example.igestamobile.data.model.TurnoResponse;
 import com.example.igestamobile.data.model.UnidadeModel;
 import com.example.igestamobile.databinding.FragmentNotificationsBinding;
+import com.example.igestamobile.ui.dialogs.AcessoNegadoDialog;
 import com.example.igestamobile.utils.MaskUtil;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -69,7 +70,7 @@ public class NotificationsFragment extends Fragment {
     private static final String KEY_EMPRESA_ID = "EMPRESA_ID";
     private static final String KEY_EMPRESA_NOME = "EMPRESA_NOME";
     private static final String KEY_TURNO_ID = "TURNO_ID";
-
+    private static final String KEY_TIPO_USUARIO = "TIPO_USUARIO";
     private CondenaApi condenaApi;
     private CondenaUnidadeApi condenaUnidadeApi;
     private UnidadeApi unidadeApi;
@@ -101,6 +102,13 @@ public class NotificationsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        if (!isUsuarioGestor()) {
+            AcessoNegadoDialog dialog = new AcessoNegadoDialog();
+            dialog.show(getParentFragmentManager(), "AcessoNegadoDialogTag");
+
+            return inflater.inflate(R.layout.fragment_notifications, container, false); // Retorna o layout, mas o diálogo o cobre.
+        }
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -502,8 +510,22 @@ public class NotificationsFragment extends Fragment {
                 .getString(KEY_USUARIO_CREDENCIAL, null);
 
         if (rawCredencial != null) {
-            return MaskUtil.unmaskCnpj(rawCredencial);
+            if (rawCredencial.contains("@")) {
+                return rawCredencial;
+            } else {
+                return MaskUtil.unmaskCnpj(rawCredencial);
+            }
         }
         return null;
+    }
+
+    private boolean isUsuarioGestor() {
+        if (getContext() == null) return false;
+
+        SharedPreferences sharedPrefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        String cargo = sharedPrefs.getString(KEY_TIPO_USUARIO, "");
+
+        return "Gestor".equalsIgnoreCase(cargo);
     }
 }
