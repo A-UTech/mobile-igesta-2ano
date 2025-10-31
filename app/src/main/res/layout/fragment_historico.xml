@@ -35,7 +35,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/turnos" />
+                tools:listitem="@layout/item_turnos" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <CalendarView

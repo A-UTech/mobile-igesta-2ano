@@ -111,7 +111,7 @@ public class NotificationsFragment extends Fragment {
             AcessoNegadoDialog dialog = new AcessoNegadoDialog();
             dialog.show(getParentFragmentManager(), "AcessoNegadoDialogTag");
 
-            return inflater.inflate(R.layout.fragment_notifications, container, false); // Retorna o layout, mas o diálogo o cobre.
+            return inflater.inflate(R.layout.fragment_notifications, container, false);
         }
 
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);

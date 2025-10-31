@@ -2,55 +2,62 @@ package com.example.igestamobile;
 
 import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import com.bumptech.glide.Glide; // Importação adicionada
+import com.google.android.gms.common.images.ImageManager;
+import com.google.android.material.imageview.ShapeableImageView; // Importação adicionada
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PerfilFuncionario#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.igestamobile.R; // Garanta que o seu pacote seja o correto
+
 public class PerfilFuncionario extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // Constantes de Chave de Argumentos (DEVEM ser as mesmas usadas no GerenciarFuncionario!)
+    private static final String ARG_NOME = "nome";
+    private static final String ARG_EMAIL = "email";
+    private static final String ARG_CARGO = "cargo";
+    private static final String ARG_URL_IMAGEM = "urlImagem";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
     private Dialog dialog_remover;
+
+    // Elementos de UI
+    private ShapeableImageView imagePerfilFuncionario;
+    private TextView textNomeFuncionario;
+    private TextView textEmailFuncionario;
+    private TextView textCargoFuncionario;
+
+
+    // Variáveis para armazenar os dados do funcionário
+    private String nomeFuncionario;
+    private String emailFuncionario;
+    private String cargoFuncionario;
+    private String urlImagemFuncionario;
+
 
     public PerfilFuncionario() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PerfilFuncionario.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PerfilFuncionario newInstance(String param1, String param2) {
+    public static PerfilFuncionario newInstance(String nome, String email, String cargo, String urlImagem) {
         PerfilFuncionario fragment = new PerfilFuncionario();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_NOME, nome);
+        args.putString(ARG_EMAIL, email);
+        args.putString(ARG_CARGO, cargo);
+        args.putString(ARG_URL_IMAGEM, urlImagem);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,9 +65,17 @@ public class PerfilFuncionario extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 1. Resgatar os dados do funcionário do Bundle
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            nomeFuncionario = getArguments().getString(ARG_NOME);
+            emailFuncionario = getArguments().getString(ARG_EMAIL);
+            cargoFuncionario = getArguments().getString(ARG_CARGO);
+            urlImagemFuncionario = getArguments().getString(ARG_URL_IMAGEM);
+
+            Log.d("PerfilFuncionario", "Dados Recebidos: " + nomeFuncionario + " | " + emailFuncionario);
+        } else {
+            Log.e("PerfilFuncionario", "Nenhum argumento recebido.");
         }
     }
 
@@ -69,8 +84,11 @@ public class PerfilFuncionario extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil_funcionario, container, false);
 
-        View btVoltar = view.findViewById(R.id.bt_voltar_pf);
+        imagePerfilFuncionario = view.findViewById(R.id.img_funcionario_perfil);
+        textNomeFuncionario = view.findViewById(R.id.nome_funcionario);
+        textEmailFuncionario = view.findViewById(R.id.email_funcionario);
 
+        View btVoltar = view.findViewById(R.id.bt_voltar_pf);
         LinearLayout bt_remover = view.findViewById(R.id.bt_remover_funcionario);
 
         dialog_remover = new Dialog(requireContext());
@@ -90,16 +108,11 @@ public class PerfilFuncionario extends Fragment {
         });
 
         bt_remover_dialog.setOnClickListener(v -> {
-            //Lógica para remover o funcionário do banco
+            // Lógica para remover o funcionário do banco
         });
 
         if (btVoltar != null) {
-            btVoltar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(v).popBackStack();
-                }
-            });
+            btVoltar.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
         }
 
         return view;
@@ -109,6 +122,29 @@ public class PerfilFuncionario extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 2. Popular os elementos de UI
+        if (nomeFuncionario != null) {
+            textNomeFuncionario.setText(nomeFuncionario);
+        }
+        if (emailFuncionario != null) {
+            textEmailFuncionario.setText(emailFuncionario);
+        }
+
+        if (urlImagemFuncionario != null && !urlImagemFuncionario.isEmpty()) {
+            Glide.with(this)
+                    .load(urlImagemFuncionario)
+                    .override(175, 175)
+                    .centerCrop()
+                    .placeholder(R.mipmap.fotoperfil)
+                    .error(R.mipmap.fotoperfil)
+                    .into(imagePerfilFuncionario);
+        } else {
+            // Se a URL estiver vazia, use a imagem padrão
+            imagePerfilFuncionario.setImageResource(R.mipmap.fotoperfil);
+        }
+
+
+        // Lógica do Dropdown (Função/Cargo)
         String[] funcoes = requireContext().getResources().getStringArray(R.array.cargos_opcoes);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -121,11 +157,18 @@ public class PerfilFuncionario extends Fragment {
 
         dropdownCargos.setAdapter(adapter);
 
-        //Para definir qual é a função "padrão"
-        dropdownCargos.setText(funcoes[0], false);
+        // Para definir a função "padrão" usando o cargo recebido
+        if (cargoFuncionario != null && !cargoFuncionario.isEmpty()) {
+            dropdownCargos.setText(cargoFuncionario, false);
+        } else {
+            // Se não houver cargo, define o primeiro da lista
+            dropdownCargos.setText(funcoes[0], false);
+        }
 
         dropdownCargos.setOnItemClickListener((parent, v, position, id) -> {
             String itemSelecionado = (String) parent.getItemAtPosition(position);
+            // Aqui você pode adicionar lógica para salvar a mudança de cargo, se necessário.
+            Log.d("PerfilFuncionario", "Novo cargo selecionado: " + itemSelecionado);
         });
     }
 }
