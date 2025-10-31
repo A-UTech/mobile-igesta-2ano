@@ -1,10 +1,13 @@
 package com.example.igestamobile.ui.notifications;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.igestamobile.NotificationHelper;
 import com.example.igestamobile.R;
 import com.example.igestamobile.adapter.CondenaUnidadeAdapter;
 import com.example.igestamobile.data.api.CondenaApi;
@@ -248,6 +252,18 @@ public class NotificationsFragment extends Fragment {
                                                     public void onResponse(Call<RegistroModel> call, Response<RegistroModel> response) {
                                                         if (response.isSuccessful()) {
                                                             Toast.makeText(requireContext(), "Condenas enviadas com sucesso.", Toast.LENGTH_SHORT).show();
+                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                                                if (requireContext().checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                                                                        != PackageManager.PERMISSION_GRANTED) {
+                                                                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                                                }
+                                                            }
+
+                                                            NotificationHelper.showNotification(
+                                                                    requireContext(),
+                                                                    "Suas contagens foram enviadas!",
+                                                                    "Volte mais tarde para inserir as contagens do próximo turno."
+                                                            );
                                                         } else {
                                                             Toast.makeText(requireContext(), "Erro ao enviar condenas.", Toast.LENGTH_SHORT).show();
                                                         }
