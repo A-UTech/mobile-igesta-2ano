@@ -110,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingHorizontal="44dp"
                 android:paddingBottom="90dp">
 
                 <LinearLayout
@@ -122,8 +123,7 @@
                         android:id="@+id/cardView2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="11dp"
-                        android:minWidth="156dp"
+                        android:minWidth="145dp"
                         android:minHeight="167dp"
                         app:cardBackgroundColor="@color/verde_escuro"
                         app:cardCornerRadius="20.5dp"
@@ -176,6 +176,7 @@
                         android:id="@+id/cardView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="11dp"
                         android:minWidth="156dp"
                         android:minHeight="167dp"
                         app:cardBackgroundColor="@color/verde_claro"
@@ -229,9 +230,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="44dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="44dp"
                     android:minHeight="217dp"
                     app:cardBackgroundColor="@color/verde_escuro"
                     app:cardCornerRadius="20.5dp"
@@ -369,7 +368,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
-                        android:minWidth="156dp"
+                        android:minWidth="145dp"
                         android:minHeight="131dp"
                         app:cardBackgroundColor="@color/verde_claro"
                         app:cardCornerRadius="20.5dp"
@@ -444,7 +443,7 @@
 
                             <TextView
                                 android:id="@+id/textView27"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
                                 android:lineHeight="18dp"
@@ -492,9 +491,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="44dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="44dp"
                     android:layout_marginBottom="50dp"
                     android:minHeight="217dp"
                     app:cardBackgroundColor="@color/verde_escuro"
