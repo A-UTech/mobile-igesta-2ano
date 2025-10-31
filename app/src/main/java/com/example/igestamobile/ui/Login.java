@@ -40,6 +40,7 @@ public class Login extends AppCompatActivity {
     private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
     private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
+    private static final String KEY_TIPO_USUARIO = "TIPO_USUARIO";
     private EditText etEmailCnpj;
     private EditText etSenha;
     private AppCompatButton btnLogin;
@@ -103,6 +104,11 @@ public class Login extends AppCompatActivity {
                                             if (response.isSuccessful() && response.body() != null) {
                                                 LoginModelResponse user = response.body();
 
+                                                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = prefs.edit();
+                                                editor.putString(KEY_TIPO_USUARIO, user.getTipoUsuario());
+                                                editor.apply();
+
                                                 switch (user.getTipoUsuario()) {
                                                     case "unidade":
                                                         handleLoginUnidade(user);
@@ -120,7 +126,7 @@ public class Login extends AppCompatActivity {
                                                         Toast.makeText(Login.this, "Tipo de usuário inválido.", Toast.LENGTH_LONG).show();
                                                         break;
                                                 }
-                                            } else if (response.code() == 401) {
+                                            } else if (response.code() == 401 || response.code() == 403) {
                                                 etEmailCnpj.setError("E-mail ou CNPJ inválido.");
                                                 etSenha.setError("Senha inválida.");
                                                 etEmailCnpj.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
@@ -136,6 +142,13 @@ public class Login extends AppCompatActivity {
                                             Toast.makeText(Login.this, "Falha na conexão de rede. Verifique o servidor.", Toast.LENGTH_LONG).show();
                                         }
                                     });
+                        } else if (response.code() == 500) {
+                            etEmailCnpj.setError("E-mail ou CNPJ inválido.");
+                            etSenha.setError("Senha inválida.");
+                            etEmailCnpj.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
+                            etSenha.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
+                        } else {
+                            Toast.makeText(Login.this, "Erro no servidor: Código " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 

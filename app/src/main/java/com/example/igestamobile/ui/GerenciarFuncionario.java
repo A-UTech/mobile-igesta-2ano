@@ -159,7 +159,11 @@ public class GerenciarFuncionario extends Fragment {
                 .getString(KEY_USUARIO_CREDENCIAL, null);
 
         if (rawCredencial != null) {
-            return MaskUtil.unmaskCnpj(rawCredencial);
+            if (rawCredencial.contains("@")) {
+                return rawCredencial;
+            } else {
+                return MaskUtil.unmaskCnpj(rawCredencial);
+            }
         }
         return null;
     }

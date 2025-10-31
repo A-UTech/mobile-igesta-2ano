@@ -33,7 +33,7 @@
             android:textColor="@color/cinza_medio"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.006"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/shapeableImageView5"
             app:layout_constraintTop_toTopOf="parent" />
 
