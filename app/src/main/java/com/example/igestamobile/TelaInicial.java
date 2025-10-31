@@ -1,77 +1,103 @@
 package com.example.igestamobile;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TelaInicial#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.bumptech.glide.Glide;
+import com.example.igestamobile.R;
+import com.example.igestamobile.databinding.FragmentHomeBinding;
+import com.example.igestamobile.utils.MaskUtil;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class TelaInicial extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public TelaInicial() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TelaInicial.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TelaInicial newInstance(String param1, String param2) {
-        TelaInicial fragment = new TelaInicial();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private static final String PREFS_NAME = "LoginPrefs";
+    private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
+    private FragmentHomeBinding binding;
+    ShapeableImageView imageFuncionarioHome;
+    private FirebaseFirestore db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_tela_inicial, container, false);
+    }
 
-        View view = inflater.inflate(R.layout.fragment_tela_inicial, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        View btChatbot = view.findViewById(R.id.bt_chatbot);
+        db = FirebaseFirestore.getInstance();
 
-        btChatbot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requireActivity().findViewById(R.id.navigation_chatbot).performClick();
-            }
-        });
+        imageFuncionarioHome = view.findViewById(R.id.imageFuncionarioHome);
 
-        return view;
+        loadProfileImage();
+    }
+
+    private void loadProfileImage() {
+        String documentId = getUsuarioCredencial();
+
+        if (documentId == null) {
+            Log.e("Firebase", "Credencial não encontrada. Imagem não pode ser carregada.");
+            return;
+        }
+
+        db.collection("usuarios").document(documentId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!isAdded()) {
+                        Log.d("GlideFix", "Fragment not attached. Cancelling profile image load.");
+                        return;
+                    }
+                    if (documentSnapshot.exists()) {
+                        String profileImageUrl = documentSnapshot.getString("imagem");
+
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(this)
+                                    .load(profileImageUrl)
+                                    .override(175, 175)
+                                    .centerCrop()
+                                    .placeholder(R.mipmap.fotoperfil)
+                                    .error(R.mipmap.fotoperfil)
+                                    .into(imageFuncionarioHome);
+
+                            Log.i("Firebase", "Foto de perfil carregada do Firebase.");
+                        } else {
+                            Log.d("Firebase", "URL da foto de perfil (campo 'imagem') não encontrada no Firestore.");
+                        }
+                    } else {
+                        Log.d("Firebase", "Documento do usuário não encontrado no Firestore (ID: " + documentId + ").");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firebase", "Erro ao buscar documento do usuário: " + e.getMessage());
+                });
+    }
+
+    private String getUsuarioCredencial() {
+        if (getActivity() == null) return null;
+
+        String rawCredencial = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_CREDENCIAL, null);
+
+        if (rawCredencial != null) {
+            return MaskUtil.unmask(rawCredencial);
+        }
+        return null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
