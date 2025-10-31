@@ -123,12 +123,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nome_funcionario" />
 
-        <ImageView
-            android:id="@+id/imageView12"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_funcionario_perfil"
             android:layout_width="174dp"
             android:layout_height="174dp"
             android:layout_marginTop="101dp"
             android:src="@mipmap/foto_funcionario"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -146,7 +147,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+            app:layout_constraintTop_toBottomOf="@+id/img_funcionario_perfil" />
 
         <ImageView
             android:id="@+id/bt_voltar_pf"

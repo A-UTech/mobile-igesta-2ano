@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/branco">
+    android:layout_height="wrap_content" android:background="@color/branco">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -22,7 +21,7 @@
             android:paddingBottom="15dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imageView11"
+                android:id="@+id/img_funcionario"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="18dp"
@@ -33,7 +32,7 @@
                 app:srcCompat="@mipmap/user" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/txt_cargo_funcionario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
@@ -42,11 +41,11 @@
                 android:text="Cargo"
                 android:textColor="@color/branco"
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView11"
+                app:layout_constraintStart_toEndOf="@+id/img_funcionario"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/txt_nome_funcionario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
@@ -54,8 +53,8 @@
                 android:text="Nome Completo"
                 android:textColor="@color/branco"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView11"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+                app:layout_constraintStart_toEndOf="@+id/img_funcionario"
+                app:layout_constraintTop_toBottomOf="@+id/txt_cargo_funcionario" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
