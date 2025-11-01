@@ -23,7 +23,7 @@
             app:srcCompat="@mipmap/fotoperfil" />
 
         <TextView
-            android:id="@+id/textView36"
+            android:id="@+id/txt_ola_chatbot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -41,7 +41,7 @@
             android:id="@+id/textView37"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/poppins_semibold"
             android:text="IGestinha"
             android:textColor="@color/verde_escuro"
@@ -49,7 +49,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.145"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView36" />
+            app:layout_constraintTop_toBottomOf="@+id/shapeableImageView5" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/mensagem_funcionario"

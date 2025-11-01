@@ -24,7 +24,7 @@
             app:srcCompat="@mipmap/fotoperfil" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/txt_ola_tela_inicial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

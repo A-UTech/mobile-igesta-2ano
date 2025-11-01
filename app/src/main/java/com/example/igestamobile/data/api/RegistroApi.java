@@ -14,11 +14,11 @@ import retrofit2.http.Query;
 public interface RegistroApi {
     @GET("igesta/registros/selecionar")
     Call<List<RegistroModel>> selecionarRegistros();
-    @GET("igesta/registros/selecionarPorPeriodoEUnidade")
+    @GET("igesta/registros/periodo/{inicio}/{fim}/{unidade}")
     Call<List<RegistroModel>> buscarRegistrosPorPeriodoEUnidade(
-            @Query("dataInicio") String dataInicioISO,
-            @Query("dataFim") String dataFimISO,
-            @Query("unidade") String unidade
+            @Path("inicio") String dataInicioISO,
+            @Path("fim") String dataFimISO,
+            @Path("unidade") String unidade
     );
     @POST("igesta/registros/inserir")
     Call<RegistroModel> inserirRegistro(@Body RegistroModel registro);

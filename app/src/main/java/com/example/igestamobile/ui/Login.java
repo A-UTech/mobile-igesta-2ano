@@ -19,6 +19,7 @@ import com.example.igestamobile.data.api.LiderApi;
 import com.example.igestamobile.data.api.LoginApi;
 import com.example.igestamobile.data.api.SqlRetrofitClient;
 import com.example.igestamobile.data.api.TokenManager;
+import com.example.igestamobile.data.api.UnidadeApi;
 import com.example.igestamobile.data.model.AuthRequest;
 import com.example.igestamobile.data.model.AuthResponse;
 import com.example.igestamobile.data.model.CondenaUnidadeResponse;
@@ -26,6 +27,7 @@ import com.example.igestamobile.data.model.GestorModel;
 import com.example.igestamobile.data.model.LiderModel;
 import com.example.igestamobile.data.model.LoginModelRequest;
 import com.example.igestamobile.data.model.LoginModelResponse;
+import com.example.igestamobile.data.model.UnidadeModel;
 import com.example.igestamobile.utils.MaskUtil;
 
 import java.util.List;
@@ -163,6 +165,25 @@ public class Login extends AppCompatActivity {
     private void handleLoginUnidade(LoginModelResponse user) {
         SharedPreferences sharedPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         sharedPrefs.edit().putInt(KEY_UNIDADE_ID, user.getId()).apply();
+        UnidadeApi unidadeApi = SqlRetrofitClient.getClient(this).create(UnidadeApi.class);
+        unidadeApi.selecionarUnidadePorId(user.getId()).enqueue(new Callback<UnidadeModel>() {
+            @Override
+            public void onResponse(Call<UnidadeModel> call, Response<UnidadeModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String unidadeNome = response.body().getNome();
+
+                    SharedPreferences sharedPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                    sharedPrefs.edit().putString(KEY_USUARIO_NOME, unidadeNome).apply();
+                } else {
+                    Toast.makeText(Login.this, "Não foi possível obter a unidade.", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UnidadeModel> call, Throwable t) {
+                Toast.makeText(Login.this, "Falha na conexão de rede ao buscar unidade.", Toast.LENGTH_LONG).show();
+            }
+        });
 
         CondenaUnidadeApi condenaUnidadeApi = SqlRetrofitClient.getClient(this).create(CondenaUnidadeApi.class);
         condenaUnidadeApi.selecionarCondenasUnidade(user.getId()).enqueue(new Callback<List<CondenaUnidadeResponse>>() {
@@ -188,9 +209,11 @@ public class Login extends AppCompatActivity {
             public void onResponse(Call<LiderModel> call, Response<LiderModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Integer unidadeId = response.body().getIdUnidade();
+                    String liderNome = response.body().getNome();
 
                     SharedPreferences sharedPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                     sharedPrefs.edit().putInt(KEY_UNIDADE_ID, unidadeId).apply();
+                    sharedPrefs.edit().putString(KEY_USUARIO_NOME, liderNome).apply();
 
                     irParaTela(MainActivity.class);
                 } else {

@@ -64,6 +64,7 @@ public class Perfil extends Fragment {
 
     private static final String PREFS_NAME = "LoginPrefs";
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
+    private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
     private String cloudname = "dpbzx88eu";
     private String uploadProjeto = "IGesta";
     private Uri photoUri;
@@ -72,7 +73,7 @@ public class Perfil extends Fragment {
     private String mParam2;
     private Button bt_n_logout, bt_logout_dialog;
     private Dialog dialog_logout;
-    private TextView bt_alterar_foto_perfil, bt_selecionar_galeria, bt_tirar_foto;
+    private TextView bt_alterar_foto_perfil, bt_selecionar_galeria, bt_tirar_foto, txt_nome_usuario, txt_credencial_usuario;
     private ImageView img_foto_perfil;
 
     private FirebaseFirestore db;
@@ -118,6 +119,11 @@ public class Perfil extends Fragment {
         bt_selecionar_galeria = dialog_foto_opcoes.findViewById(R.id.bt_selecionar_galeria);
         img_foto_perfil = view.findViewById(R.id.img_foto_perfil);
         bt_tirar_foto = dialog_foto_opcoes.findViewById(R.id.bt_contar_condenas);
+        txt_nome_usuario = view.findViewById(R.id.txt_nome_usuario);
+        txt_credencial_usuario = view.findViewById(R.id.txt_credencial_usuario);
+
+        txt_nome_usuario.setText(getUsuarioNome());
+        txt_credencial_usuario.setText(getUsuarioCredencialInteiro());
 
         setGallery();
         setCamera();
@@ -179,6 +185,18 @@ public class Perfil extends Fragment {
         return view;
     }
 
+    private String getUsuarioNome() {
+        if (getActivity() == null) return null;
+
+        return getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_NOME, null);
+    }
+    private String getUsuarioCredencialInteiro() {
+        if (getActivity() == null) return null;
+
+        return getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_CREDENCIAL, null);
+    }
     private String getUsuarioCredencial() {
         if (getActivity() == null) return null;
 

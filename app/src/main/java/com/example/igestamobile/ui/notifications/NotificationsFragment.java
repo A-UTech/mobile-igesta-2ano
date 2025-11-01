@@ -94,10 +94,8 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
     private ShapeableImageView fotoPerfilCondenas;
     private FirebaseFirestore db;
     private String currentFilterType = null;
-    private TextView txt_concluir_alteracoes;
-    private TextView txt_descartar_alteracoes;
+    private TextView txt_concluir_alteracoes, txt_descartar_alteracoes, bt_enviar_contagens, txt_ola_contar_condenas;
     private ImageButton btn_option;
-    private TextView bt_enviar_contagens;
     private TextInputEditText searchCondenas;
     private List<CondenaUnidadeResponse> listaOriginalCondenas = new ArrayList<>();
 
@@ -169,6 +167,12 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
 
         carregarCondenasDeUnidade(getClienteIdSalvo());
         setupSearchListener();
+
+        txt_ola_contar_condenas = root.findViewById(R.id.txt_ola_contar_condenas);
+
+        String nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_NOME, null);
+        txt_ola_contar_condenas.setText("Olá, " + nome + "!");
 
         bt_enviar_contagens = root.findViewById(R.id.bt_enviar_contagens);
 
