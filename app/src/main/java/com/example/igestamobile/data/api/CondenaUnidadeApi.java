@@ -16,9 +16,9 @@ public interface CondenaUnidadeApi {
     @GET("igesta/user/condena-unidade/unidade/{id}")
     Call<List<CondenaUnidadeResponse>> selecionarCondenasUnidade(@Path("id") Integer id);
 
-    @POST("igesta/user/condena-unidade/associar")
-    Call<CondenaUnidadeResponse> associarCondenaUnidade(@Body CondenaUnidadeRequest request);
+    @POST("igesta/user/condena-unidade/associar/{unidadeId}/{condenaId}")
+    Call<Void> associarCondenaUnidade(@Path("unidadeId") Integer unidadeId, @Path("condenaId") Integer condenaId);
 
-    @DELETE("igesta/user/condena-unidade/desassociar")
-    Call<Void> desassociarCondenaUnidade(@Body CondenaUnidadeRequest request);
+    @DELETE("igesta/user/condena-unidade/desassociar/{unidadeId}/{condenaId}")
+    Call<Void> desassociarCondenaUnidade(@Path("unidadeId") Integer unidadeId, @Path("condenaId") Integer condenaId);
 }

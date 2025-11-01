@@ -40,7 +40,7 @@ import retrofit2.Response;
 
 public class Chatbot extends Fragment {
 
-    private static final String BASE_URL = "https://chatbot-mobile-igesta.vercel.app/";
+    private static final String BASE_URL = "https://chatbot-mobile-ha2n.onrender.com/";
     private String UNIDADE;
     private static final String PREFS_NAME = "LoginPrefs";
     private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
