@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +62,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -95,6 +98,8 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
     private TextView txt_descartar_alteracoes;
     private ImageButton btn_option;
     private TextView bt_enviar_contagens;
+    private TextInputEditText searchCondenas;
+    private List<CondenaUnidadeResponse> listaOriginalCondenas = new ArrayList<>();
 
     private ActivityResultLauncher<String> createDocumentLauncher;
 
@@ -160,7 +165,10 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
         adapter = new CondenaUnidadeAdapter(new ArrayList<>(), requireContext(), condenaApi, this);
         binding.recyclerView.setAdapter(adapter);
 
+        searchCondenas = root.findViewById(R.id.inputTextPesquisarCondenas);
+
         carregarCondenasDeUnidade(getClienteIdSalvo());
+        setupSearchListener();
 
         bt_enviar_contagens = root.findViewById(R.id.bt_enviar_contagens);
 
@@ -501,6 +509,50 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
         return root;
     }
 
+    private void setupSearchListener() {
+        if (searchCondenas == null) return;
+
+        searchCondenas.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void filter(String text) {
+        if (adapter == null) return;
+
+        String query = text.toLowerCase(Locale.getDefault()).trim();
+
+        if (query.isEmpty()) {
+            if (adapter.getModo() == CondenaUnidadeAdapter.MODO_CONTAGEM) {
+                adapter.setLista(new ArrayList<>(listaOriginalCondenas));
+            } else {
+                carregarCondenasParaEdicao(getClienteIdSalvo());
+            }
+            return;
+        }
+
+        List<CondenaUnidadeResponse> listaBase = adapter.getListaAtual();
+        List<CondenaUnidadeResponse> listaFiltrada = new ArrayList<>();
+
+        for (CondenaUnidadeResponse condena : listaBase) {
+            if (condena.getNome() != null && condena.getNome().toLowerCase(Locale.getDefault()).contains(query)) {
+                listaFiltrada.add(condena);
+            }
+        }
+
+        adapter.setLista(listaFiltrada);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onCondenaSelectionChanged(boolean hasPendingChanges) {
         if (txt_concluir_alteracoes != null) {
@@ -546,7 +598,11 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
             @Override
             public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter.setLista(response.body());
+
+                    listaOriginalCondenas.clear();
+                    listaOriginalCondenas.addAll(response.body());
+
+                    adapter.setLista(new ArrayList<>(listaOriginalCondenas));
                     adapter.setModo(CondenaUnidadeAdapter.MODO_CONTAGEM);
                     adapter.notifyDataSetChanged();
                 } else {

@@ -50,7 +50,7 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
     }
 
     public CondenaUnidadeAdapter(List<CondenaUnidadeResponse> condenasUnidades, Context context, CondenaApi condenaApi, OnCondenaSelectionListener selectionListener) {
-        this.condenasUnidadesOriginal = condenasUnidades;
+        this.condenasUnidadesOriginal = new ArrayList<>(condenasUnidades);
         this.condenasUnidadesExibida = new ArrayList<>(condenasUnidades);
         this.context = context;
         this.condenaApi = condenaApi;
@@ -325,7 +325,8 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
     }
 
     public void setLista(List<CondenaUnidadeResponse> novaLista) {
-        this.condenasUnidadesOriginal = novaLista;
+        this.condenasUnidadesOriginal.clear();
+        this.condenasUnidadesOriginal.addAll(novaLista);
 
         this.condenasUnidadesExibida = new ArrayList<>(novaLista);
         notifyDataSetChanged();
@@ -340,10 +341,8 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
 
     public void aplicarFiltroVisual(String tipoFiltro) {
         if (tipoFiltro == null) {
-
             condenasUnidadesExibida = new ArrayList<>(condenasUnidadesOriginal);
         } else {
-
             String filtroLowerCase = tipoFiltro.toLowerCase(Locale.ROOT);
 
             List<CondenaUnidadeResponse> listaFiltrada = condenasUnidadesOriginal.stream()
@@ -386,13 +385,22 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
         }
         return contagensFinais;
     }
+
     public void setModo(int novoModo) {
         if (this.modoAtual != novoModo) {
             this.modoAtual = novoModo;
         }
     }
+
+    public int getModo() {
+        return this.modoAtual;
+    }
+
     @Override
     public int getItemViewType(int position) {
         return modoAtual;
+    }
+    public List<CondenaUnidadeResponse> getListaAtual() {
+        return new ArrayList<>(this.condenasUnidadesExibida);
     }
 }

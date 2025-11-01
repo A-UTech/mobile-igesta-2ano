@@ -149,7 +149,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new GerenciarFuncionariosAdapter(listaOriginalFuncionarios, this);
+        adapter = new GerenciarFuncionariosAdapter(new ArrayList<>(listaOriginalFuncionarios), this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -169,13 +169,18 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
     }
 
     private void filter(String text) {
+        String query = text.toLowerCase(Locale.getDefault()).trim();
+        if (query.isEmpty()) {
+            adapter.updateList(new ArrayList<>(listaOriginalFuncionarios));
+            return;
+        }
+
         List<FuncionarioAdapterModel> listaFiltrada = new ArrayList<>();
-        String query = text.toLowerCase(Locale.getDefault());
 
         for (FuncionarioAdapterModel funcionario : listaOriginalFuncionarios) {
             if (funcionario.getNome().toLowerCase(Locale.getDefault()).contains(query) ||
                     funcionario.getCargo().toLowerCase(Locale.getDefault()).contains(query) ||
-                    (funcionario.getEmail() != null && funcionario.getEmail().contains(query)) ) {
+                    (funcionario.getEmail() != null && funcionario.getEmail().toLowerCase(Locale.getDefault()).contains(query))) {
                 listaFiltrada.add(funcionario);
             }
         }
@@ -303,6 +308,10 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         });
 
         Log.i("RV", "Lista unificada. Total de funcionários: " + listaOriginalFuncionarios.size());
+
+        if (adapter != null) {
+            adapter.updateList(new ArrayList<>(listaOriginalFuncionarios));
+        }
 
         fetchImageUrlsForFuncionarios(listaOriginalFuncionarios);
     }
