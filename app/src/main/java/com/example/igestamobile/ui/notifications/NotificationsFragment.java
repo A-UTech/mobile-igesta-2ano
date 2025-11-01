@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,13 +60,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationsFragment extends Fragment {
+public class NotificationsFragment extends Fragment implements CondenaUnidadeAdapter.OnCondenaSelectionListener {
     private static final String PREFS_NAME = "LoginPrefs";
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
     private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
@@ -82,13 +84,17 @@ public class NotificationsFragment extends Fragment {
     private TurnoApi turnoApi;
     private FragmentNotificationsBinding binding;
     private CondenaUnidadeAdapter adapter;
-    private Dialog dialog_enviar_contagens, dialog_enviar_condenas;
+    private Dialog dialog_enviar_contagens, dialog_enviar_condenas, dialog_condena_opcoes, dialog_apagar, dialog_concluir;
     private List<Condena> pendingCondenasList = null;
     private Button bt_filtrar_total;
     private Button bt_filtrar_parcial;
-    ShapeableImageView fotoPerfilCondenas;
+    private ShapeableImageView fotoPerfilCondenas;
     private FirebaseFirestore db;
     private String currentFilterType = null;
+    private TextView txt_concluir_alteracoes;
+    private TextView txt_descartar_alteracoes;
+    private ImageButton btn_option;
+    private TextView bt_enviar_contagens;
 
     private ActivityResultLauncher<String> createDocumentLauncher;
 
@@ -101,6 +107,32 @@ public class NotificationsFragment extends Fragment {
             clienteId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
         }
         return clienteId;
+    }
+
+    private String getUsuarioCredencial() {
+        if (getActivity() == null) return null;
+
+        String rawCredencial = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_CREDENCIAL, null);
+
+        if (rawCredencial != null) {
+            if (rawCredencial.contains("@")) {
+                return rawCredencial;
+            } else {
+                return MaskUtil.unmaskCnpj(rawCredencial);
+            }
+        }
+        return null;
+    }
+
+    private boolean isUsuarioGestor() {
+        if (getContext() == null) return false;
+
+        SharedPreferences sharedPrefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        String cargo = sharedPrefs.getString(KEY_TIPO_USUARIO, "");
+
+        return "Gestor".equalsIgnoreCase(cargo);
     }
 
     @Override
@@ -125,35 +157,57 @@ public class NotificationsFragment extends Fragment {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        adapter = new CondenaUnidadeAdapter(new ArrayList<>(), requireContext(), condenaApi);
+        adapter = new CondenaUnidadeAdapter(new ArrayList<>(), requireContext(), condenaApi, this);
         binding.recyclerView.setAdapter(adapter);
 
         carregarCondenasDeUnidade(getClienteIdSalvo());
 
-        TextView bt_enviar_contagens = root.findViewById(R.id.bt_enviar_contagens);
+        bt_enviar_contagens = root.findViewById(R.id.bt_enviar_contagens);
 
         bt_filtrar_total = root.findViewById(R.id.btn_total);
         bt_filtrar_parcial = root.findViewById(R.id.btn_parcial);
 
         dialog_enviar_contagens = new Dialog(requireContext());
         dialog_enviar_condenas = new Dialog(requireContext());
+        dialog_condena_opcoes = new Dialog(requireContext());
+        dialog_apagar = new Dialog(requireContext());
+        dialog_concluir = new Dialog(requireContext());
 
         dialog_enviar_contagens.setContentView(R.layout.dialog_enviar);
         dialog_enviar_condenas.setContentView(R.layout.dialog_enviar_condenas);
+        dialog_condena_opcoes.setContentView(R.layout.dialog_condena_opcoes);
+        dialog_apagar.setContentView(R.layout.dialog_apagar);
+        dialog_concluir.setContentView(R.layout.dialog_concluir);
 
         dialog_enviar_contagens.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog_enviar_condenas.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog_enviar_contagens.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog_enviar_condenas.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog_apagar.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog_concluir.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog_apagar.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog_concluir.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
         db = FirebaseFirestore.getInstance();
 
         fotoPerfilCondenas = root.findViewById(R.id.foto_perfil_condenas);
+        btn_option = root.findViewById(R.id.btn_option);
+        txt_descartar_alteracoes = root.findViewById(R.id.txt_descartar_alteracoes);
+        txt_concluir_alteracoes = root.findViewById(R.id.txt_concluir_alteracoes);
         Button bt_n_enviar_contagens = dialog_enviar_contagens.findViewById(R.id.bt_n_remover);
         Button bt_enviar_contagens_dialog = dialog_enviar_contagens.findViewById(R.id.bt_cadastrar_func_dialog);
         Button bt_enviar_condenas_dialog = dialog_enviar_condenas.findViewById(R.id.bt_enviar_condenas_dialog);
+        Button bt_n_remover = dialog_apagar.findViewById(R.id.bt_n_remover);
+        Button bt_s_remover = dialog_apagar.findViewById(R.id.bt_s_remover);
+        Button bt_n_concluir = dialog_concluir.findViewById(R.id.bt_n_concluir);
+        Button bt_s_concluir = dialog_concluir.findViewById(R.id.bt_s_concluir);
+        TextView bt_contar_condenas = dialog_condena_opcoes.findViewById(R.id.bt_contar_condenas);
+        TextView bt_editar_condenas = dialog_condena_opcoes.findViewById(R.id.bt_editar_condenas);
         TextInputEditText dialogInputInicio = dialog_enviar_condenas.findViewById(R.id.input_horario_inicio);
         TextInputEditText dialogInputTermino = dialog_enviar_condenas.findViewById(R.id.input_horario_termino);
+
+        if (txt_concluir_alteracoes != null) txt_concluir_alteracoes.setVisibility(View.GONE);
+        if (txt_descartar_alteracoes != null) txt_descartar_alteracoes.setVisibility(View.GONE);
 
         createDocumentLauncher = registerForActivityResult(
                 new ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
@@ -167,159 +221,242 @@ public class NotificationsFragment extends Fragment {
                 }
         );
 
-        bt_enviar_contagens.setOnClickListener(v -> {
-            dialog_enviar_contagens.show();
-        });
+        if (bt_enviar_contagens != null) {
+            bt_enviar_contagens.setOnClickListener(v -> {
+                dialog_enviar_contagens.show();
+            });
+        }
 
-        bt_n_enviar_contagens.setOnClickListener(v -> {
-            dialog_enviar_contagens.dismiss();
-        });
+        if (bt_n_enviar_contagens != null) {
+            bt_n_enviar_contagens.setOnClickListener(v -> {
+                dialog_enviar_contagens.dismiss();
+            });
+        }
 
-        bt_enviar_contagens_dialog.setOnClickListener(v -> {
-            dialog_enviar_contagens.dismiss();
-            dialog_enviar_condenas.show();
-        });
+        if (bt_enviar_contagens_dialog != null) {
+            bt_enviar_contagens_dialog.setOnClickListener(v -> {
+                dialog_enviar_contagens.dismiss();
+                dialog_enviar_condenas.show();
+            });
+        }
+
+        if (btn_option != null) {
+            btn_option.setOnClickListener(v -> {
+                dialog_condena_opcoes.show();
+            });
+        }
+
+        if (bt_contar_condenas != null) {
+            bt_contar_condenas.setOnClickListener(v -> {
+                dialog_condena_opcoes.dismiss();
+                carregarCondenasDeUnidade(getClienteIdSalvo());
+                Toast.makeText(requireContext(), "Modo de Contagem ativado.", Toast.LENGTH_SHORT).show();
+
+                if (bt_enviar_contagens != null) bt_enviar_contagens.setVisibility(View.VISIBLE);
+                if (bt_filtrar_total != null) bt_filtrar_total.setVisibility(View.VISIBLE);
+                if (bt_filtrar_parcial != null) bt_filtrar_parcial.setVisibility(View.VISIBLE);
+                if (btn_option != null) btn_option.setVisibility(View.VISIBLE);
+
+                if (txt_concluir_alteracoes != null) txt_concluir_alteracoes.setVisibility(View.GONE);
+                if (txt_descartar_alteracoes != null) txt_descartar_alteracoes.setVisibility(View.GONE);
+            });
+        }
+
+        if (bt_editar_condenas != null) {
+            bt_editar_condenas.setOnClickListener(v -> {
+                dialog_condena_opcoes.dismiss();
+                carregarCondenasParaEdicao(getClienteIdSalvo());
+                Toast.makeText(requireContext(), "Modo de Edição ativado. Selecione as condenas.", Toast.LENGTH_LONG).show();
+
+                if (bt_enviar_contagens != null) bt_enviar_contagens.setVisibility(View.GONE);
+                if (bt_filtrar_total != null) bt_filtrar_total.setVisibility(View.GONE);
+                if (bt_filtrar_parcial != null) bt_filtrar_parcial.setVisibility(View.GONE);
+                if (btn_option != null) btn_option.setVisibility(View.GONE);
+
+                if (txt_concluir_alteracoes != null) txt_concluir_alteracoes.setVisibility(View.VISIBLE);
+                if (txt_descartar_alteracoes != null) txt_descartar_alteracoes.setVisibility(View.VISIBLE);
+            });
+        }
+
+        if (txt_descartar_alteracoes != null) {
+            txt_descartar_alteracoes.setOnClickListener(v -> {
+                dialog_apagar.show();
+                bt_n_remover.setOnClickListener(v1 -> {
+                    dialog_apagar.dismiss();
+                });
+                bt_s_remover.setOnClickListener(v1 -> {
+                    dialog_apagar.dismiss();
+                    carregarCondenasDeUnidade(getClienteIdSalvo());
+                    Toast.makeText(requireContext(), "Alterações descartadas. Retornando ao Modo Contagem.", Toast.LENGTH_SHORT).show();
+
+                    if (bt_enviar_contagens != null) bt_enviar_contagens.setVisibility(View.VISIBLE);
+                    if (bt_filtrar_total != null) bt_filtrar_total.setVisibility(View.VISIBLE);
+                    if (bt_filtrar_parcial != null) bt_filtrar_parcial.setVisibility(View.VISIBLE);
+                    if (btn_option != null) btn_option.setVisibility(View.VISIBLE);
+
+                    if (txt_concluir_alteracoes != null) txt_concluir_alteracoes.setVisibility(View.GONE);
+                    if (txt_descartar_alteracoes != null) txt_descartar_alteracoes.setVisibility(View.GONE);
+                });
+            });
+        }
+
+        if (txt_concluir_alteracoes != null) {
+            txt_concluir_alteracoes.setOnClickListener(v -> {
+                if (adapter.getCondenasParaAdicionarIds().isEmpty() && adapter.getCondenasParaRemoverIds().isEmpty()) {
+                    Toast.makeText(requireContext(), "Nenhuma alteração pendente para salvar.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                dialog_concluir.show();
+                bt_n_concluir.setOnClickListener(v1 -> {
+                    dialog_concluir.dismiss();
+                });
+                bt_s_concluir.setOnClickListener(v1 -> {
+                    dialog_concluir.dismiss();
+                    enviarAlteracoesDeCondenas();
+                });
+            });
+        }
 
         loadProfileImage();
 
-        bt_enviar_condenas_dialog.setOnClickListener(v -> {
-            dialog_enviar_condenas.dismiss();
+        if (bt_enviar_condenas_dialog != null) {
+            bt_enviar_condenas_dialog.setOnClickListener(v -> {
+                dialog_enviar_condenas.dismiss();
 
-            List<CondenaUnidadeResponse> contagensFinais = adapter.getContagensFinais();
+                List<CondenaUnidadeResponse> contagensFinais = adapter.getContagensFinais();
 
-            List<Condena> listaParaPlanilha = new ArrayList<>();
-            for (CondenaUnidadeResponse item : contagensFinais) {
-                listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade(), item.getTipo()));
-            }
+                List<Condena> listaParaPlanilha = new ArrayList<>();
+                for (CondenaUnidadeResponse item : contagensFinais) {
+                    listaParaPlanilha.add(new Condena(item.getNome(), item.getQuantidade(), item.getTipo()));
+                }
 
-            List<RegistroCondenaModel> condenasParaRegistro = adapter.getContagensFinaisMongo();
-            SharedPreferences sharedPrefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-            String gestor = sharedPrefs.getString(KEY_USUARIO_NOME, "");
-            Integer unidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
+                List<RegistroCondenaModel> condenasParaRegistro = adapter.getContagensFinaisMongo();
+                SharedPreferences sharedPrefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                String gestor = sharedPrefs.getString(KEY_USUARIO_NOME, "");
+                Integer unidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
 
-            unidadeApi.selecionarUnidadePorId(unidadeId).enqueue(new Callback<UnidadeModel>() {
-                @Override
-                public void onResponse(Call<UnidadeModel> call, Response<UnidadeModel> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                        editor.putString(KEY_UNIDADE_NOME, response.body().getNome());
-                        Integer empresaId = response.body().getIdEmpresa();
-                        editor.putInt(KEY_EMPRESA_ID, empresaId);
-                        editor.apply();
+                unidadeApi.selecionarUnidadePorId(unidadeId).enqueue(new Callback<UnidadeModel>() {
+                    @Override
+                    public void onResponse(Call<UnidadeModel> call, Response<UnidadeModel> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                            editor.putString(KEY_UNIDADE_NOME, response.body().getNome());
+                            Integer empresaId = response.body().getIdEmpresa();
+                            editor.putInt(KEY_EMPRESA_ID, empresaId);
+                            editor.apply();
 
-                        empresaApi.selecionarEmpresaPorId(empresaId).enqueue(new Callback<EmpresaModel>() {
-                            @Override
-                            public void onResponse(Call<EmpresaModel> call, Response<EmpresaModel> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    sharedPrefs.edit().putString(KEY_EMPRESA_NOME, response.body().getNome()).apply();
+                            empresaApi.selecionarEmpresaPorId(empresaId).enqueue(new Callback<EmpresaModel>() {
+                                @Override
+                                public void onResponse(Call<EmpresaModel> call, Response<EmpresaModel> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        sharedPrefs.edit().putString(KEY_EMPRESA_NOME, response.body().getNome()).apply();
 
-                                    Integer finalUnidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
-                                    String inicio = dialogInputInicio.getText().toString();
-                                    String termino = dialogInputTermino.getText().toString();
+                                        Integer finalUnidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
+                                        String inicio = dialogInputInicio.getText().toString();
+                                        String termino = dialogInputTermino.getText().toString();
 
-                                    turnoApi.selecionarPorUnidadeEPeriodo(finalUnidadeId, inicio, termino).enqueue(new Callback<TurnoResponse>() {
-                                        @Override
-                                        public void onResponse(Call<TurnoResponse> call, Response<TurnoResponse> response) {
-                                            if (response.isSuccessful() && response.body() != null) {
-                                                sharedPrefs.edit().putInt(KEY_TURNO_ID, response.body().getId()).apply();
+                                        turnoApi.selecionarPorUnidadeEPeriodo(finalUnidadeId, inicio, termino).enqueue(new Callback<TurnoResponse>() {
+                                            @Override
+                                            public void onResponse(Call<TurnoResponse> call, Response<TurnoResponse> response) {
+                                                if (response.isSuccessful() && response.body() != null) {
+                                                    sharedPrefs.edit().putInt(KEY_TURNO_ID, response.body().getId()).apply();
 
-                                                String gestorFinal = sharedPrefs.getString(KEY_USUARIO_NOME, "Daniel Freitas");
-                                                String unidadeFinal = sharedPrefs.getString(KEY_UNIDADE_NOME, "");
-                                                String empresaFinal = sharedPrefs.getString(KEY_EMPRESA_NOME, "");
-                                                Integer idTurnoFinal = sharedPrefs.getInt(KEY_TURNO_ID, -1);
+                                                    String gestorFinal = sharedPrefs.getString(KEY_USUARIO_NOME, "Daniel Freitas");
+                                                    String unidadeFinal = sharedPrefs.getString(KEY_UNIDADE_NOME, "");
+                                                    String empresaFinal = sharedPrefs.getString(KEY_EMPRESA_NOME, "");
+                                                    Integer idTurnoFinal = sharedPrefs.getInt(KEY_TURNO_ID, -1);
 
-                                                String lote = "L1234";
-                                                Date dataAtual = new Date();
+                                                    String lote = "L1234";
+                                                    Date dataAtual = new Date();
 
-                                                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", java.util.Locale.US);
+                                                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", java.util.Locale.US);
 
-                                                sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                                                    sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
 
-                                                String dataFormatada = sdf.format(dataAtual);
+                                                    String dataFormatada = sdf.format(dataAtual);
 
-                                                RegistroModel request = new RegistroModel(
-                                                        gestorFinal,
-                                                        empresaFinal,
-                                                        idTurnoFinal,
-                                                        dataFormatada,
-                                                        lote,
-                                                        unidadeFinal,
-                                                        condenasParaRegistro
-                                                );
+                                                    RegistroModel request = new RegistroModel(
+                                                            gestorFinal,
+                                                            empresaFinal,
+                                                            idTurnoFinal,
+                                                            dataFormatada,
+                                                            lote,
+                                                            unidadeFinal,
+                                                            condenasParaRegistro
+                                                    );
 
-                                                MongoRetrofitClient.getClient().create(RegistroApi.class).inserirRegistro(request).enqueue(new Callback<RegistroModel>() {
-                                                    @Override
-                                                    public void onResponse(Call<RegistroModel> call, Response<RegistroModel> response) {
-                                                        if (response.isSuccessful()) {
-                                                            Toast.makeText(requireContext(), "Condenas enviadas com sucesso.", Toast.LENGTH_SHORT).show();
-                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                                                if (requireContext().checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                                                                        != PackageManager.PERMISSION_GRANTED) {
-                                                                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                                    MongoRetrofitClient.getClient().create(RegistroApi.class).inserirRegistro(request).enqueue(new Callback<RegistroModel>() {
+                                                        @Override
+                                                        public void onResponse(Call<RegistroModel> call, Response<RegistroModel> response) {
+                                                            if (response.isSuccessful()) {
+                                                                Toast.makeText(requireContext(), "Condenas enviadas com sucesso.", Toast.LENGTH_SHORT).show();
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                                                    if (requireContext().checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                                                                            != PackageManager.PERMISSION_GRANTED) {
+                                                                        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                                                    }
                                                                 }
+
+                                                                NotificationHelper.showNotification(
+                                                                        requireContext(),
+                                                                        "Suas contagens foram enviadas!",
+                                                                        "Volte mais tarde para inserir as contagens do próximo turno."
+                                                                );
+                                                            } else {
+                                                                Toast.makeText(requireContext(), "Erro ao enviar condenas.", Toast.LENGTH_SHORT).show();
                                                             }
-
-                                                            NotificationHelper.showNotification(
-                                                                    requireContext(),
-                                                                    "Suas contagens foram enviadas!",
-                                                                    "Volte mais tarde para inserir as contagens do próximo turno."
-                                                            );
-                                                        } else {
-                                                            Toast.makeText(requireContext(), "Erro ao enviar condenas.", Toast.LENGTH_SHORT).show();
                                                         }
-                                                    }
 
-                                                    @Override
-                                                    public void onFailure(Call<RegistroModel> call, Throwable t) {
-                                                        Toast.makeText(requireContext(), "Falha ao enviar condenas.", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                                        @Override
+                                                        public void onFailure(Call<RegistroModel> call, Throwable t) {
+                                                            Toast.makeText(requireContext(), "Falha ao enviar condenas.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
 
-                                                NotificationsFragment.this.pendingCondenasList = listaParaPlanilha;
-                                                createDocumentLauncher.launch("condenas.xlsx");
+                                                    NotificationsFragment.this.pendingCondenasList = listaParaPlanilha;
+                                                    createDocumentLauncher.launch("condenas.xlsx");
 
-                                            } else {
-                                                Toast.makeText(requireContext(), "Falha ao carregar turno.", Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    Toast.makeText(requireContext(), "Falha ao carregar turno.", Toast.LENGTH_LONG).show();
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(Call<TurnoResponse> call, Throwable t) {
-                                            if (isAdded() && getActivity() != null) {
-                                                Toast.makeText(requireContext(), "Erro de rede ao buscar turno!", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onFailure(Call<TurnoResponse> call, Throwable t) {
+                                                if (isAdded() && getActivity() != null) {
+                                                    Toast.makeText(requireContext(), "Erro de rede ao buscar turno!", Toast.LENGTH_SHORT).show();
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
 
-                                } else {
-                                    Toast.makeText(requireContext(), "Falha ao carregar empresa.", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(requireContext(), "Falha ao carregar empresa.", Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<EmpresaModel> call, Throwable t) {
-                                if (isAdded() && getActivity() != null) {
-                                    Toast.makeText(requireContext(), "Erro de rede ao buscar empresa!", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onFailure(Call<EmpresaModel> call, Throwable t) {
+                                    if (isAdded() && getActivity() != null) {
+                                        Toast.makeText(requireContext(), "Erro de rede ao buscar empresa!", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                    } else {
-                        Toast.makeText(requireContext(), "Falha ao carregar unidade.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(requireContext(), "Falha ao carregar unidade.", Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<UnidadeModel> call, Throwable t) {
-                    if (isAdded() && getActivity() != null) {
-                        Toast.makeText(requireContext(), "Erro de rede ao buscar unidade!", Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onFailure(Call<UnidadeModel> call, Throwable t) {
+                        if (isAdded() && getActivity() != null) {
+                            Toast.makeText(requireContext(), "Erro de rede ao buscar unidade!", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
+                });
             });
-        });
-
-
-
+        }
 
         View.OnClickListener filtroClickListener = new View.OnClickListener() {
             @Override
@@ -364,6 +501,13 @@ public class NotificationsFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onCondenaSelectionChanged(boolean hasPendingChanges) {
+        if (txt_concluir_alteracoes != null) {
+            txt_concluir_alteracoes.setEnabled(hasPendingChanges);
+        }
+    }
+
     private void updateFiltroButtons(String activeType) {
         if (getContext() == null) return;
         try {
@@ -403,8 +547,10 @@ public class NotificationsFragment extends Fragment {
             public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     adapter.setLista(response.body());
+                    adapter.setModo(CondenaUnidadeAdapter.MODO_CONTAGEM);
+                    adapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(requireContext(), "Falha ao carregar IDs de associação.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), "Falha ao carregar condenas de contagem.", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -417,21 +563,168 @@ public class NotificationsFragment extends Fragment {
         });
     }
 
+    private void carregarCondenasParaEdicao(Integer unidadeId) {
+        condenaUnidadeApi.selecionarCondenasUnidade(unidadeId).enqueue(new Callback<List<CondenaUnidadeResponse>>() {
+            @Override
+            public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> responseExistentes) {
+                if (responseExistentes.isSuccessful() && responseExistentes.body() != null) {
+
+                    adapter.setCondenasExistentesIds(responseExistentes.body());
+
+                    condenaApi.selecionarCondenas().enqueue(new Callback<List<CondenaModel>>() {
+                        @Override
+                        public void onResponse(Call<List<CondenaModel>> call, Response<List<CondenaModel>> responseTodas) {
+                            if (responseTodas.isSuccessful() && responseTodas.body() != null) {
+
+                                List<CondenaUnidadeResponse> condenasConvertidas = responseTodas.body().stream()
+                                        .map(condenaModel -> new CondenaUnidadeResponse(
+                                                condenaModel.getId()
+                                        )).collect(Collectors.toList());
+
+                                adapter.setLista(condenasConvertidas);
+                                adapter.setModo(CondenaUnidadeAdapter.MODO_EDICAO);
+                                adapter.notifyDataSetChanged();
+                                if (adapter.getCondenasParaAdicionarIds().isEmpty() && adapter.getCondenasParaRemoverIds().isEmpty()) {
+                                    onCondenaSelectionChanged(false);
+                                } else {
+                                    onCondenaSelectionChanged(true);
+                                }
+
+
+                            } else {
+                                Toast.makeText(requireContext(), "Falha ao carregar lista de todas as condenas.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<CondenaModel>> call, Throwable t) {
+                            Toast.makeText(requireContext(), "Não foi possível carregar as condenas gerais", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(requireContext(), "Falha ao carregar condenas existentes da unidade.", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CondenaUnidadeResponse>> call, Throwable t) {
+                Toast.makeText(requireContext(), "Erro de rede ao buscar condenas existentes!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void enviarAlteracoesDeCondenas() {
+        if (getContext() == null) return;
+
+        Integer unidadeId = getClienteIdSalvo();
+        List<Integer> idsParaAdicionar = adapter.getCondenasParaAdicionarIds();
+        List<Integer> idsParaRemover = adapter.getCondenasParaRemoverIds();
+
+        AtomicInteger totalCalls = new AtomicInteger(idsParaAdicionar.size() + idsParaRemover.size());
+        AtomicInteger successfulCalls = new AtomicInteger(0);
+
+        if (totalCalls.get() == 0) {
+            Toast.makeText(requireContext(), "Nenhuma alteração para salvar.", Toast.LENGTH_SHORT).show();
+            handleCompletion(0);
+            return;
+        }
+
+        for (Integer condenaId : idsParaAdicionar) {
+            condenaUnidadeApi.associarCondenaUnidade(unidadeId, condenaId).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        successfulCalls.incrementAndGet();
+                    } else {
+                        Log.e("API_CALL", "Falha ao associar Condena ID: " + condenaId + ". Código: " + response.code());
+                    }
+                    checkCompletion();
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("API_CALL", "Erro de rede ao associar Condena ID: " + condenaId, t);
+                    checkCompletion();
+                }
+
+                private void checkCompletion() {
+                    if (totalCalls.decrementAndGet() == 0) {
+                        handleCompletion(successfulCalls.get());
+                    }
+                }
+            });
+        }
+
+        for (Integer condenaId : idsParaRemover) {
+            condenaUnidadeApi.desassociarCondenaUnidade(unidadeId, condenaId).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        successfulCalls.incrementAndGet();
+                        Log.i("DELETE_SUCCESS", "Condena ID " + condenaId + " desassociada (Resposta: " + response.code() + ")");
+                    } else {
+                        Log.e("DELETE_FAILURE", "Condena ID " + condenaId + " falhou. Código HTTP: " + response.code() + ". Mensagem: " + response.message());
+                    }
+                    checkCompletion();
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("API_CALL", "Erro de rede ao desassociar Condena ID: " + condenaId, t);
+                    checkCompletion();
+                }
+
+                private void checkCompletion() {
+                    if (totalCalls.decrementAndGet() == 0) {
+                        handleCompletion(successfulCalls.get());
+                    }
+                }
+            });
+        }
+    }
+
+    private void handleCompletion(int successfulCalls) {
+        if (!isAdded() || getActivity() == null) return;
+
+        int totalCalls = adapter.getCondenasParaAdicionarIds().size() + adapter.getCondenasParaRemoverIds().size();
+
+        if (successfulCalls == totalCalls) {
+            Toast.makeText(requireContext(), "Sucesso! Todas as alterações foram salvas.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(requireContext(), "Atenção: Apenas " + successfulCalls + " de " + totalCalls + " alterações foram salvas com sucesso. Verifique o log.", Toast.LENGTH_LONG).show();
+        }
+
+        carregarCondenasDeUnidade(getClienteIdSalvo());
+
+        if (txt_concluir_alteracoes != null) txt_concluir_alteracoes.setVisibility(View.GONE);
+        if (txt_descartar_alteracoes != null) txt_descartar_alteracoes.setVisibility(View.GONE);
+
+        if (bt_enviar_contagens != null) bt_enviar_contagens.setVisibility(View.VISIBLE);
+        if (bt_filtrar_total != null) bt_filtrar_total.setVisibility(View.VISIBLE);
+        if (bt_filtrar_parcial != null) bt_filtrar_parcial.setVisibility(View.VISIBLE);
+        if (btn_option != null) btn_option.setVisibility(View.VISIBLE);
+    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
     private void gerarPlanilha(List<Condena> condenas, Uri uri) {
+        if (getContext() == null) return;
+
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Condenas");
+        Sheet sheet = workbook.createSheet("Contagem Condenas");
 
 
-        Row header = sheet.createRow(0);
-        header.createCell(0).setCellValue("Condena");
-        header.createCell(1).setCellValue("Tipo");
-        header.createCell(2).setCellValue("Quantidade");
-        header.createCell(3).setCellValue("Porcentagem");
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Condena");
+        headerRow.createCell(1).setCellValue("Tipo");
+        headerRow.createCell(2).setCellValue("Quantidade");
+        headerRow.createCell(3).setCellValue("Porcentagem");
 
 
         int total = 0;
@@ -517,31 +810,5 @@ public class NotificationsFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     Log.e("Firebase", "Erro ao buscar documento do usuário: " + e.getMessage());
                 });
-    }
-
-    private String getUsuarioCredencial() {
-        if (getActivity() == null) return null;
-
-        String rawCredencial = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                .getString(KEY_USUARIO_CREDENCIAL, null);
-
-        if (rawCredencial != null) {
-            if (rawCredencial.contains("@")) {
-                return rawCredencial;
-            } else {
-                return MaskUtil.unmaskCnpj(rawCredencial);
-            }
-        }
-        return null;
-    }
-
-    private boolean isUsuarioGestor() {
-        if (getContext() == null) return false;
-
-        SharedPreferences sharedPrefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-        String cargo = sharedPrefs.getString(KEY_TIPO_USUARIO, "");
-
-        return "Gestor".equalsIgnoreCase(cargo);
     }
 }

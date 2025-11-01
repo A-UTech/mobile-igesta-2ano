@@ -21,8 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:fontFamily="@font/poppins_regular"
+            android:paddingHorizontal="50dp"
             android:paddingVertical="10dp"
-            android:text="Tirar foto"
+            android:text="Contar condenas"
             android:textAlignment="center"
             android:textColor="@color/preto"
             android:textSize="20sp"
@@ -32,12 +33,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/bt_selecionar_galeria"
+            android:id="@+id/bt_editar_condenas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_regular"
+            android:paddingHorizontal="50dp"
             android:paddingVertical="10dp"
-            android:text="Selecionar da galeria"
+            android:text="Editar condenas"
             android:textAlignment="center"
             android:textColor="@color/preto"
             android:textSize="20sp"

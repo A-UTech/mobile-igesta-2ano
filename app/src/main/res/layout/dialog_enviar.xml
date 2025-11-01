@@ -47,7 +47,7 @@
                 android:layout_marginTop="7dp"
                 android:fontFamily="@font/poppins_regular"
                 android:lineHeight="20dp"
-                android:text="Os dados cadastrados não podem ser alterados."
+                android:text="Os dados cadastrados não podem ser alterados"
                 android:textAlignment="center"
                 android:textColor="@color/preto"
                 android:textSize="16sp"
