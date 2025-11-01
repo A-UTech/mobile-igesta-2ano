@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -9,9 +9,10 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView43"
+            android:id="@+id/txt_nome_condena"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_regular"
             android:padding="7.5dp"
@@ -21,9 +22,10 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/textView44"
+            android:id="@+id/txt_tipo_condena"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_regular"
             android:padding="7.5dp"
@@ -33,9 +35,10 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/textView45"
+            android:id="@+id/txt_qnt_condena"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_regular"
             android:padding="7.5dp"
@@ -45,9 +48,10 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/textView46"
+            android:id="@+id/txt_porcentagem_condena"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_regular"
             android:padding="7.5dp"

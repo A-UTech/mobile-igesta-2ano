@@ -42,7 +42,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView38"
+                android:id="@+id/txt_nome_turno"
                 android:layout_width="238dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="52dp"
@@ -74,7 +74,7 @@
                 app:cornerRadius="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView38" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_nome_turno" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
