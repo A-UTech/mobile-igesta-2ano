@@ -34,13 +34,13 @@
                 android:textAlignment="center"
                 android:textColor="@color/preto"
                 android:textSize="30sp"
-                app:layout_constraintEnd_toStartOf="@+id/textView38"
+                app:layout_constraintEnd_toStartOf="@+id/txt_nome_turno"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView38"
+                app:layout_constraintStart_toEndOf="@+id/txt_nome_turno"
                 app:layout_constraintTop_toBottomOf="@+id/bt_voltar_historico" />
 
             <TextView
-                android:id="@+id/textView38"
+                android:id="@+id/txt_nome_turno"
                 android:layout_width="268dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="37dp"
@@ -64,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView38">
+                app:layout_constraintTop_toBottomOf="@+id/txt_nome_turno">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/bt_n_remover"
