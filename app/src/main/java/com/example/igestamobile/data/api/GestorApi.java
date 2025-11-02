@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -25,6 +26,6 @@ public interface GestorApi {
     @DELETE("igesta/user/gestores/excluir/{id}")
     Call<GestorModel> excluirGestor(@Path("id") Integer id);
 
-    @PUT("igesta/user/gestores/atualizarParcial/{id}")
+    @PATCH("igesta/user/gestores/atualizarParcial/{id}")
     Call<Void> atualizarGestorParcial(@Path("id") int id, @Body UsuarioRequest body);
 }
