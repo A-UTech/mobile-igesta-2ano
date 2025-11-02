@@ -1,6 +1,7 @@
 package com.example.igestamobile;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -220,8 +221,10 @@ public class TelaInicial extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     double comparacao = response.body();
                     String texto;
+                    txtComparacaoMesPassado.setTextColor(Color.parseColor("#4E8530"));
                     if (comparacao > 0) {
                         texto = String.format("+%.1f%%", comparacao);
+                        txtComparacaoMesPassado.setTextColor(Color.parseColor("#EA2323"));
                     } else {
                         texto = String.format("%.1f%%", comparacao);
                     }
