@@ -60,6 +60,8 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
     private static final String ARG_EMAIL = "email";
     private static final String ARG_CARGO = "cargo";
     private static final String ARG_URL_IMAGEM = "urlImagem";
+    private static final String ARG_ID = "identificador";
+    private static final String ARG_UNIDADE_ID = "unidadeId";
 
     private String mParam1;
     private String mParam2;
@@ -209,6 +211,13 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         bundle.putString(ARG_NOME, funcionario.getNome());
         bundle.putString(ARG_EMAIL, funcionario.getEmail());
         bundle.putString(ARG_CARGO, funcionario.getCargo());
+
+        bundle.putString(ARG_ID, funcionario.getIdentificador());
+
+        SharedPreferences sharedPrefs = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        int unidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, 0);
+        bundle.putInt(ARG_UNIDADE_ID, unidadeId);
+
 
         if (funcionario.getUrlImagem() != null) {
             bundle.putString(ARG_URL_IMAGEM, funcionario.getUrlImagem());

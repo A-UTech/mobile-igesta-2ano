@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -18,4 +19,7 @@ public interface GestorApi {
     Call<GestorModel> selecionarGestores(@Path("id") Integer id);
     @POST("igesta/user/gestores/inserir")
     Call<GestorModel> cadastrarGestor(@Body GestorModel gestor);
+
+    @DELETE("igesta/user/gestores/excluir/{id}")
+    Call<GestorModel> excluirGestor(@Path("id") Integer id);
 }
