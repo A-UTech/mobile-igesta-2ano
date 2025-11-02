@@ -119,7 +119,7 @@ public class Perfil extends Fragment {
         bt_alterar_foto_perfil = dialog_opcoes_imagem.findViewById(R.id.bt_alterar_foto_perfil);
         bt_selecionar_galeria = dialog_foto_opcoes.findViewById(R.id.bt_selecionar_galeria);
         img_foto_perfil = view.findViewById(R.id.img_foto_perfil);
-        bt_tirar_foto = dialog_foto_opcoes.findViewById(R.id.bt_contar_condenas);
+        bt_tirar_foto = dialog_foto_opcoes.findViewById(R.id.bt_limpar_contagens);
         txt_nome_usuario = view.findViewById(R.id.txt_nome_usuario);
         txt_credencial_usuario = view.findViewById(R.id.txt_credencial_usuario);
 

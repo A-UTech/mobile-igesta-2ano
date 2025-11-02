@@ -3,7 +3,6 @@ package com.example.igestamobile.ui.notifications;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -213,10 +212,11 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
         Button bt_s_remover = dialog_apagar.findViewById(R.id.bt_s_remover);
         Button bt_n_concluir = dialog_concluir.findViewById(R.id.bt_n_concluir);
         Button bt_s_concluir = dialog_concluir.findViewById(R.id.bt_s_concluir);
-        TextView bt_contar_condenas = dialog_condena_opcoes.findViewById(R.id.bt_contar_condenas);
+        TextView bt_limpar_contagens = dialog_condena_opcoes.findViewById(R.id.bt_limpar_contagens);
         TextView bt_editar_condenas = dialog_condena_opcoes.findViewById(R.id.bt_editar_condenas);
         TextInputEditText dialogInputInicio = dialog_enviar_condenas.findViewById(R.id.input_horario_inicio);
         TextInputEditText dialogInputTermino = dialog_enviar_condenas.findViewById(R.id.input_horario_termino);
+        TextInputEditText dialogInputLote = dialog_enviar_condenas.findViewById(R.id.input_lote);
 
         if (txt_concluir_alteracoes != null) txt_concluir_alteracoes.setVisibility(View.GONE);
         if (txt_descartar_alteracoes != null) txt_descartar_alteracoes.setVisibility(View.GONE);
@@ -258,18 +258,10 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
             });
         }
 
-        if (bt_contar_condenas != null) {
-            bt_contar_condenas.setOnClickListener(v -> {
+        if (bt_limpar_contagens != null) {
+            bt_limpar_contagens.setOnClickListener(v -> {
                 dialog_condena_opcoes.dismiss();
-                carregarCondenasDeUnidade(getClienteIdSalvo());
-
-                if (bt_enviar_contagens != null) bt_enviar_contagens.setVisibility(View.VISIBLE);
-                if (bt_filtrar_total != null) bt_filtrar_total.setVisibility(View.VISIBLE);
-                if (bt_filtrar_parcial != null) bt_filtrar_parcial.setVisibility(View.VISIBLE);
-                if (btn_option != null) btn_option.setVisibility(View.VISIBLE);
-
-                if (txt_concluir_alteracoes != null) txt_concluir_alteracoes.setVisibility(View.GONE);
-                if (txt_descartar_alteracoes != null) txt_descartar_alteracoes.setVisibility(View.GONE);
+                limparTodasAsContagens();
             });
         }
 
@@ -366,6 +358,7 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
                                         Integer finalUnidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, -1);
                                         String inicio = dialogInputInicio.getText().toString();
                                         String termino = dialogInputTermino.getText().toString();
+                                        String lote = dialogInputLote.getText().toString();
 
                                         turnoApi.selecionarPorUnidadeEPeriodo(finalUnidadeId, inicio, termino).enqueue(new Callback<TurnoResponse>() {
                                             @Override
@@ -378,7 +371,7 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
                                                     String empresaFinal = sharedPrefs.getString(KEY_EMPRESA_NOME, "");
                                                     Integer idTurnoFinal = sharedPrefs.getInt(KEY_TURNO_ID, -1);
 
-                                                    String lote = "L1234";
+                                                    String loteFinal = lote;
                                                     Date dataAtual = new Date();
 
                                                     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", java.util.Locale.US);
@@ -392,7 +385,7 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
                                                             empresaFinal,
                                                             idTurnoFinal,
                                                             dataFormatada,
-                                                            lote,
+                                                            loteFinal,
                                                             unidadeFinal,
                                                             condenasParaRegistro
                                                     );
@@ -402,6 +395,9 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
                                                         public void onResponse(Call<RegistroModel> call, Response<RegistroModel> response) {
                                                             if (response.isSuccessful()) {
                                                                 Toast.makeText(requireContext(), "Condenas enviadas com sucesso.", Toast.LENGTH_SHORT).show();
+
+                                                                limparTodasAsContagens();
+
                                                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                                                     if (requireContext().checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
                                                                             != PackageManager.PERMISSION_GRANTED) {
@@ -869,5 +865,10 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
                 .addOnFailureListener(e -> {
                     Log.e("Firebase", "Erro ao buscar documento do usuário: " + e.getMessage());
                 });
+    }
+    private void limparTodasAsContagens() {
+        if (adapter != null) {
+            adapter.zerarTodasAsContagens();
+        }
     }
 }
