@@ -12,6 +12,8 @@ public class CondenaModel {
     @SerializedName("tipo")
     private String tipo;
 
+    private boolean isSelecionada = true;
+
     public Long getId() {
         return id;
     }
@@ -34,5 +36,13 @@ public class CondenaModel {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public boolean isSelecionada() {
+        return isSelecionada;
+    }
+
+    public void setSelecionada(boolean selecionada) {
+        isSelecionada = selecionada;
     }
 }
