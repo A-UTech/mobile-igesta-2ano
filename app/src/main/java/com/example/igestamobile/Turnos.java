@@ -1,6 +1,10 @@
 package com.example.igestamobile;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -9,10 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.igestamobile.adapter.CondenaTurnoAdapter;
 import com.example.igestamobile.data.model.RegistroCondenaModel;
 import com.example.igestamobile.data.model.CondenaDetalhe;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +40,9 @@ public class Turnos extends Fragment {
     private ArrayList<RegistroCondenaModel> condenasBrutas;
     private RecyclerView recyclerViewCondenas;
     private CondenaTurnoAdapter adapter;
+    private List<CondenaDetalhe> condenasCalculadas;
+    private Button btExportarPlanilha;
+    private ActivityResultLauncher<String> createDocumentLauncher;
 
     public Turnos() {
     }
@@ -46,6 +63,17 @@ public class Turnos extends Fragment {
             nomeTurno = getArguments().getString(ARG_NOME_TURNO);
             condenasBrutas = getArguments().getParcelableArrayList(ARG_CONDENAS);
         }
+
+        createDocumentLauncher = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+                uri -> {
+                    if (uri != null && condenasCalculadas != null) {
+                        gerarPlanilha(condenasCalculadas, uri);
+                    } else if (uri == null) {
+                        Toast.makeText(requireContext(), "Criação de arquivo cancelada pelo usuário.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     @Override
@@ -61,7 +89,7 @@ public class Turnos extends Fragment {
         recyclerViewCondenas = view.findViewById(R.id.rv_planilha);
         recyclerViewCondenas.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        List<CondenaDetalhe> condenasCalculadas = calcularDetalhesCondenas(condenasBrutas);
+        condenasCalculadas = calcularDetalhesCondenas(condenasBrutas);
 
         adapter = new CondenaTurnoAdapter(condenasCalculadas);
         recyclerViewCondenas.setAdapter(adapter);
@@ -69,6 +97,18 @@ public class Turnos extends Fragment {
         View btVoltar = view.findViewById(R.id.bt_voltar_turnos);
         if (btVoltar != null) {
             btVoltar.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+        }
+
+        btExportarPlanilha = view.findViewById(R.id.bt_exportar_planilha);
+        if (btExportarPlanilha != null) {
+            btExportarPlanilha.setOnClickListener(v -> {
+                if (condenasCalculadas == null || condenasCalculadas.isEmpty()) {
+                    Toast.makeText(requireContext(), "Não há dados para exportar.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String nomeArquivo = String.format("contagem_turno_%s.xlsx", nomeTurno != null ? nomeTurno : "detalhe");
+                createDocumentLauncher.launch(nomeArquivo);
+            });
         }
 
         return view;
@@ -96,5 +136,40 @@ public class Turnos extends Fragment {
         }
 
         return detalhes;
+    }
+
+    private void gerarPlanilha(List<CondenaDetalhe> detalhes, Uri uri) {
+        if (getContext() == null) return;
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Contagem Condenas");
+
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Condena");
+        headerRow.createCell(1).setCellValue("Tipo");
+        headerRow.createCell(2).setCellValue("Quantidade");
+        headerRow.createCell(3).setCellValue("Porcentagem");
+
+        int rowIndex = 1;
+        for (CondenaDetalhe c : detalhes) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(c.getNome());
+            row.createCell(1).setCellValue(c.getTipo());
+            row.createCell(2).setCellValue(c.getQuantidade());
+            row.createCell(3).setCellValue(String.format(java.util.Locale.US, "%.2f%%", c.getPorcentagem()));
+        }
+
+        try (OutputStream os = requireContext().getContentResolver().openOutputStream(uri)) {
+            if (os != null) {
+                workbook.write(os);
+                workbook.close();
+                Toast.makeText(requireContext(), "Planilha salva com sucesso!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(requireContext(), "Não foi possível abrir o fluxo de saída.", Toast.LENGTH_LONG).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Erro ao salvar planilha: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }
