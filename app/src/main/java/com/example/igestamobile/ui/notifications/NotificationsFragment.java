@@ -262,7 +262,6 @@ public class NotificationsFragment extends Fragment implements CondenaUnidadeAda
             bt_contar_condenas.setOnClickListener(v -> {
                 dialog_condena_opcoes.dismiss();
                 carregarCondenasDeUnidade(getClienteIdSalvo());
-                Toast.makeText(requireContext(), "Modo de Contagem ativado.", Toast.LENGTH_SHORT).show();
 
                 if (bt_enviar_contagens != null) bt_enviar_contagens.setVisibility(View.VISIBLE);
                 if (bt_filtrar_total != null) bt_filtrar_total.setVisibility(View.VISIBLE);

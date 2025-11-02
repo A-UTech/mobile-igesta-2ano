@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/foto_perfil_condenas" />
 
     <TextView
-        android:id="@+id/textView31"
+        android:id="@+id/txt_ola_contar_condenas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -119,13 +119,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="30dp"
-        android:paddingBottom="90dp"
+        android:paddingBottom="180dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_total"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas"
         tools:listitem="@layout/item_contagem_condenas" />
 
     <TextView
@@ -147,5 +148,41 @@
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_descartar_alteracoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableTop="@drawable/icon_trash"
+        android:fontFamily="@font/poppins_regular"
+        android:maxWidth="60dp"
+        android:text="Descartar alterações"
+        android:textAlignment="center"
+        android:textColor="@color/vermelho"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
+
+    <TextView
+        android:id="@+id/txt_concluir_alteracoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableTop="@drawable/icon_check"
+        android:fontFamily="@font/poppins_regular"
+        android:maxWidth="60dp"
+        android:text="Concluir alterações"
+        android:textAlignment="center"
+        android:textColor="@color/verde_escuro"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.914"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
