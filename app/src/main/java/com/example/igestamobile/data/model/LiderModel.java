@@ -1,5 +1,6 @@
 package com.example.igestamobile.data.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LiderModel {
@@ -20,6 +21,14 @@ public class LiderModel {
 
     @SerializedName("area")
     private String area;
+
+    public LiderModel(Integer idUnidade, String nome, String email, String senha, String area) {
+        this.idUnidade = idUnidade;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.area = area;
+    }
 
     public Integer getId() {
         return id;
