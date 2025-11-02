@@ -23,6 +23,7 @@ import com.cloudinary.android.preprocess.ImagePreprocessChain;
 import com.cloudinary.android.preprocess.Limit;
 import com.cloudinary.android.preprocess.Rotate;
 import com.example.igestamobile.R;
+import com.example.igestamobile.data.api.TokenManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -140,7 +141,10 @@ public class Perfil extends Fragment {
         });
 
         bt_logout_dialog.setOnClickListener(v -> {
-            clearUsuarioCredencial();
+            TokenManager tokenManager = new TokenManager(requireContext());
+            tokenManager.clearToken();
+
+            clearAllLoginPrefs();
 
             Intent intent = new Intent(requireActivity(), Login.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -213,11 +217,12 @@ public class Perfil extends Fragment {
         return null;
     }
 
-    private void clearUsuarioCredencial() {
+    private void clearAllLoginPrefs() {
         if (getActivity() == null) return;
+
         getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
                 .edit()
-                .remove(KEY_USUARIO_CREDENCIAL)
+                .clear()
                 .apply();
     }
 

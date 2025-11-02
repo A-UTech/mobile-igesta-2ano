@@ -22,7 +22,7 @@ public class TokenManager {
         return prefs.getString(KEY_TOKEN, null);
     }
 
-    public void deleteToken() {
+    public void clearToken() {
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(KEY_TOKEN);
         editor.apply();

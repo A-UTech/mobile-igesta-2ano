@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +66,7 @@ public class Login extends AppCompatActivity {
             String senha = etSenha.getText().toString().trim();
 
             if (!emailCnpj.isEmpty() && !senha.isEmpty()) {
+                setLoadingState(true);
                 SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(KEY_USUARIO_CREDENCIAL, emailCnpj);
@@ -82,27 +84,38 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void setLoadingState(boolean isLoading) {
+        if (isLoading) {
+            btnLogin.setEnabled(false);
+            btnLogin.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.borda_btn_cinza).mutate());
+
+            etEmailCnpj.setEnabled(false);
+            etSenha.setEnabled(false);
+        } else {
+            btnLogin.setEnabled(true);
+            btnLogin.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.borda_btn).mutate());
+
+            etEmailCnpj.setEnabled(true);
+            etSenha.setEnabled(true);
+        }
+    }
+
     private void performLogin(String emailCnpj, String senha) {
         AuthRequest authRequest = new AuthRequest(emailCnpj, senha);
         SqlRetrofitClient.getClient(this).create(AuthApi.class).login(authRequest)
                 .enqueue(new Callback<AuthResponse>() {
                     @Override
                     public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                        btnLogin.setEnabled(true);
-
                         if (response.isSuccessful() && response.body() != null) {
                             AuthResponse authResponse = response.body();
                             TokenManager tokenManager = new TokenManager(Login.this);
                             tokenManager.saveToken(authResponse.getToken());
                             LoginModelRequest request = new LoginModelRequest(emailCnpj, senha);
-                            btnLogin.setEnabled(false);
 
                             SqlRetrofitClient.getClient(Login.this).create(LoginApi.class).login(request)
                                     .enqueue(new Callback<LoginModelResponse>() {
                                         @Override
                                         public void onResponse(Call<LoginModelResponse> call, Response<LoginModelResponse> response) {
-                                            btnLogin.setEnabled(true);
-
                                             if (response.isSuccessful() && response.body() != null) {
                                                 LoginModelResponse user = response.body();
 
@@ -125,38 +138,43 @@ public class Login extends AppCompatActivity {
                                                         break;
 
                                                     default:
+                                                        setLoadingState(false);
                                                         Toast.makeText(Login.this, "Tipo de usuário inválido.", Toast.LENGTH_LONG).show();
                                                         break;
                                                 }
                                             } else if (response.code() == 401 || response.code() == 403) {
+                                                setLoadingState(false);
                                                 etEmailCnpj.setError("E-mail ou CNPJ inválido.");
                                                 etSenha.setError("Senha inválida.");
                                                 etEmailCnpj.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
                                                 etSenha.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
                                             } else {
+                                                setLoadingState(false);
                                                 Toast.makeText(Login.this, "Erro no servidor: Código " + response.code(), Toast.LENGTH_LONG).show();
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<LoginModelResponse> call, Throwable t) {
-                                            btnLogin.setEnabled(true);
+                                            setLoadingState(false);
                                             Toast.makeText(Login.this, "Falha na conexão de rede. Verifique o servidor.", Toast.LENGTH_LONG).show();
                                         }
                                     });
                         } else if (response.code() == 500) {
+                            setLoadingState(false);
                             etEmailCnpj.setError("E-mail ou CNPJ inválido.");
                             etSenha.setError("Senha inválida.");
                             etEmailCnpj.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
                             etSenha.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.borda_edittext_error));
                         } else {
+                            setLoadingState(false);
                             Toast.makeText(Login.this, "Erro no servidor: Código " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<AuthResponse> call, Throwable t) {
-                        btnLogin.setEnabled(true);
+                        setLoadingState(false);
                         Toast.makeText(Login.this, "Token - Falha na conexão de rede ao buscar token.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -175,12 +193,14 @@ public class Login extends AppCompatActivity {
                     SharedPreferences sharedPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                     sharedPrefs.edit().putString(KEY_USUARIO_NOME, unidadeNome).apply();
                 } else {
+                    setLoadingState(false);
                     Toast.makeText(Login.this, "Não foi possível obter a unidade.", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<UnidadeModel> call, Throwable t) {
+                setLoadingState(false);
                 Toast.makeText(Login.this, "Falha na conexão de rede ao buscar unidade.", Toast.LENGTH_LONG).show();
             }
         });
@@ -189,6 +209,7 @@ public class Login extends AppCompatActivity {
         condenaUnidadeApi.selecionarCondenasUnidade(user.getId()).enqueue(new Callback<List<CondenaUnidadeResponse>>() {
             @Override
             public void onResponse(Call<List<CondenaUnidadeResponse>> call, Response<List<CondenaUnidadeResponse>> response) {
+                setLoadingState(false);
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     irParaTela(MainActivity.class);
                 } else {
@@ -198,6 +219,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<CondenaUnidadeResponse>> call, Throwable t) {
+                setLoadingState(false);
                 Toast.makeText(Login.this, "Falha na conexão de rede ao buscar condenas.", Toast.LENGTH_LONG).show();
             }
         });
@@ -207,6 +229,7 @@ public class Login extends AppCompatActivity {
         liderApi.selecionarLideres(user.getId()).enqueue(new Callback<LiderModel>() {
             @Override
             public void onResponse(Call<LiderModel> call, Response<LiderModel> response) {
+                setLoadingState(false);
                 if (response.isSuccessful() && response.body() != null) {
                     Integer unidadeId = response.body().getIdUnidade();
                     String liderNome = response.body().getNome();
@@ -223,6 +246,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LiderModel> call, Throwable t) {
+                setLoadingState(false);
                 Toast.makeText(Login.this, "Falha na conexão de rede ao buscar líder.", Toast.LENGTH_LONG).show();
             }
         });
@@ -232,11 +256,11 @@ public class Login extends AppCompatActivity {
         gestorApi.selecionarGestores(user.getId()).enqueue(new Callback<GestorModel>() {
             @Override
             public void onResponse(Call<GestorModel> call, Response<GestorModel> response) {
+                setLoadingState(false);
                 if (response.isSuccessful() && response.body() != null) {
                     Integer unidadeId = response.body().getIdUnidade();
                     Integer gestorId = response.body().getId();
                     String gestorNome = response.body().getNome();
-
 
                     SharedPreferences sharedPrefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                     sharedPrefs.edit().putInt(KEY_UNIDADE_ID, unidadeId).apply();
@@ -251,6 +275,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<GestorModel> call, Throwable t) {
+                setLoadingState(false);
                 Toast.makeText(Login.this, "Falha na conexão de rede ao buscar gestor.", Toast.LENGTH_LONG).show();
             }
         });
