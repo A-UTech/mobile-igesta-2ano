@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,7 @@ public class Chatbot extends Fragment {
     private static final String PREFS_NAME = "LoginPrefs";
     private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
+    private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
     private RecyclerView recyclerView;
     private TextInputEditText mensagem_funcionario;
     private ImageButton btnEnviar;
@@ -55,7 +57,8 @@ public class Chatbot extends Fragment {
     private ChatApi chatApi;
     private UnidadeApi unidadeApi;
 
-    ShapeableImageView shapeableImageView5;
+    private ShapeableImageView shapeableImageView5;
+    private TextView txtOlaChatbot;
     private FirebaseFirestore db;
     private String profileImageUrl;
 
@@ -87,6 +90,12 @@ public class Chatbot extends Fragment {
                 UNIDADE = "Unidade não encontrada";
             }
         });
+
+        txtOlaChatbot = view.findViewById(R.id.txt_ola_chatbot);
+
+        String nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_NOME, null);
+        txtOlaChatbot.setText("Olá, " + nome + "!");
 
         recyclerView = view.findViewById(R.id.recyclerView);
         mensagem_funcionario = view.findViewById(R.id.mensagem_funcionario);

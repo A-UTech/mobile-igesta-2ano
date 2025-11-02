@@ -27,7 +27,7 @@
             app:useCompatPadding="false" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/txt_ola_gf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/bt_voltar_gf"
-            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+            app:layout_constraintTop_toBottomOf="@+id/imageFuncionarioGerenciar" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_funcionarios"
@@ -82,7 +82,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp" android:layout_marginTop="26dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="26dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

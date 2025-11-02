@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.igestamobile.R;
@@ -49,6 +50,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
     private static final String PREFS_NAME = "LoginPrefs";
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
     private static final String KEY_TIPO_USUARIO = "TIPO_USUARIO";
+    private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_NOME = "nome";
@@ -73,6 +75,8 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
     private int apiCallsCompleted = 0;
     private final int totalApiCalls = 2;
     private int imagesLoadedCount = 0;
+
+    private TextView txt_ola_gf;
 
     public GerenciarFuncionario() {
 
@@ -111,6 +115,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
 
         View adicionarFuncionario = view.findViewById(R.id.bt_adicionar_funcionario);
         View btVoltar = view.findViewById(R.id.bt_voltar_gf);
+        txt_ola_gf = view.findViewById(R.id.txt_ola_gf);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         searchFuncionarios = view.findViewById(R.id.search_funcionarios);
@@ -124,6 +129,10 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
 
         imageFuncionarioGerenciar = view.findViewById(R.id.imageFuncionarioGerenciar);
         Button bt_cadastrar_func = dialog_cadastrar_func.findViewById(R.id.bt_cadastrar_func_dialog);
+
+        String nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_NOME, null);
+        txt_ola_gf.setText("Olá, " + nome + "!");
 
         loadProfileImage();
 

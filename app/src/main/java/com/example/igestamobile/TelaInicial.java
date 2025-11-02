@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,8 +24,10 @@ public class TelaInicial extends Fragment {
 
     private static final String PREFS_NAME = "LoginPrefs";
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
+    private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
     private FragmentHomeBinding binding;
-    ShapeableImageView imageFuncionarioHome;
+    private ShapeableImageView imageFuncionarioHome;
+    private TextView txtOlaTelaInicial;
     private FirebaseFirestore db;
 
     @Override
@@ -39,6 +42,11 @@ public class TelaInicial extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         imageFuncionarioHome = view.findViewById(R.id.imageFuncionarioHome);
+        txtOlaTelaInicial = view.findViewById(R.id.txt_ola_tela_inicial);
+
+        String nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_NOME, null);
+        txtOlaTelaInicial.setText("Olá, " + nome + "!");
 
         loadProfileImage();
     }
