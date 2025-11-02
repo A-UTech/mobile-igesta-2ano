@@ -13,8 +13,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.igestamobile.R;
+import com.example.igestamobile.data.api.TokenManager;
 
 public class SplashScreen extends AppCompatActivity {
+
+    private final long DELAY_TIME = 7500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +31,19 @@ public class SplashScreen extends AppCompatActivity {
         });
         ImageView imageView = findViewById(R.id.logo);
         Glide.with(this).load(R.mipmap.logoanimadasemfundo).into(imageView);
-        new Handler().postDelayed(this::abrirTela, 7500);
+
+        new Handler().postDelayed(this::abrirTela, DELAY_TIME);
     }
+
     private void abrirTela(){
-        Intent rota = new Intent(this, Login.class);
+        TokenManager tokenManager = new TokenManager(this);
+        Intent rota;
+        if (tokenManager.getToken() != null) {
+            rota = new Intent(this, MainActivity.class);
+        } else {
+            rota = new Intent(this, Login.class);
+        }
+
         startActivity(rota);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
