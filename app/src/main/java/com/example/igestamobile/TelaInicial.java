@@ -22,7 +22,7 @@ import com.example.igestamobile.data.api.SqlRetrofitClient;
 import com.example.igestamobile.data.api.UnidadeApi;
 import com.example.igestamobile.data.model.CondenaTopModel;
 import com.example.igestamobile.data.model.UnidadeModel;
-import com.example.igestamobile.databinding.FragmentHomeBinding;
+import com.example.igestamobile.databinding.FragmentTelaInicialBinding;
 import com.example.igestamobile.utils.MaskUtil;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,7 +39,7 @@ public class TelaInicial extends Fragment {
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
     private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
     private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
-    private FragmentHomeBinding binding;
+    private FragmentTelaInicialBinding binding;
     private ShapeableImageView imageFuncionarioHome;
     private TextView txtOlaTelaInicial, txtQuantidadeCondenaTotal, txtQuantidadeCondenaParcial, txtTotalCondenas, txtComparacaoMesPassado, txtQntdTotal_1, txtQntdTotal_2, txtQntdTotal_3, txtQntdParcial_1, txtQntdParcial_2, txtQntdParcial_3, txtQntdTotal_1_nome, txtQntdTotal_2_nome, txtQntdTotal_3_nome, txtQntdParcial_1_nome, txtQntdParcial_2_nome, txtQntdParcial_3_nome;
     private FirebaseFirestore db;

@@ -16,14 +16,16 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/bt_contar_condenas"
+            android:id="@+id/bt_limpar_contagens"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="30dp"
+            android:drawableLeft="@drawable/lixeira"
             android:fontFamily="@font/poppins_regular"
-            android:paddingHorizontal="50dp"
+            android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
-            android:text="Contar condenas"
+            android:text="Limpar contagens"
             android:textAlignment="center"
             android:textColor="@color/preto"
             android:textSize="20sp"
@@ -36,8 +38,10 @@
             android:id="@+id/bt_editar_condenas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:drawableLeft="@drawable/ic_edit"
             android:fontFamily="@font/poppins_regular"
-            android:paddingHorizontal="50dp"
+            android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
             android:text="Editar condenas"
             android:textAlignment="center"
@@ -46,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bt_contar_condenas" />
+            app:layout_constraintTop_toBottomOf="@+id/bt_limpar_contagens" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/bt_contar_condenas"
+            android:id="@+id/bt_limpar_contagens"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -44,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bt_contar_condenas" />
+            app:layout_constraintTop_toBottomOf="@+id/bt_limpar_contagens" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

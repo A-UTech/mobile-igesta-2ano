@@ -403,4 +403,19 @@ public class CondenaUnidadeAdapter extends RecyclerView.Adapter<CondenaUnidadeAd
     public List<CondenaUnidadeResponse> getListaAtual() {
         return new ArrayList<>(this.condenasUnidadesExibida);
     }
+    public void zerarTodasAsContagens() {
+        if (modoAtual != MODO_CONTAGEM) {
+            return;
+        }
+
+        for (CondenaUnidadeResponse condena : condenasUnidadesOriginal) {
+            condena.setQuantidade(0);
+        }
+
+        for (CondenaUnidadeResponse condena : condenasUnidadesExibida) {
+            condena.setQuantidade(0);
+        }
+
+        notifyDataSetChanged();
+    }
 }
