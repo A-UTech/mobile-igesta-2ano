@@ -1,5 +1,6 @@
 package com.example.igestamobile.data.api;
 
+import com.example.igestamobile.data.model.CondenaTopModel;
 import com.example.igestamobile.data.model.RegistroModel;
 
 import java.util.List;
@@ -22,4 +23,22 @@ public interface RegistroApi {
     );
     @POST("igesta/registros/inserir")
     Call<RegistroModel> inserirRegistro(@Body RegistroModel registro);
+
+    @GET("igesta/registros/total-condenas-registradas/{unidade}")
+    Call<Integer> buscarTotalCondenasRegistradas(@Path("unidade") String unidade);
+
+    @GET("igesta/registros/tipo-total-por-unidade/{unidade}")
+    Call<Integer> buscarTipoTotalPorUnidade(@Path("unidade") String unidade);
+
+    @GET("igesta/registros/tipo-parcial-por-unidade/{unidade}")
+    Call<Integer> buscarTipoParcialPorUnidade(@Path("unidade") String unidade);
+
+    @GET("igesta/registros/comparar-mes-passado/{unidade}")
+    Call<Double> buscarComparacaoMesPassado(@Path("unidade") String unidade);
+
+    @GET("igesta/registros/condenas-totais-mais-registradas/{unidade}")
+    Call<List<CondenaTopModel>> buscarCondenasTotaisMaisRegistradas(@Path("unidade") String unidade);
+
+    @GET("igesta/registros/condenas-parciais-mais-registradas/{unidade}")
+    Call<List<CondenaTopModel>> buscarCondenasParciaisMaisRegistradas(@Path("unidade") String unidade);
 }

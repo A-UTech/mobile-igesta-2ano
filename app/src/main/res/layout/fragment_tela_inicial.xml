@@ -160,7 +160,7 @@
                             app:srcCompat="@mipmap/condenas_totais" />
 
                         <TextView
-                            android:id="@+id/textView21"
+                            android:id="@+id/txt_quantidade_condena_total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="51dp"
@@ -203,7 +203,7 @@
                             android:textSize="12sp" />
 
                         <TextView
-                            android:id="@+id/textView24"
+                            android:id="@+id/txt_quantidade_condena_parcial"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="51dp"
@@ -271,7 +271,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textView53"
+                                android:id="@+id/txt_qntd_2_nome"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="40dp"
@@ -301,7 +301,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textView49"
+                                android:id="@+id/txt_qntd_1_nome"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
@@ -330,7 +330,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textView47"
+                                android:id="@+id/txt_qntd_3_nome"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="70dp"
@@ -405,7 +405,7 @@
                             app:srcCompat="@mipmap/condenas_totais_esc" />
 
                         <TextView
-                            android:id="@+id/textView35"
+                            android:id="@+id/txt_total_condenas"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="51dp"
@@ -432,7 +432,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textView26"
+                                android:id="@+id/txt_comparacao_mes_passado"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
@@ -462,31 +462,6 @@
                     app:cardBackgroundColor="@color/branco"
                     app:cardCornerRadius="20.5dp"
                     app:cardElevation="0dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginRight="20dp"
-                        android:fontFamily="@font/poppins_bold"
-                        android:text="0%"
-                        android:textColor="#4E8530"
-                        android:textSize="36sp" />
-
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_medium"
-                        android:lineHeight="18dp"
-                        android:text="Condenas em relação a semana passada."
-                        android:textColor="@color/preto" />
-                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -533,7 +508,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txt_condena_2_parcial"
+                                android:id="@+id/txt_qntd_2_parcial_nome"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="40dp"
@@ -563,7 +538,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txt_condena_1_parcial"
+                                android:id="@+id/txt_qntd_1_parcial_nome"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
@@ -592,7 +567,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txt_condena_3_parcial"
+                                android:id="@+id/txt_qntd_3_parcial_nome"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="70dp"
