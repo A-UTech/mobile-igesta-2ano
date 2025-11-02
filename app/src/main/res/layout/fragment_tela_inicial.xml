@@ -267,7 +267,7 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical">
 
                             <TextView
@@ -275,6 +275,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="40dp"
+                                android:lineHeight="14dp"
                                 android:fontFamily="@font/poppins_medium"
                                 android:gravity="center"
                                 android:maxWidth="100dp"
@@ -286,7 +287,8 @@
                             <TextView
                                 android:id="@+id/txt_qntd_2"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
                                 android:layout_marginHorizontal="2dp"
                                 android:background="@color/branco"
                                 android:fontFamily="@font/poppins_semibold"
@@ -298,7 +300,7 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical">
 
                             <TextView
@@ -306,6 +308,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
+                                android:lineHeight="14dp"
                                 android:gravity="center"
                                 android:maxWidth="100dp"
                                 android:paddingHorizontal="10dp"
@@ -316,7 +319,8 @@
                             <TextView
                                 android:id="@+id/txt_qntd_1"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
                                 android:layout_marginHorizontal="2dp"
                                 android:background="@color/branco"
                                 android:fontFamily="@font/poppins_semibold"
@@ -328,7 +332,7 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical">
 
                             <TextView
@@ -338,6 +342,7 @@
                                 android:layout_marginTop="70dp"
                                 android:fontFamily="@font/poppins_medium"
                                 android:gravity="center"
+                                android:lineHeight="14dp"
                                 android:maxWidth="100dp"
                                 android:paddingHorizontal="10dp"
                                 android:text="Condena 3"
@@ -347,7 +352,8 @@
                             <TextView
                                 android:id="@+id/txt_qntd_3"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
                                 android:layout_marginHorizontal="2dp"
                                 android:background="@color/branco"
                                 android:fontFamily="@font/poppins_semibold"
@@ -442,7 +448,7 @@
                                 android:fontFamily="@font/poppins_bold"
                                 android:text="0%"
                                 android:textColor="#4E8530"
-                                android:textSize="36sp" />
+                                android:textSize="30sp" />
 
                             <TextView
                                 android:id="@+id/textView27"
@@ -526,7 +532,8 @@
                             <TextView
                                 android:id="@+id/txt_qntd_2_parcial"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
                                 android:layout_marginHorizontal="2dp"
                                 android:background="@color/branco"
                                 android:fontFamily="@font/poppins_semibold"
@@ -556,7 +563,8 @@
                             <TextView
                                 android:id="@+id/txt_qntd_1_parcial"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
                                 android:layout_marginHorizontal="2dp"
                                 android:background="@color/branco"
                                 android:fontFamily="@font/poppins_semibold"
@@ -587,7 +595,8 @@
                             <TextView
                                 android:id="@+id/txt_qntd_3_parcial"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
                                 android:layout_marginHorizontal="2dp"
                                 android:background="@color/branco"
                                 android:fontFamily="@font/poppins_semibold"
