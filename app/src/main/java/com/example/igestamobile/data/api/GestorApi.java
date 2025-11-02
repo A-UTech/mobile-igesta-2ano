@@ -2,6 +2,7 @@ package com.example.igestamobile.data.api;
 
 import com.example.igestamobile.data.model.GestorModel;
 import com.example.igestamobile.data.model.LiderModel;
+import com.example.igestamobile.data.model.UsuarioRequest;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface GestorApi {
@@ -22,4 +24,7 @@ public interface GestorApi {
 
     @DELETE("igesta/user/gestores/excluir/{id}")
     Call<GestorModel> excluirGestor(@Path("id") Integer id);
+
+    @PUT("igesta/user/gestores/atualizarParcial/{id}")
+    Call<Void> atualizarGestorParcial(@Path("id") int id, @Body UsuarioRequest body);
 }

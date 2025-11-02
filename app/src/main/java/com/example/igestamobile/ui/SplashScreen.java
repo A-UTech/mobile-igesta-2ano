@@ -39,9 +39,9 @@ public class SplashScreen extends AppCompatActivity {
         TokenManager tokenManager = new TokenManager(this);
         Intent rota;
         if (tokenManager.getToken() != null) {
-            rota = new Intent(this, MainActivity.class);
-        } else {
             rota = new Intent(this, Login.class);
+        } else {
+            rota = new Intent(this, MainActivity.class);
         }
 
         startActivity(rota);

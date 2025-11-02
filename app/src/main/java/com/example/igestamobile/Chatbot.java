@@ -61,6 +61,11 @@ public class Chatbot extends Fragment {
     private TextView txtOlaChatbot;
     private FirebaseFirestore db;
     private String profileImageUrl;
+    private String nome;
+
+    public Chatbot() {
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,8 +98,9 @@ public class Chatbot extends Fragment {
 
         txtOlaChatbot = view.findViewById(R.id.txt_ola_chatbot);
 
-        String nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
                 .getString(KEY_USUARIO_NOME, null);
+
         txtOlaChatbot.setText("Olá, " + nome + "!");
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -102,7 +108,7 @@ public class Chatbot extends Fragment {
         btnEnviar = view.findViewById(R.id.btnEnviar);
         shapeableImageView5 = view.findViewById(R.id.shapeableImageView5);
 
-        adapter = new MensagemAdapter(mensagens, requireContext(), profileImageUrl);
+        adapter = new MensagemAdapter(mensagens, requireContext(), profileImageUrl, nome);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
@@ -229,7 +235,10 @@ public class Chatbot extends Fragment {
                     .into(shapeableImageView5);
         }
 
-        adapter = new MensagemAdapter(mensagens, requireContext(), profileImageUrl);
+        nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(KEY_USUARIO_NOME, null);
+
+        adapter = new MensagemAdapter(mensagens, requireContext(), profileImageUrl, nome);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
