@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -133,7 +132,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         db = FirebaseFirestore.getInstance();
 
         imageFuncionarioGerenciar = view.findViewById(R.id.imageFuncionarioGerenciar);
-        txtNomeFuncionario = dialog_cadastrar_func.findViewById(R.id.input_nome_funcionario);
+        txtNomeFuncionario = dialog_cadastrar_func.findViewById(R.id.input_senha);
         txtEmailFuncionario = dialog_cadastrar_func.findViewById(R.id.input_email_funcionario);
         MaterialButton bt_cadastrar_func = dialog_cadastrar_func.findViewById(R.id.bt_cadastrar_func_dialog);
 

@@ -15,6 +15,8 @@ import com.example.igestamobile.R;
 import com.example.igestamobile.data.model.ChatBot.MensagemModel;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class MensagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,11 +30,14 @@ public class MensagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     String funcionarioImageUrl;
 
+    String funcionarioNome;
 
-    public MensagemAdapter(List<MensagemModel> mensagens,Context context, String funcionarioImageUrl) {
+
+    public MensagemAdapter(List<MensagemModel> mensagens,Context context, String funcionarioImageUrl, String funcionarioNome) {
         this.mensagens = mensagens;
         this.context = context;
         this.funcionarioImageUrl = funcionarioImageUrl;
+        this.funcionarioNome = funcionarioNome;
     }
 
     @Override
@@ -79,6 +84,9 @@ public class MensagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else {
                 ((UserViewHolder) holder).imageFuncionario.setImageResource(R.mipmap.fotoperfil);
             }
+            if (funcionarioNome != null && !funcionarioNome.isEmpty()) {
+                ((UserViewHolder) holder).nomeFuncionario.setText(funcionarioNome);
+            }
         } else if (holder instanceof BotViewHolder) {
             ((BotViewHolder) holder).textMessage.setText(msg.getMensagem());
         }else if (holder instanceof LoadingViewHolder){
@@ -95,10 +103,13 @@ public class MensagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView textMessage;
         ShapeableImageView imageFuncionario;
+
+        TextView nomeFuncionario;
         UserViewHolder(View itemView) {
             super(itemView);
             textMessage = itemView.findViewById(R.id.tvMensagemFuncionario);
             imageFuncionario = itemView.findViewById(R.id.imageFuncionario);
+            nomeFuncionario = itemView.findViewById(R.id.tvNomeUser);
         }
     }
 

@@ -43,7 +43,11 @@ public class Login extends AppCompatActivity {
     private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
     private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
+
+    private static final String KEY_USUARIO_SENHA = "USUARIO_SENHA";
     private static final String KEY_TIPO_USUARIO = "TIPO_USUARIO";
+
+
     private EditText etEmailCnpj;
     private EditText etSenha;
     private AppCompatButton btnLogin;
@@ -70,6 +74,7 @@ public class Login extends AppCompatActivity {
                 SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(KEY_USUARIO_CREDENCIAL, emailCnpj);
+                editor.putString(KEY_USUARIO_SENHA, senha);
                 editor.apply();
                 performLogin(emailCnpj, senha);
             } else {
