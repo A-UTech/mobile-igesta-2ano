@@ -18,9 +18,6 @@ public class LiderModel {
     @SerializedName("senha")
     private String senha;
 
-    @SerializedName("cpf")
-    private String cpf;
-
     @SerializedName("area")
     private String area;
 
@@ -62,14 +59,6 @@ public class LiderModel {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getArea() {

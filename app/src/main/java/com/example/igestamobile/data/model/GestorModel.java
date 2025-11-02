@@ -18,8 +18,12 @@ public class GestorModel {
     @SerializedName("senha")
     private String senha;
 
-    @SerializedName("cpf")
-    private String cpf;
+    public GestorModel(Integer idUnidade, String nome, String email, String senha) {
+        this.idUnidade = idUnidade;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+    }
 
     public Integer getId() {
         return id;
@@ -59,13 +63,5 @@ public class GestorModel {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.igestamobile.R;
@@ -29,6 +30,7 @@ import com.example.igestamobile.data.model.LiderModel;
 import com.example.igestamobile.data.model.FuncionarioAdapterModel;
 import com.example.igestamobile.ui.dialogs.AcessoNegadoDialog;
 import com.example.igestamobile.utils.MaskUtil;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -51,6 +53,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
     private static final String KEY_USUARIO_CREDENCIAL = "USUARIO_CREDENCIAL";
     private static final String KEY_TIPO_USUARIO = "TIPO_USUARIO";
     private static final String KEY_USUARIO_NOME = "USUARIO_NOME";
+    private static final String KEY_UNIDADE_ID = "UNIDADE_ID";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_NOME = "nome";
@@ -67,7 +70,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
     private RecyclerView recyclerView;
     private GerenciarFuncionariosAdapter adapter;
     private List<FuncionarioAdapterModel> listaOriginalFuncionarios = new ArrayList<>();
-    private TextInputEditText searchFuncionarios;
+    private TextInputEditText searchFuncionarios, txtNomeFuncionario, txtEmailFuncionario;
 
     private List<GestorModel> listaGestores = new ArrayList<>();
     private List<LiderModel> listaLideres = new ArrayList<>();
@@ -128,7 +131,9 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         db = FirebaseFirestore.getInstance();
 
         imageFuncionarioGerenciar = view.findViewById(R.id.imageFuncionarioGerenciar);
-        Button bt_cadastrar_func = dialog_cadastrar_func.findViewById(R.id.bt_cadastrar_func_dialog);
+        txtNomeFuncionario = dialog_cadastrar_func.findViewById(R.id.input_nome_funcionario);
+        txtEmailFuncionario = dialog_cadastrar_func.findViewById(R.id.input_email_funcionario);
+        MaterialButton bt_cadastrar_func = dialog_cadastrar_func.findViewById(R.id.bt_cadastrar_func_dialog);
 
         String nome = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
                 .getString(KEY_USUARIO_NOME, null);
@@ -144,8 +149,9 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
             dialog_cadastrar_func.show();
         });
 
-        bt_cadastrar_func.setOnClickListener(v -> {
 
+        bt_cadastrar_func.setOnClickListener(v -> {
+            cadastrarFuncionario();
         });
 
         if (btVoltar != null) {
@@ -199,8 +205,6 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
 
     @Override
     public void onItemClick(FuncionarioAdapterModel funcionario) {
-        Log.d("FuncionarioClick", "Funcionário clicado: " + funcionario.getNome() + ", ID: " + funcionario.getIdentificador() + ", Cargo: " + funcionario.getCargo());
-
         Bundle bundle = new Bundle();
         bundle.putString(ARG_NOME, funcionario.getNome());
         bundle.putString(ARG_EMAIL, funcionario.getEmail());
@@ -218,6 +222,14 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
     }
 
     private void fetchFuncionariosFromApi() {
+        apiCallsCompleted = 0;
+        listaGestores.clear();
+        listaLideres.clear();
+        listaOriginalFuncionarios.clear();
+        if (adapter != null) {
+            adapter.updateList(new ArrayList<>());
+        }
+
         GestorApi gestorApi = SqlRetrofitClient.getClient(getContext()).create(GestorApi.class);
         LiderApi liderApi = SqlRetrofitClient.getClient(getContext()).create(LiderApi.class);
 
@@ -226,9 +238,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
             public void onResponse(@NonNull Call<List<GestorModel>> call, @NonNull Response<List<GestorModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     listaGestores = response.body();
-                    Log.i("API", "Gestores carregados: " + listaGestores.size());
                 } else {
-                    Log.e("API", "Erro ao carregar gestores: " + response.code());
                     listaGestores = new ArrayList<>();
                 }
                 checkApiCallsCompleted();
@@ -236,7 +246,6 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
 
             @Override
             public void onFailure(@NonNull Call<List<GestorModel>> call, @NonNull Throwable t) {
-                Log.e("API", "Falha na requisição de Gestores: " + t.getMessage());
                 listaGestores = new ArrayList<>();
                 checkApiCallsCompleted();
             }
@@ -247,9 +256,7 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
             public void onResponse(@NonNull Call<List<LiderModel>> call, @NonNull Response<List<LiderModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     listaLideres = response.body();
-                    Log.i("API", "Líderes carregados: " + listaLideres.size());
                 } else {
-                    Log.e("API", "Erro ao carregar líderes: " + response.code());
                     listaLideres = new ArrayList<>();
                 }
                 checkApiCallsCompleted();
@@ -257,7 +264,6 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
 
             @Override
             public void onFailure(@NonNull Call<List<LiderModel>> call, @NonNull Throwable t) {
-                Log.e("API", "Falha na requisição de Líderes: " + t.getMessage());
                 listaLideres = new ArrayList<>();
                 checkApiCallsCompleted();
             }
@@ -277,8 +283,9 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         Integer unidadeIdParaFiltrar = getUnidadeUsuarioIdInt();
 
         if (unidadeIdParaFiltrar == null) {
-            Log.e("UNIFY", "ID da Unidade para filtro é nulo. Nenhum funcionário será exibido.");
-            adapter.notifyDataSetChanged();
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
             return;
         }
 
@@ -316,8 +323,6 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
             return f1.getNome().compareToIgnoreCase(f2.getNome());
         });
 
-        Log.i("RV", "Lista unificada. Total de funcionários: " + listaOriginalFuncionarios.size());
-
         if (adapter != null) {
             adapter.updateList(new ArrayList<>(listaOriginalFuncionarios));
         }
@@ -330,7 +335,9 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         final int totalFuncionarios = funcionarios.size();
 
         if (totalFuncionarios == 0) {
-            adapter.notifyDataSetChanged();
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
             return;
         }
 
@@ -349,14 +356,13 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
                                 if (imageUrl != null && !imageUrl.isEmpty()) {
                                     funcionario.setUrlImagem(imageUrl);
                                 }
-                            } else {
-                                Log.d("FirebaseImages", "Imagem não encontrada para o email: " + funcionario.getEmail());
                             }
 
                             imagesLoadedCount++;
                             if (imagesLoadedCount == totalFuncionarios) {
-                                Log.i("FirebaseImages", "Todas as URLs de imagem foram processadas. Atualizando RV.");
-                                adapter.notifyDataSetChanged();
+                                if (adapter != null) {
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
                         }
                     });
@@ -371,7 +377,6 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         String documentId = getUsuarioCredencial();
 
         if (documentId == null) {
-            Log.e("Firebase", "Credencial não encontrada. Imagem não pode ser carregada.");
             return;
         }
 
@@ -379,7 +384,6 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (!isAdded()) {
-                        Log.d("GlideFix", "Fragment not attached. Cancelling profile image load.");
                         return;
                     }
                     if (documentSnapshot.exists()) {
@@ -393,17 +397,11 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
                                     .placeholder(R.mipmap.fotoperfil)
                                     .error(R.mipmap.fotoperfil)
                                     .into(imageFuncionarioGerenciar);
-
-                            Log.i("Firebase", "Foto de perfil carregada do Firebase.");
-                        } else {
-                            Log.d("Firebase", "URL da foto de perfil (campo 'imagem') não encontrada no Firestore.");
                         }
-                    } else {
-                        Log.d("Firebase", "Documento do usuário não encontrado no Firestore (ID: " + documentId + ").");
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firebase", "Erro ao buscar documento do usuário: " + e.getMessage());
+
                 });
     }
 
@@ -431,5 +429,54 @@ public class GerenciarFuncionario extends Fragment implements GerenciarFuncionar
         String cargo = sharedPrefs.getString(KEY_TIPO_USUARIO, "");
 
         return "Unidade".equalsIgnoreCase(cargo);
+    }
+    private void cadastrarFuncionario() {
+        String nome = txtNomeFuncionario.getText() != null ? txtNomeFuncionario.getText().toString().trim() : "";
+        String email = txtEmailFuncionario.getText() != null ? txtEmailFuncionario.getText().toString().trim() : "";
+
+        if (nome.isEmpty() || email.isEmpty()) {
+            Toast.makeText(getContext(), "Por favor, preencha o nome e o email.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getContext(), "Email inválido.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SharedPreferences sharedPrefs = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Integer unidadeId = sharedPrefs.getInt(KEY_UNIDADE_ID, 0);
+
+        final String SENHA_INICIAL = "senhaPadrao123";
+
+        GestorModel novoFuncionario = new GestorModel(
+                unidadeId,
+                nome,
+                email,
+                SENHA_INICIAL
+        );
+
+        GestorApi gestorApi = SqlRetrofitClient.getClient(getContext()).create(GestorApi.class);
+
+        gestorApi.cadastrarGestor(novoFuncionario).enqueue(new Callback<GestorModel>() {
+            @Override
+            public void onResponse(@NonNull Call<GestorModel> call, @NonNull Response<GestorModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    dialog_cadastrar_func.dismiss();
+                    txtNomeFuncionario.setText("");
+                    txtEmailFuncionario.setText("");
+                    Toast.makeText(getContext(), "Funcionário cadastrado com sucesso!", Toast.LENGTH_LONG).show();
+                    fetchFuncionariosFromApi();
+                } else {
+                    String errorMsg = "Erro ao cadastrar. Tente novamente.";
+                    Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<GestorModel> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), "Falha na conexão. Verifique sua rede.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
