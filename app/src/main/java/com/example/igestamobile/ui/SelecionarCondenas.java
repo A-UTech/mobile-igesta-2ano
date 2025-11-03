@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.igestamobile.HorarioTurno;
 import com.example.igestamobile.R;
 import com.example.igestamobile.adapter.CondenaAdapter;
 import com.example.igestamobile.data.api.CondenaApi;
@@ -84,7 +85,7 @@ public class SelecionarCondenas extends AppCompatActivity {
 
         if (condenasSelecionadas.isEmpty()) {
             Toast.makeText(this, "Nenhuma condena selecionada para associar.", Toast.LENGTH_SHORT).show();
-            iniciarMainActivity();
+            iniciarHorarioTurno();
             return;
         }
 
@@ -109,7 +110,7 @@ public class SelecionarCondenas extends AppCompatActivity {
                             Toast.makeText(SelecionarCondenas.this,
                                     "Associação concluída.",
                                     Toast.LENGTH_LONG).show();
-                            iniciarMainActivity();
+                            iniciarHorarioTurno();
                         }
                     }
 
@@ -121,7 +122,7 @@ public class SelecionarCondenas extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
 
                         if (condenasProcessadas[0] == totalCondenas) {
-                            iniciarMainActivity();
+                            iniciarHorarioTurno();
                         }
                     }
                 });
@@ -129,8 +130,8 @@ public class SelecionarCondenas extends AppCompatActivity {
         }
     }
 
-    private void iniciarMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void iniciarHorarioTurno() {
+        Intent intent = new Intent(this, HorarioTurno.class);
         startActivity(intent);
         finish();
     }
