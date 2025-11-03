@@ -12,7 +12,12 @@
         tools:layout="@layout/fragment_tela_inicial" >
         <action
             android:id="@+id/action_navigation_tela_inicial_to_navigation_chatbot"
-            app:destination="@id/navigation_chatbot" />
+            app:destination="@id/navigation_chatbot"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            />
     </fragment>
 
     <fragment
@@ -33,13 +38,28 @@
 
             <action
                 android:id="@+id/action_perfil_to_configuracao"
-                app:destination="@id/navigation_configuracao" />
+                app:destination="@id/navigation_configuracao"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_right"
+                app:popExitAnim="@anim/slide_out_left"
+                />
             <action
                 android:id="@+id/action_perfil_to_gerenciarFuncionario"
-                app:destination="@id/navigation_gerenciarFuncionario" />
+                app:destination="@id/navigation_gerenciarFuncionario"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_right"
+                app:popExitAnim="@anim/slide_out_left"
+                />
             <action
                 android:id="@+id/action_navigation_perfil_to_navigation_historico"
-                app:destination="@id/navigation_historico" />
+                app:destination="@id/navigation_historico"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_right"
+                app:popExitAnim="@anim/slide_out_left"
+                />
         </fragment>
 
         <fragment
@@ -55,7 +75,12 @@
             tools:layout="@layout/fragment_gerenciar_funcionario" >
             <action
                 android:id="@+id/action_navigation_gerenciarFuncionario_to_navigation_perfilFuncionario"
-                app:destination="@id/navigation_perfilFuncionario" />
+                app:destination="@id/navigation_perfilFuncionario"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_right"
+                app:popExitAnim="@anim/slide_out_left"
+                />
         </fragment>
 
         <fragment
@@ -71,7 +96,12 @@
             tools:layout="@layout/fragment_historico" >
             <action
                 android:id="@+id/action_navigation_historico_to_navigation_turnos"
-                app:destination="@id/navigation_turnos" />
+                app:destination="@id/navigation_turnos"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_right"
+                app:popExitAnim="@anim/slide_out_left"
+                />
         </fragment>
 
         <fragment
