@@ -80,6 +80,8 @@ public class Configuracao extends Fragment {
         builder.setView(dialogView);
 
         final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         dialog.show();
 
         android.widget.EditText etSenha = dialogView.findViewById(R.id.input_senha);
@@ -109,6 +111,8 @@ public class Configuracao extends Fragment {
         builder.setView(dialogView);
 
         final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         dialog.show();
 
         android.widget.EditText etNome = dialogView.findViewById(R.id.input_nome);
