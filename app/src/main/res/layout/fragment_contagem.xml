@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    tools:context=".ui.contagem.ContagemFragment" >
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/inputTextPesquisarCondenas"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/searchbar"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/poppins_regular"
+        android:hint="Pesquisar condenas"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textColor="@color/preto"
+        android:textColorHighlight="@color/preto"
+        android:textColorHint="@color/cinza_escuro"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+    <TextView
+        android:id="@+id/textView32"
+        android:layout_width="179dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:lineHeight="30dp"
+        android:text="Contagem de Condenas"
+        android:textColor="@color/verde_escuro"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/foto_perfil_condenas" />
+
+    <TextView
+        android:id="@+id/txt_ola_contar_condenas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Olá!"
+        android:textColor="@color/cinza_medio"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/foto_perfil_condenas"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/foto_perfil_condenas"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="43dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:srcCompat="@mipmap/fotoperfil" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_total"
+        android:layout_width="104dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Totais"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/branco"
+        android:visibility="visible"
+        app:backgroundTint="@color/verde_escuro"
+        app:cornerRadius="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_parcial"
+        android:layout_width="104dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:text="Parciais"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/branco"
+        android:visibility="visible"
+        app:backgroundTint="@color/verde_escuro"
+        app:cornerRadius="20.5dp"
+        app:layout_constraintStart_toEndOf="@+id/btn_total"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
+
+    <ImageButton
+        android:id="@+id/btn_option"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/opcoes"
+        android:text="Button"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="30dp"
+        android:paddingBottom="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas"
+        tools:listitem="@layout/item_contagem_condenas" />
+
+    <TextView
+        android:id="@+id/bt_enviar_contagens"
+        android:layout_width="99dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="103dp"
+        android:background="@drawable/borda_btn"
+        android:drawableTop="@drawable/enviar_contagem"
+        android:drawablePadding="5dp"
+        android:fontFamily="@font/poppins_medium"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:text="Enviar condenas"
+        android:textAlignment="center"
+        android:textColor="@color/branco"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_descartar_alteracoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableTop="@drawable/icon_trash"
+        android:fontFamily="@font/poppins_regular"
+        android:maxWidth="60dp"
+        android:text="Descartar alterações"
+        android:textAlignment="center"
+        android:textColor="@color/vermelho"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
+
+    <TextView
+        android:id="@+id/txt_concluir_alteracoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableTop="@drawable/icon_check"
+        android:fontFamily="@font/poppins_regular"
+        android:maxWidth="60dp"
+        android:text="Concluir alterações"
+        android:textAlignment="center"
+        android:textColor="@color/verde_escuro"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.914"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputTextPesquisarCondenas" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

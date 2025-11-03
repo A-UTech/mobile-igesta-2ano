@@ -23,7 +23,7 @@
         tools:replace="android:fullBackupContent"
         tools:targetApi="31">
         <activity
-            android:name=".HorarioTurno"
+            android:name=".ui.horarioturno.HorarioTurno"
             android:exported="false" />
 
         <provider
@@ -37,16 +37,16 @@
         </provider>
 
         <activity
-            android:name=".ui.SelecionarCondenas"
+            android:name=".ui.selecionarcondenas.SelecionarCondenas"
             android:exported="false" />
         <activity
-            android:name=".ui.Login"
+            android:name=".ui.login.Login"
             android:exported="false" />
         <activity
             android:name=".ui.Cadastro"
             android:exported="false" />
         <activity
-            android:name=".ui.SplashScreen"
+            android:name=".ui.splashscreen.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,7 +55,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name" />
     </application>
