@@ -11,6 +11,22 @@
         android:layout_height="match_parent"
         android:background="@color/branco">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_editarInfos"
+            android:layout_width="143dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="120dp"
+            android:background="@drawable/borda_btn"
+            android:backgroundTint="@color/verde_escuro"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Editar Informações"
+            android:textAllCaps="false"
+            android:textColor="@color/branco"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSenhaUsuario" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
@@ -35,76 +51,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_email_input"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="55dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/input_border"
-            android:fontFamily="@font/poppins_regular"
-            android:hint="Nome"
-            android:paddingLeft="25dp"
-            android:singleLine="true"
-            android:textColor="@color/preto"
-            android:textColorHint="@color/cinza_medio"
-            android:textColorLink="@color/preto"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtNome" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_input"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="55dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/input_border"
-            android:fontFamily="@font/poppins_regular"
-            android:hint="E-mail"
-            android:paddingLeft="25dp"
-            android:singleLine="true"
-            android:textColor="@color/preto"
-            android:textColorHint="@color/cinza_medio"
-            android:textColorLink="@color/preto"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/senha_input"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="55dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/input_border"
-            android:fontFamily="@font/poppins_regular"
-            android:hint="Senha"
-            android:paddingLeft="25dp"
-            android:singleLine="true"
-            android:textColor="@color/preto"
-            android:textColorHint="@color/cinza_medio"
-            android:textColorLink="@color/preto"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtSenha" />
-
         <TextView
             android:id="@+id/txtNome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="36dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="Nome*"
+            android:text="Nome"
             android:textColor="@color/preto"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.103"
+            app:layout_constraintHorizontal_bias="0.149"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -112,40 +68,74 @@
             android:id="@+id/txtEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="28dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="E-mail*"
+            android:text="Credencial"
             android:textColor="@color/preto"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.103"
+            app:layout_constraintHorizontal_bias="0.155"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_email_input" />
+            app:layout_constraintTop_toBottomOf="@+id/tvNomeUsuario" />
 
         <TextView
             android:id="@+id/txtSenha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="28dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="Senha*"
+            android:text="Senha"
             android:textColor="@color/preto"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.102"
+            app:layout_constraintHorizontal_bias="0.149"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_input" />
+            app:layout_constraintTop_toBottomOf="@+id/tvCredencialUsuario" />
 
-        <Switch
-            android:id="@+id/modo_escuro_switch"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="55dp"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Modo escuro"
-            android:textColor="@color/preto"
+        <TextView
+            android:id="@+id/tvNomeUsuario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="12dp"
+            android:ellipsize="none"
+            android:fontFamily="@font/poppins_regular"
+            android:scrollHorizontally="false"
+            android:singleLine="true"
+            android:text="Nome Usuario"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/senha_input" />
+            app:layout_constraintTop_toBottomOf="@+id/txtNome" />
+
+        <TextView
+            android:id="@+id/tvCredencialUsuario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="12dp"
+            android:ellipsize="none"
+            android:fontFamily="@font/poppins_regular"
+            android:scrollHorizontally="false"
+            android:singleLine="true"
+            android:text="usuario.email@gmail.com"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+
+        <TextView
+            android:id="@+id/tvSenhaUsuario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/poppins_regular"
+            android:scrollHorizontally="false"
+            android:singleLine="true"
+            android:text="•••••"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtSenha" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
