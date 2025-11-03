@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_tela_inicial"
-        android:name="com.example.igestamobile.TelaInicial"
+        android:name="com.example.igestamobile.ui.telainicial.TelaInicial"
         android:label="fragment_tela_inicial"
         tools:layout="@layout/fragment_tela_inicial" >
         <action
@@ -17,9 +17,9 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.igestamobile.ui.notifications.NotificationsFragment"
+        android:name="com.example.igestamobile.ui.contagem.ContagemFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_contagem" />
 
     <navigation
         android:id="@+id/navigation_perfil"
@@ -27,7 +27,7 @@
 
         <fragment
             android:id="@+id/fragment_perfil_base"
-            android:name="com.example.igestamobile.ui.Perfil"
+            android:name="com.example.igestamobile.ui.perfil.Perfil"
             android:label="fragment_perfil"
             tools:layout="@layout/fragment_perfil" >
 
@@ -44,13 +44,13 @@
 
         <fragment
             android:id="@+id/navigation_configuracao"
-            android:name="com.example.igestamobile.ui.Configuracao"
+            android:name="com.example.igestamobile.ui.configuracao.Configuracao"
             android:label="fragment_configuracao"
             tools:layout="@layout/fragment_configuracao" />
 
         <fragment
             android:id="@+id/navigation_gerenciarFuncionario"
-            android:name="com.example.igestamobile.ui.GerenciarFuncionario"
+            android:name="com.example.igestamobile.ui.gerenciarfuncionario.GerenciarFuncionario"
             android:label="fragment_gerenciar_funcionario"
             tools:layout="@layout/fragment_gerenciar_funcionario" >
             <action
@@ -60,13 +60,13 @@
 
         <fragment
             android:id="@+id/navigation_perfilFuncionario"
-            android:name="com.example.igestamobile.PerfilFuncionario"
+            android:name="com.example.igestamobile.ui.perfilfuncionario.PerfilFuncionario"
             android:label="fragment_perfil_funcionario"
             tools:layout="@layout/fragment_perfil_funcionario" />
 
         <fragment
             android:id="@+id/navigation_historico"
-            android:name="com.example.igestamobile.Historico"
+            android:name="com.example.igestamobile.ui.historico.Historico"
             android:label="fragment_historico"
             tools:layout="@layout/fragment_historico" >
             <action
@@ -76,7 +76,7 @@
 
         <fragment
             android:id="@+id/navigation_turnos"
-            android:name="com.example.igestamobile.Turnos"
+            android:name="com.example.igestamobile.ui.turnos.Turnos"
             android:label="fragment_turnos"
             tools:layout="@layout/fragment_turnos" />
 
@@ -84,7 +84,7 @@
 
     <fragment
         android:id="@+id/navigation_chatbot"
-        android:name="com.example.igestamobile.Chatbot"
+        android:name="com.example.igestamobile.ui.chatbot.Chatbot"
         android:label="fragment_chatbot"
         tools:layout="@layout/fragment_chatbot" />
 

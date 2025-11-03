@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/branco"
-    tools:context=".ui.SelecionarCondenas">
+    tools:context=".ui.selecionarcondenas.SelecionarCondenas">
 
     <TextView
         android:id="@+id/selecionar_condenas_title"
